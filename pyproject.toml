@@ -3,7 +3,7 @@ name = "idl2js"
 version = "0.1.0"
 description = ""
 authors = ["Sergey Reshetnikov <resh.sersh@gmail.com>"]
-license = "BSD-4-Clause"
+license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "^3.8"

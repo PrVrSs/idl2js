@@ -1,4 +1,5 @@
 import uuid
+from typing import NamedTuple
 
 from .const import LET
 from .nodes import VariableDeclaration, VariableDeclarator, Identifier
@@ -8,9 +9,20 @@ def unique_name_generator():
     return f'v_{uuid.uuid4().hex}'
 
 
-class VariableStorage:
+class Variable(NamedTuple):
+    # возможно стоит построить граф: какие переменные из каких получились.
+    # и такую структуру использовать в `VariableStorage`.
+    name: str
+    type: str
 
-    variables = {}
+
+class VariableStorage:
+    """
+    сделать crud.
+    отделить `vars` `vars_as_ast`
+    """
+    vars = []
+    vars_as_ast = []
 
     def __init__(self):
         self._interface = ''
@@ -19,21 +31,28 @@ class VariableStorage:
     def interface(self):
         return self._interface
 
-    def create_variable(self, expression, interface=False):
+    def create_variable(self, expression, idl_type=None):
         unique_name = unique_name_generator()
 
-        self.variables[unique_name] = VariableDeclaration(
-            kind=LET,
-            declarations=[
-                VariableDeclarator(
-                    id=Identifier(name=unique_name),
-                    init=expression,
-                )
-            ],
+        self.vars_as_ast.append(
+            VariableDeclaration(
+                kind=LET,
+                declarations=[
+                    VariableDeclarator(
+                        id=Identifier(name=unique_name),
+                        init=expression,
+                    )
+                ],
+            )
         )
 
-        if interface is True:
+        if idl_type is None:
             self._interface = unique_name
+            var_type = expression.callee.name
+        else:
+            var_type = idl_type.idl_type
+
+        self.vars.append(Variable(name=unique_name, type=var_type))
 
 
 class DefinitionStorage:

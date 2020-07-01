@@ -101,8 +101,8 @@ def main():
     var_store = VariableStorage()
 
     InterfaceTransformer(variable_storage=var_store).visit(idl_ast)
-
-    for variable in var_store.variables.values():
+    print(var_store.vars)
+    for variable in var_store.vars_as_ast:
         print(unparse(variable))
 
 

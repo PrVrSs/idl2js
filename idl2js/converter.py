@@ -10,24 +10,43 @@ from idl2js.nodes import (
 from idl2js.storages import VariableStorage, DefinitionStorage
 
 
-class BaseCollector(IdlNodeVisitor):
+class InterfaceTransformer(IdlNodeVisitor):
 
-    def __init__(self, definition_storage):
-        self._definition_storage = definition_storage
+    def __init__(self, variable_storage: VariableStorage):
+        self._variable_storage = variable_storage
 
-    def traverse(self, node):
-        if isinstance(node, list):
-            for item in node:
-                self.traverse(item)
-        else:
-            self.visit(node)
+    def visit_interface(self, node) -> None:
+        if node.partial is True:
+            return
+
+        self._variable_storage.create_variable(
+            NewExpression(
+                callee=Identifier(name=node.name),
+                arguments=[],
+            ))
+
+        self.generic_visit(node)
+
+    def visit_attribute(self, node):
+        self._variable_storage.create_variable(
+            MemberExpression(
+                object=Identifier(name=self._variable_storage.interface),
+                property=Identifier(name=node.name),
+            ),
+            idl_type=node.idl_type
+        )
+
+        self.generic_visit(node)
 
 
 class ConversionRule:
     pass
 
 
-class CollectTypedef(BaseCollector):
+class CollectTypedef(IdlNodeVisitor):
+
+    def __init__(self, definition_storage):
+        self._definition_storage = definition_storage
 
     def visit_typedef(self, node):
         self._definition_storage.add_typedef(
@@ -66,35 +85,6 @@ class DefinitionCollector(IdlNodeVisitor):
         self._definition_storage.enums[node.name] = node
 
 
-class InterfaceTransformer(IdlNodeVisitor):
-
-    def __init__(self, variable_storage: VariableStorage):
-        self._variable_storage = variable_storage
-
-    def visit_interface(self, node) -> None:
-        if node.partial is True:
-            return
-
-        self._variable_storage.create_variable(
-            NewExpression(
-                callee=Identifier(name=node.name),
-                arguments=[],
-            ),
-            interface=True,
-        )
-
-        self.generic_visit(node)
-
-    def visit_attribute(self, node):
-        self._variable_storage.create_variable(
-            MemberExpression(
-                object=Identifier(name=self._variable_storage.interface),
-                property=Identifier(name=node.name),
-            ))
-
-        self.generic_visit(node)
-
-
 def main():
     raw_idl = (Path(__file__).parent / 'webidls' / 'blob.webidl').resolve()
     # pprint(pretty_parse(str(raw_idl)))
@@ -104,7 +94,7 @@ def main():
     # td = DefinitionCollector(storage).visit(idl_ast)
 
     InterfaceTransformer(variable_storage=var_store).visit(idl_ast)
-    print(var_store.variables)
+    print(var_store.vars_as_ast)
 
 
 if __name__ == '__main__':

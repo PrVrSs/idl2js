@@ -2,6 +2,7 @@
 
 ### Examples
 
+`idl`
 ```
 [Exposed=(Window,Worker)]
 interface Blob {
@@ -15,7 +16,7 @@ interface Blob {
   readonly attribute DOMString type;
 };
 ```
-
+`result`
 ```
 let v_db181039fd784c4c95f9dbcabe341d84 = new Blob()
 let v_25807798757b479782978804d68e3679 = v_db181039fd784c4c95f9dbcabe341d84.size
