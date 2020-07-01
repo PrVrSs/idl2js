@@ -1,0 +1,2 @@
+LET = 'let'
+CONST = 'const'
