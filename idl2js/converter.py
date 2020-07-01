@@ -3,6 +3,7 @@ from pathlib import Path
 from pywebidl2 import IdlNodeVisitor, Idl, antlr_visitor
 
 from idl2js.nodes import (
+    CallExpression,
     Identifier,
     MemberExpression,
     NewExpression,
@@ -32,6 +33,20 @@ class InterfaceTransformer(IdlNodeVisitor):
             MemberExpression(
                 object=Identifier(name=self._variable_storage.interface),
                 property=Identifier(name=node.name),
+            ),
+            idl_type=node.idl_type
+        )
+
+        self.generic_visit(node)
+
+    def visit_operation(self, node):
+        self._variable_storage.create_variable(
+            CallExpression(
+                callee=MemberExpression(
+                    object=Identifier(name=self._variable_storage.interface),
+                    property=Identifier(name=node.name)
+                ),
+                arguments=[]
             ),
             idl_type=node.idl_type
         )

@@ -36,7 +36,7 @@ class parentheses:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._unparser.write(self._queue.pop().close)
 
-    __enter__ = lambda self: ...
+    __enter__ = lambda _: ...
 
 
 class Unparser(Visitor):
@@ -89,6 +89,12 @@ class Unparser(Visitor):
         self.write('.')
 
         self.traverse(node.property)
+
+    def visit_call_expression(self, node):
+        self.traverse(node.callee)
+
+        with self._parentheses(PAREN):
+            self.traverse(node.arguments)
 
 
 def unparse(ast):

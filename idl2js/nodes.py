@@ -56,6 +56,14 @@ class MemberExpression(AST):
 
 
 @attr.s
+class CallExpression(AST):
+
+    callee = attr.ib()
+    arguments = attr.ib(factory=list)
+    type: str = attr.ib(default='CallExpression')
+
+
+@attr.s
 class AssignmentExpression(AST):
     ...
 
