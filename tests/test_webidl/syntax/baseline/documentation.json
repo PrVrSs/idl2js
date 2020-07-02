@@ -1,0 +1,10 @@
+[
+    {
+        "type": "interface",
+        "name": "Documentation",
+        "inheritance": null,
+        "members": [],
+        "ext_attrs": [],
+        "partial": false
+    }
+]

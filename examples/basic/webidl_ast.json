@@ -1,0 +1,297 @@
+[
+    {
+        "members": [
+            {
+                "arguments": [
+                    {
+                        "name": "blobParts",
+                        "idl_type": {
+                            "idl_type": [
+                                {
+                                    "idl_type": "BlobPart",
+                                    "type": "argument-type",
+                                    "ext_attrs": [],
+                                    "nullable": false,
+                                    "union": false,
+                                    "generic": ""
+                                }
+                            ],
+                            "type": "argument-type",
+                            "ext_attrs": [],
+                            "nullable": false,
+                            "union": false,
+                            "generic": "sequence"
+                        },
+                        "ext_attrs": [],
+                        "default": null,
+                        "type": "argument",
+                        "optional": true,
+                        "variadic": false
+                    },
+                    {
+                        "name": "options",
+                        "idl_type": {
+                            "idl_type": "BlobPropertyBag",
+                            "type": "argument-type",
+                            "ext_attrs": [],
+                            "nullable": false,
+                            "union": false,
+                            "generic": ""
+                        },
+                        "ext_attrs": [],
+                        "default": {
+                            "type": "dictionary",
+                            "value": []
+                        },
+                        "type": "argument",
+                        "optional": true,
+                        "variadic": false
+                    }
+                ],
+                "ext_attrs": [
+                    {
+                        "name": "Throws",
+                        "arguments": [],
+                        "rhs": null,
+                        "type": "extended-attribute"
+                    }
+                ],
+                "type": "constructor"
+            },
+            {
+                "idl_type": {
+                    "idl_type": "unsigned long long",
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "nullable": false,
+                    "union": false,
+                    "generic": ""
+                },
+                "name": "size",
+                "ext_attrs": [
+                    {
+                        "name": "GetterThrows",
+                        "arguments": [],
+                        "rhs": null,
+                        "type": "extended-attribute"
+                    }
+                ],
+                "type": "attribute",
+                "readonly": true,
+                "special": ""
+            },
+            {
+                "idl_type": {
+                    "idl_type": "DOMString",
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "nullable": false,
+                    "union": false,
+                    "generic": ""
+                },
+                "name": "type",
+                "ext_attrs": [],
+                "type": "attribute",
+                "readonly": true,
+                "special": ""
+            },
+            {
+                "name": "slice",
+                "idl_type": {
+                    "idl_type": "Blob",
+                    "type": "return-type",
+                    "ext_attrs": [],
+                    "nullable": false,
+                    "union": false,
+                    "generic": ""
+                },
+                "arguments": [
+                    {
+                        "name": "start",
+                        "idl_type": {
+                            "idl_type": "long long",
+                            "type": "argument-type",
+                            "ext_attrs": [
+                                {
+                                    "name": "Clamp",
+                                    "arguments": [],
+                                    "rhs": null,
+                                    "type": "extended-attribute"
+                                }
+                            ],
+                            "nullable": false,
+                            "union": false,
+                            "generic": ""
+                        },
+                        "ext_attrs": [],
+                        "default": null,
+                        "type": "argument",
+                        "optional": true,
+                        "variadic": false
+                    },
+                    {
+                        "name": "end",
+                        "idl_type": {
+                            "idl_type": "long long",
+                            "type": "argument-type",
+                            "ext_attrs": [
+                                {
+                                    "name": "Clamp",
+                                    "arguments": [],
+                                    "rhs": null,
+                                    "type": "extended-attribute"
+                                }
+                            ],
+                            "nullable": false,
+                            "union": false,
+                            "generic": ""
+                        },
+                        "ext_attrs": [],
+                        "default": null,
+                        "type": "argument",
+                        "optional": true,
+                        "variadic": false
+                    },
+                    {
+                        "name": "contentType",
+                        "idl_type": {
+                            "idl_type": "DOMString",
+                            "type": "argument-type",
+                            "ext_attrs": [],
+                            "nullable": false,
+                            "union": false,
+                            "generic": ""
+                        },
+                        "ext_attrs": [],
+                        "default": null,
+                        "type": "argument",
+                        "optional": true,
+                        "variadic": false
+                    }
+                ],
+                "ext_attrs": [
+                    {
+                        "name": "Throws",
+                        "arguments": [],
+                        "rhs": null,
+                        "type": "extended-attribute"
+                    }
+                ],
+                "type": "operation",
+                "special": ""
+            },
+            {
+                "name": "stream",
+                "idl_type": {
+                    "idl_type": "ReadableStream",
+                    "type": "return-type",
+                    "ext_attrs": [],
+                    "nullable": false,
+                    "union": false,
+                    "generic": ""
+                },
+                "arguments": [],
+                "ext_attrs": [
+                    {
+                        "name": "NewObject",
+                        "arguments": [],
+                        "rhs": null,
+                        "type": "extended-attribute"
+                    },
+                    {
+                        "name": "Throws",
+                        "arguments": [],
+                        "rhs": null,
+                        "type": "extended-attribute"
+                    }
+                ],
+                "type": "operation",
+                "special": ""
+            },
+            {
+                "name": "text",
+                "idl_type": {
+                    "idl_type": [
+                        {
+                            "idl_type": "USVString",
+                            "type": "return-type",
+                            "ext_attrs": [],
+                            "nullable": false,
+                            "union": false,
+                            "generic": ""
+                        }
+                    ],
+                    "type": "return-type",
+                    "ext_attrs": [],
+                    "nullable": false,
+                    "union": false,
+                    "generic": "Promise"
+                },
+                "arguments": [],
+                "ext_attrs": [
+                    {
+                        "name": "NewObject",
+                        "arguments": [],
+                        "rhs": null,
+                        "type": "extended-attribute"
+                    }
+                ],
+                "type": "operation",
+                "special": ""
+            },
+            {
+                "name": "arrayBuffer",
+                "idl_type": {
+                    "idl_type": [
+                        {
+                            "idl_type": null,
+                            "type": "return-type",
+                            "ext_attrs": [],
+                            "nullable": false,
+                            "union": false,
+                            "generic": ""
+                        }
+                    ],
+                    "type": "return-type",
+                    "ext_attrs": [],
+                    "nullable": false,
+                    "union": false,
+                    "generic": "Promise"
+                },
+                "arguments": [],
+                "ext_attrs": [
+                    {
+                        "name": "NewObject",
+                        "arguments": [],
+                        "rhs": null,
+                        "type": "extended-attribute"
+                    }
+                ],
+                "type": "operation",
+                "special": ""
+            }
+        ],
+        "name": "Blob",
+        "inheritance": null,
+        "partial": false,
+        "type": "interface",
+        "ext_attrs": [
+            {
+                "name": "Exposed",
+                "arguments": [],
+                "rhs": {
+                    "type": "identifier-list",
+                    "value": [
+                        {
+                            "value": "Window"
+                        },
+                        {
+                            "value": "Worker"
+                        }
+                    ]
+                },
+                "type": "extended-attribute"
+            }
+        ]
+    }
+]

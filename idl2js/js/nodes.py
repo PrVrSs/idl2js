@@ -1,14 +1,15 @@
+import abc
 from typing import Any, List
 
 import attr
 
 
-class AST:
+class Ast(abc.ABC):
     ...
 
 
 @attr.s
-class Module(AST):
+class Module(Ast):
 
     type: str = attr.ib(default='module')
     source_type: str = attr.ib(default='Program')
@@ -16,7 +17,7 @@ class Module(AST):
 
 
 @attr.s
-class NewExpression(AST):
+class NewExpression(Ast):
 
     callee = attr.ib()
     arguments = attr.ib(factory=list)
@@ -24,7 +25,7 @@ class NewExpression(AST):
 
 
 @attr.s
-class VariableDeclaration(AST):
+class VariableDeclaration(Ast):
 
     type: str = attr.ib(default='VariableDeclaration')
     kind: str = attr.ib(default='let')
@@ -32,7 +33,7 @@ class VariableDeclaration(AST):
 
 
 @attr.s
-class VariableDeclarator(AST):
+class VariableDeclarator(Ast):
 
     id = attr.ib()
     init = attr.ib()
@@ -40,14 +41,14 @@ class VariableDeclarator(AST):
 
 
 @attr.s
-class Identifier(AST):
+class Identifier(Ast):
 
     name: str = attr.ib()
     type: str = attr.ib(default='Identifier')
 
 
 @attr.s
-class MemberExpression(AST):
+class MemberExpression(Ast):
 
     object = attr.ib()
     property = attr.ib()
@@ -56,7 +57,7 @@ class MemberExpression(AST):
 
 
 @attr.s
-class CallExpression(AST):
+class CallExpression(Ast):
 
     callee = attr.ib()
     arguments = attr.ib(factory=list)
@@ -64,25 +65,25 @@ class CallExpression(AST):
 
 
 @attr.s
-class AssignmentExpression(AST):
+class AssignmentExpression(Ast):
     ...
 
 
 @attr.s
-class ArrayExpression(AST):
+class ArrayExpression(Ast):
     ...
 
 
 @attr.s
-class ObjectExpression(AST):
+class ObjectExpression(Ast):
     ...
 
 
 @attr.s
-class Literal(AST):
+class Literal(Ast):
     ...
 
 
 @attr.s
-class Property(AST):
+class Property(Ast):
     ...

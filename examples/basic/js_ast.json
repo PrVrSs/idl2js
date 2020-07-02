@@ -1,0 +1,189 @@
+[
+    {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+            {
+                "id": {
+                    "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                    "type": "Identifier"
+                },
+                "init": {
+                    "callee": {
+                        "name": "Blob",
+                        "type": "Identifier"
+                    },
+                    "arguments": [],
+                    "type": "NewExpression"
+                },
+                "type": "VariableDeclarator"
+            }
+        ]
+    },
+    {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+            {
+                "id": {
+                    "name": "v_9e3a45e55f194055b5aec84f229b4ae9",
+                    "type": "Identifier"
+                },
+                "init": {
+                    "object": {
+                        "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                        "type": "Identifier"
+                    },
+                    "property": {
+                        "name": "size",
+                        "type": "Identifier"
+                    },
+                    "computed": false,
+                    "type": "MemberExpression"
+                },
+                "type": "VariableDeclarator"
+            }
+        ]
+    },
+    {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+            {
+                "id": {
+                    "name": "v_54c5f1f39cc542799e4c576e3872293d",
+                    "type": "Identifier"
+                },
+                "init": {
+                    "object": {
+                        "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                        "type": "Identifier"
+                    },
+                    "property": {
+                        "name": "type",
+                        "type": "Identifier"
+                    },
+                    "computed": false,
+                    "type": "MemberExpression"
+                },
+                "type": "VariableDeclarator"
+            }
+        ]
+    },
+    {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+            {
+                "id": {
+                    "name": "v_1c9eef079c204064ae38e6cd4b6f8ac5",
+                    "type": "Identifier"
+                },
+                "init": {
+                    "callee": {
+                        "object": {
+                            "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                            "type": "Identifier"
+                        },
+                        "property": {
+                            "name": "slice",
+                            "type": "Identifier"
+                        },
+                        "computed": false,
+                        "type": "MemberExpression"
+                    },
+                    "arguments": [],
+                    "type": "CallExpression"
+                },
+                "type": "VariableDeclarator"
+            }
+        ]
+    },
+    {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+            {
+                "id": {
+                    "name": "v_8fb868dba10545eea96499671e63824c",
+                    "type": "Identifier"
+                },
+                "init": {
+                    "callee": {
+                        "object": {
+                            "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                            "type": "Identifier"
+                        },
+                        "property": {
+                            "name": "stream",
+                            "type": "Identifier"
+                        },
+                        "computed": false,
+                        "type": "MemberExpression"
+                    },
+                    "arguments": [],
+                    "type": "CallExpression"
+                },
+                "type": "VariableDeclarator"
+            }
+        ]
+    },
+    {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+            {
+                "id": {
+                    "name": "v_61e228946e204e759819f777b5326767",
+                    "type": "Identifier"
+                },
+                "init": {
+                    "callee": {
+                        "object": {
+                            "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                            "type": "Identifier"
+                        },
+                        "property": {
+                            "name": "text",
+                            "type": "Identifier"
+                        },
+                        "computed": false,
+                        "type": "MemberExpression"
+                    },
+                    "arguments": [],
+                    "type": "CallExpression"
+                },
+                "type": "VariableDeclarator"
+            }
+        ]
+    },
+    {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+            {
+                "id": {
+                    "name": "v_9818bdf5798a48aabc116f14e4505770",
+                    "type": "Identifier"
+                },
+                "init": {
+                    "callee": {
+                        "object": {
+                            "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                            "type": "Identifier"
+                        },
+                        "property": {
+                            "name": "arrayBuffer",
+                            "type": "Identifier"
+                        },
+                        "computed": false,
+                        "type": "MemberExpression"
+                    },
+                    "arguments": [],
+                    "type": "CallExpression"
+                },
+                "type": "VariableDeclarator"
+            }
+        ]
+    }
+]

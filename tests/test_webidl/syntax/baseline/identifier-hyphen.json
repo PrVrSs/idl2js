@@ -1,0 +1,43 @@
+[
+    {
+        "type": "interface",
+        "name": "CSSStyleDeclaration",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "attribute",
+                "name": "-will-change",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [
+                        {
+                            "type": "extended-attribute",
+                            "name": "TreatNullAs",
+                            "rhs": {
+                                "type": "identifier",
+                                "value": "EmptyString"
+                            },
+                            "arguments": []
+                        }
+                    ],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "CSSOMString"
+                },
+                "ext_attrs": [
+                    {
+                        "type": "extended-attribute",
+                        "name": "CEReactions",
+                        "rhs": null,
+                        "arguments": []
+                    }
+                ],
+                "special": "",
+                "readonly": false
+            }
+        ],
+        "ext_attrs": [],
+        "partial": true
+    }
+]

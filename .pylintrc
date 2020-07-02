@@ -1,0 +1,37 @@
+[MASTER]
+
+# Add files or directories to the blacklist. They should be base names, not
+# paths.
+ignore=
+    generated,
+
+
+[MESSAGES CONTROL]
+
+# Disable the message, report, category or checker with the given id(s).
+disable=
+    abstract-method,
+    access-member-before-definition,
+    duplicate-code,
+    bad-mcs-classmethod-argument,
+    empty-docstring,
+    inconsistent-return-statements,
+    missing-docstring,
+    no-else-return,
+    no-member,
+    no-value-for-parameter,
+    too-few-public-methods,
+
+
+[CLASSES]
+
+# List of member names, which should be excluded from the protected access
+# warning.
+exclude-protected=
+    _errHandler,
+
+
+[DESIGN]
+
+# Maximum number of arguments for function / method.
+max-args=10

@@ -1,0 +1,163 @@
+[
+    {
+        "type": "interface",
+        "name": "Util",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "const",
+                "name": "DEBUG",
+                "idl_type": {
+                    "type": "const-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "boolean"
+                },
+                "ext_attrs": [],
+                "value": {
+                    "type": "boolean",
+                    "value": false
+                }
+            },
+            {
+                "type": "const",
+                "name": "negative",
+                "idl_type": {
+                    "type": "const-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "short"
+                },
+                "ext_attrs": [],
+                "value": {
+                    "type": "number",
+                    "value": "-1"
+                }
+            },
+            {
+                "type": "const",
+                "name": "LF",
+                "idl_type": {
+                    "type": "const-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "octet"
+                },
+                "ext_attrs": [],
+                "value": {
+                    "type": "number",
+                    "value": "10"
+                }
+            },
+            {
+                "type": "const",
+                "name": "BIT_MASK",
+                "idl_type": {
+                    "type": "const-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unsigned long"
+                },
+                "ext_attrs": [],
+                "value": {
+                    "type": "number",
+                    "value": "0x0000fc00"
+                }
+            },
+            {
+                "type": "const",
+                "name": "AVOGADRO",
+                "idl_type": {
+                    "type": "const-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "float"
+                },
+                "ext_attrs": [],
+                "value": {
+                    "type": "number",
+                    "value": "6.022e23"
+                }
+            },
+            {
+                "type": "const",
+                "name": "sobig",
+                "idl_type": {
+                    "type": "const-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unrestricted float"
+                },
+                "ext_attrs": [],
+                "value": {
+                    "type": "Infinity",
+                    "negative": false
+                }
+            },
+            {
+                "type": "const",
+                "name": "minusonedividedbyzero",
+                "idl_type": {
+                    "type": "const-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unrestricted double"
+                },
+                "ext_attrs": [],
+                "value": {
+                    "type": "Infinity",
+                    "negative": true
+                }
+            },
+            {
+                "type": "const",
+                "name": "notanumber",
+                "idl_type": {
+                    "type": "const-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "short"
+                },
+                "ext_attrs": [],
+                "value": {
+                    "type": "NaN"
+                }
+            },
+            {
+                "type": "const",
+                "name": "_const",
+                "idl_type": {
+                    "type": "const-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "boolean"
+                },
+                "ext_attrs": [],
+                "value": {
+                    "type": "boolean",
+                    "value": true
+                }
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    }
+]

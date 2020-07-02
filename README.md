@@ -1,43 +1,23 @@
-# *WIP* idl2js
+# idl2js
 
-### Examples
+[![Python Version](https://img.shields.io/badge/python-3.8-blue?style=plastic)](https://www.python.org/)
+[![License](https://img.shields.io/cocoapods/l/A?style=plastic)](https://github.com/PrVrSs/idl2js/blob/master/LICENSE)
 
-`idl`
-```
-[Exposed=(Window,Worker)]
-interface Blob {
-  [Throws]
-  constructor(optional sequence<BlobPart> blobParts,
-              optional BlobPropertyBag options = {});
 
-  [GetterThrows]
-  readonly attribute unsigned long long size;
+### Example
 
-  readonly attribute DOMString type;
+[WebIdl]() → [WebIdlAst]() → [JsAst]() → [Js]()
 
-  [Throws]
-  Blob slice(optional [Clamp] long long start,
-             optional [Clamp] long long end,
-             optional DOMString contentType);
 
-  [NewObject, Throws] ReadableStream stream();
-  [NewObject] Promise<USVString> text();
-  [NewObject] Promise<ArrayBuffer> arrayBuffer();
-};
-```
-`js`
-```
-let v_cb16fe6dbaf1498f99875a42200b4516 = new Blob()
-let v_5f826e18849a4e569445dbd281b4a353 = v_cb16fe6dbaf1498f99875a42200b4516.size
-let v_92e1d27127ff461eb333111cba8911ab = v_cb16fe6dbaf1498f99875a42200b4516.type
-let v_a657497572654ca983cb044065628cde = v_cb16fe6dbaf1498f99875a42200b4516.slice()
-let v_2711e5fdc3574e02bb24278b86db8bcf = v_cb16fe6dbaf1498f99875a42200b4516.stream()
-let v_c5e916aed01b4b109a0a0bcb78de0de7 = v_cb16fe6dbaf1498f99875a42200b4516.text()
-let v_23894af618ed479d89fa3b765ef3cfda = v_cb16fe6dbaf1498f99875a42200b4516.arrayBuffer()
+### RoadMap
 
-```
+- [x] WebIdl Parser
+- [ ] WebIdlAst → JsAst
+- [ ] Unparse JsAst
 
 
 ### Links
 
+
 * [searchfox - webidl](https://searchfox.org/mozilla-central/source/dom/webidl)
+* [original webidl parser](https://github.com/w3c/webidl2.js)

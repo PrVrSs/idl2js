@@ -1,12 +1,14 @@
 from operator import attrgetter
+from typing import Generic, TypeVar
 
 import stringcase
 from attr import fields
 
-from .nodes import AST
+
+T = TypeVar('T')
 
 
-class Visitor:
+class Visitor(Generic[T]):
 
     def visit(self, node):
         visitor = getattr(
@@ -18,12 +20,13 @@ class Visitor:
         return visitor(node)
 
     def generic_visit(self, node):
+
         for name in map(attrgetter('name'), fields(type(node))):
             field = getattr(node, name)
 
-            if isinstance(field, AST):
+            if isinstance(field, self.__orig_class__.__args__):
                 self.visit(field)
             elif isinstance(field, list):
                 for item in field:
-                    if isinstance(item, AST):
+                    if isinstance(item, self.__orig_class__.__args__):
                         self.visit(item)

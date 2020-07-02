@@ -1,0 +1,90 @@
+[
+    {
+        "type": "interface",
+        "name": "IntegerSet",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "attribute",
+                "name": "cardinality",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unsigned long"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": true
+            },
+            {
+                "type": "operation",
+                "name": "union",
+                "idl_type": {
+                    "type": "return-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "void"
+                },
+                "arguments": [
+                    {
+                        "type": "argument",
+                        "name": "ints",
+                        "ext_attrs": [],
+                        "idl_type": {
+                            "type": "argument-type",
+                            "ext_attrs": [],
+                            "generic": "",
+                            "nullable": false,
+                            "union": false,
+                            "idl_type": "long"
+                        },
+                        "default": null,
+                        "optional": false,
+                        "variadic": true
+                    }
+                ],
+                "ext_attrs": [],
+                "special": ""
+            },
+            {
+                "type": "operation",
+                "name": "intersection",
+                "idl_type": {
+                    "type": "return-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "void"
+                },
+                "arguments": [
+                    {
+                        "type": "argument",
+                        "name": "ints",
+                        "ext_attrs": [],
+                        "idl_type": {
+                            "type": "argument-type",
+                            "ext_attrs": [],
+                            "generic": "",
+                            "nullable": false,
+                            "union": false,
+                            "idl_type": "long"
+                        },
+                        "default": null,
+                        "optional": false,
+                        "variadic": true
+                    }
+                ],
+                "ext_attrs": [],
+                "special": ""
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    }
+]

@@ -1,17 +1,19 @@
 from pathlib import Path
 
-from pywebidl2 import IdlNodeVisitor, Idl, antlr_visitor
+from idl2js.webidl import WebIDLParser, WebIDLVisitor
+from idl2js.webidl.nodes import Ast as WebIDLAst
 
-from idl2js.nodes import (
+from idl2js.js.nodes import (
     CallExpression,
     Identifier,
     MemberExpression,
     NewExpression,
 )
 from idl2js.storages import VariableStorage, DefinitionStorage
+from idl2js.visitor import Visitor, T
 
 
-class InterfaceTransformer(IdlNodeVisitor):
+class InterfaceTransformer(Visitor[T]):
 
     def __init__(self, variable_storage: VariableStorage):
         self._variable_storage = variable_storage
@@ -58,7 +60,7 @@ class ConversionRule:
     pass
 
 
-class CollectTypedef(IdlNodeVisitor):
+class CollectTypedef(Visitor[T]):
 
     def __init__(self, definition_storage):
         self._definition_storage = definition_storage
@@ -82,7 +84,7 @@ class CollectTypedef(IdlNodeVisitor):
         return self.visit(idl_type)
 
 
-class DefinitionCollector(IdlNodeVisitor):
+class DefinitionCollector(Visitor[T]):
 
     def __init__(self, definition_storage: DefinitionStorage):
         self._definition_storage = definition_storage
@@ -101,14 +103,14 @@ class DefinitionCollector(IdlNodeVisitor):
 
 
 def main():
-    raw_idl = (Path(__file__).parent / 'webidls' / 'blob.webidl').resolve()
-    # pprint(pretty_parse(str(raw_idl)))
-    idl_ast = antlr_visitor.Visitor(Idl(str(raw_idl)).parse()).run()
-    # print(idl_ast)
+    raw_idl = (Path(__file__).parent / 'interfaces' / 'blob.webidl').resolve()
+
+    idl_ast = WebIDLVisitor(WebIDLParser(str(raw_idl)).parse()).run()
+
     var_store = VariableStorage()
     # td = DefinitionCollector(storage).visit(idl_ast)
 
-    InterfaceTransformer(variable_storage=var_store).visit(idl_ast)
+    InterfaceTransformer[WebIDLAst](variable_storage=var_store).visit(idl_ast)
     print(var_store.vars_as_ast)
 
 

@@ -2,11 +2,12 @@ from pathlib import Path
 from types import SimpleNamespace
 from collections import deque
 
-from pywebidl2 import Idl, antlr_visitor
-
-from idl2js.visitor import Visitor
 from idl2js.converter import InterfaceTransformer
+from idl2js.js.nodes import Ast as JsAst
 from idl2js.storages import VariableStorage
+from idl2js.visitor import Visitor, T
+from idl2js.webidl import WebIDLParser, WebIDLVisitor
+from idl2js.webidl.nodes import Ast as WebIDLAst
 
 
 PAREN = 'paren'
@@ -39,7 +40,7 @@ class parentheses:
     __enter__ = lambda _: ...
 
 
-class Unparser(Visitor):
+class Unparser(Visitor[T]):
 
     def __init__(self):
         self._source = []
@@ -98,16 +99,17 @@ class Unparser(Visitor):
 
 
 def unparse(ast):
-    return Unparser().visit(ast)
+    return Unparser[JsAst]().visit(ast)
 
 
 def main():
-    raw_idl = (Path(__file__).parent / 'webidls' / 'blob.webidl').resolve()
-    idl_ast = antlr_visitor.Visitor(Idl(str(raw_idl)).parse()).run()
+    raw_idl = (Path(__file__).parent / 'interfaces' / 'blob.webidl').resolve()
+    idl_ast = WebIDLVisitor(WebIDLParser(str(raw_idl)).parse()).run()
+
     var_store = VariableStorage()
 
-    InterfaceTransformer(variable_storage=var_store).visit(idl_ast)
-    print(var_store.vars)
+    InterfaceTransformer[WebIDLAst](variable_storage=var_store).visit(idl_ast)
+
     for variable in var_store.vars_as_ast:
         print(unparse(variable))
 

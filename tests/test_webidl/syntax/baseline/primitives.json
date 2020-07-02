@@ -1,0 +1,266 @@
+[
+    {
+        "type": "interface",
+        "name": "Primitives",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "attribute",
+                "name": "truth",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "boolean"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "character",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "byte"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "value",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "octet"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "number",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "short"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "positive",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unsigned short"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "big",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "long"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "bigpositive",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unsigned long"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "bigbig",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "long long"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "bigbigpositive",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unsigned long long"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "real",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "float"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "bigreal",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "double"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "realwithinfinity",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unrestricted float"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "bigrealwithinfinity",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unrestricted double"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "string",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "DOMString"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "bytes",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "ByteString"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "date",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "Date"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            },
+            {
+                "type": "attribute",
+                "name": "regexp",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "RegExp"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    }
+]

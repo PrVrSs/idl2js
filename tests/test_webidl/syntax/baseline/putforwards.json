@@ -1,0 +1,51 @@
+[
+    {
+        "type": "interface",
+        "name": "Person",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "attribute",
+                "name": "name",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "Name"
+                },
+                "ext_attrs": [
+                    {
+                        "type": "extended-attribute",
+                        "name": "PutForwards",
+                        "rhs": {
+                            "type": "identifier",
+                            "value": "full"
+                        },
+                        "arguments": []
+                    }
+                ],
+                "special": "",
+                "readonly": true
+            },
+            {
+                "type": "attribute",
+                "name": "age",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "unsigned short"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    }
+]

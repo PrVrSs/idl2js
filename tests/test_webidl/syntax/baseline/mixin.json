@@ -1,0 +1,70 @@
+[
+    {
+        "type": "interface mixin",
+        "name": "GlobalCrypto",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "attribute",
+                "name": "crypto",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "Crypto"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": true
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    },
+    {
+        "type": "includes",
+        "ext_attrs": [],
+        "target": "Window",
+        "includes": "GlobalCrypto"
+    },
+    {
+        "type": "includes",
+        "ext_attrs": [],
+        "target": "WorkerGlobalScope",
+        "includes": "GlobalCrypto"
+    },
+    {
+        "type": "interface mixin",
+        "name": "WindowOrWorkerGlobalScope",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "attribute",
+                "name": "crypto",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "Crypto"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": true
+            }
+        ],
+        "ext_attrs": [],
+        "partial": true
+    },
+    {
+        "type": "interface mixin",
+        "name": "LocalCrypto",
+        "inheritance": null,
+        "members": [],
+        "ext_attrs": [],
+        "partial": false
+    }
+]

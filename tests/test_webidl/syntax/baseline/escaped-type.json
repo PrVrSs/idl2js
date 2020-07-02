@@ -1,0 +1,37 @@
+[
+    {
+        "type": "typedef",
+        "name": "EscapedType",
+        "idl_type": {
+            "type": "typedef-type",
+            "ext_attrs": [],
+            "generic": "",
+            "nullable": false,
+            "union": false,
+            "idl_type": "Type"
+        },
+        "ext_attrs": []
+    },
+    {
+        "type": "typedef",
+        "name": "EscapedSequence",
+        "idl_type": {
+            "type": "typedef-type",
+            "ext_attrs": [],
+            "generic": "sequence",
+            "nullable": false,
+            "union": false,
+            "idl_type": [
+                {
+                    "type": "typedef-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "Type"
+                }
+            ]
+        },
+        "ext_attrs": []
+    }
+]

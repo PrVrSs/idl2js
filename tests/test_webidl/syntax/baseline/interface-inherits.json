@@ -1,0 +1,74 @@
+[
+    {
+        "type": "interface",
+        "name": "Animal",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "attribute",
+                "name": "name",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "DOMString"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    },
+    {
+        "type": "interface",
+        "name": "Human",
+        "inheritance": "Animal",
+        "members": [
+            {
+                "type": "attribute",
+                "name": "pet",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "Dog"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    },
+    {
+        "type": "interface",
+        "name": "Dog",
+        "inheritance": "Animal",
+        "members": [
+            {
+                "type": "attribute",
+                "name": "owner",
+                "idl_type": {
+                    "type": "attribute-type",
+                    "ext_attrs": [],
+                    "generic": "",
+                    "nullable": false,
+                    "union": false,
+                    "idl_type": "Human"
+                },
+                "ext_attrs": [],
+                "special": "",
+                "readonly": false
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    }
+]

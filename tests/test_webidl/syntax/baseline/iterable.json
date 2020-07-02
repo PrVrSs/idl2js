@@ -1,0 +1,95 @@
+[
+    {
+        "type": "interface",
+        "name": "IterableOne",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "iterable",
+                "idl_type": [
+                    {
+                        "type": null,
+                        "ext_attrs": [],
+                        "generic": "",
+                        "nullable": false,
+                        "union": false,
+                        "idl_type": "long"
+                    }
+                ],
+                "arguments": [],
+                "ext_attrs": [],
+                "readonly": false,
+                "async_": false
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    },
+    {
+        "type": "interface",
+        "name": "IterableTwo",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "iterable",
+                "idl_type": [
+                    {
+                        "type": null,
+                        "ext_attrs": [],
+                        "generic": "",
+                        "nullable": false,
+                        "union": false,
+                        "idl_type": "short"
+                    },
+                    {
+                        "type": null,
+                        "ext_attrs": [],
+                        "generic": "",
+                        "nullable": true,
+                        "union": false,
+                        "idl_type": "double"
+                    }
+                ],
+                "arguments": [],
+                "ext_attrs": [],
+                "readonly": false,
+                "async_": false
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    },
+    {
+        "type": "interface",
+        "name": "IterableThree",
+        "inheritance": null,
+        "members": [
+            {
+                "type": "iterable",
+                "idl_type": [
+                    {
+                        "type": null,
+                        "ext_attrs": [
+                            {
+                                "type": "extended-attribute",
+                                "name": "XAttr",
+                                "rhs": null,
+                                "arguments": []
+                            }
+                        ],
+                        "generic": "",
+                        "nullable": false,
+                        "union": false,
+                        "idl_type": "long"
+                    }
+                ],
+                "arguments": [],
+                "ext_attrs": [],
+                "readonly": false,
+                "async_": false
+            }
+        ],
+        "ext_attrs": [],
+        "partial": false
+    }
+]

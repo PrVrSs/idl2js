@@ -1,8 +1,8 @@
 import uuid
 from typing import NamedTuple
 
-from .const import LET
-from .nodes import VariableDeclaration, VariableDeclarator, Identifier
+from idl2js.js.const import LET
+from idl2js.js.nodes import VariableDeclaration, VariableDeclarator, Identifier
 
 
 def unique_name_generator():
