@@ -5,9 +5,6 @@
 [![Python Version](https://img.shields.io/badge/python-3.8-blue?style=plastic)](https://www.python.org/)
 [![License](https://img.shields.io/cocoapods/l/A?style=plastic)](https://github.com/PrVrSs/idl2js/blob/master/LICENSE)
 
-## Description
-
-Grammar-based Fuzzer that uses WebIDL as a grammar.
 
 ### Example
 
