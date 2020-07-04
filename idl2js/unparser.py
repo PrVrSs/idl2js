@@ -29,15 +29,15 @@ class parentheses:
         self._queue = deque()
 
     def __call__(self, paren_type):
-        self._queue.append(parent := self._parentheses[paren_type])
-        self._unparser.write(parent.open)
+        self._queue.append(self._parentheses[paren_type])
 
         return self
 
+    def __enter__(self):
+        self._unparser.write(self._queue[-1].open)
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._unparser.write(self._queue.pop().close)
-
-    __enter__ = lambda _: ...
 
 
 class Unparser(Visitor[T]):
