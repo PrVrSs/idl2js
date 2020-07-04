@@ -1,6 +1,6 @@
+from contextlib import contextmanager
 from pathlib import Path
 from types import SimpleNamespace
-from collections import deque
 
 from idl2js.converter import InterfaceTransformer
 from idl2js.js.nodes import Ast as JsAst
@@ -15,36 +15,17 @@ BRACE = 'brace'
 BRACKET = 'bracket'
 
 
-class parentheses:
-
-    _parentheses = {
-        PAREN: SimpleNamespace(open='(', close=')'),
-        BRACE: SimpleNamespace(open='{', close='}'),
-        BRACKET: SimpleNamespace(open='[', close=']'),
-    }
-
-    def __init__(self, unparser):
-        self._unparser = unparser
-
-        self._queue = deque()
-
-    def __call__(self, paren_type):
-        self._queue.append(self._parentheses[paren_type])
-
-        return self
-
-    def __enter__(self):
-        self._unparser.write(self._queue[-1].open)
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self._unparser.write(self._queue.pop().close)
+_parentheses = {
+    PAREN: SimpleNamespace(open='(', close=')'),
+    BRACE: SimpleNamespace(open='{', close='}'),
+    BRACKET: SimpleNamespace(open='[', close=']'),
+}
 
 
 class Unparser(Visitor[T]):
 
     def __init__(self):
         self._source = []
-        self._parentheses = parentheses(self)
 
     def write(self, text):
         self._source.append(text)
@@ -96,6 +77,12 @@ class Unparser(Visitor[T]):
 
         with self._parentheses(PAREN):
             self.traverse(node.arguments)
+
+    @contextmanager
+    def _parentheses(self, paren):
+        self.write(_parentheses[paren].open)
+        yield
+        self.write(_parentheses[paren].close)
 
 
 def unparse(ast):
