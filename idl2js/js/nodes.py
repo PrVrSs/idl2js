@@ -65,6 +65,22 @@ class CallExpression(Ast):
 
 
 @attr.s
+class Literal(Ast):
+
+    raw = attr.ib(init=False)
+    value = attr.ib()
+    type: str = attr.ib(default='Literal')
+
+    def __attrs_post_init__(self):
+        if isinstance(self.value, int):
+            self.raw = str(self.value)
+        elif isinstance(self.value, str):
+            self.raw = f"'{self.value}'"
+        else:
+            self.raw = self.value
+
+
+@attr.s
 class AssignmentExpression(Ast):
     ...
 
@@ -76,11 +92,6 @@ class ArrayExpression(Ast):
 
 @attr.s
 class ObjectExpression(Ast):
-    ...
-
-
-@attr.s
-class Literal(Ast):
     ...
 
 

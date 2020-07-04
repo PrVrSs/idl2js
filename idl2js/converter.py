@@ -48,7 +48,7 @@ class InterfaceTransformer(Visitor[T]):
                     object=Identifier(name=self._variable_storage.interface),
                     property=Identifier(name=node.name)
                 ),
-                arguments=[]
+                arguments=self._variable_storage.create_arguments(node.arguments)
             ),
             idl_type=node.idl_type
         )
@@ -103,7 +103,7 @@ class DefinitionCollector(Visitor[T]):
 
 
 def main():
-    raw_idl = (Path(__file__).parent / 'interfaces' / 'blob.webidl').resolve()
+    raw_idl = (Path(__file__).parent / 'idl' / 'blob.webidl').resolve()
 
     idl_ast = WebIDLVisitor(WebIDLParser(str(raw_idl)).parse()).run()
 

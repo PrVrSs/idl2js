@@ -5,7 +5,7 @@
         "declarations": [
             {
                 "id": {
-                    "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                    "name": "v_1baa61b4581c4db3a2e93dd4dca67a75",
                     "type": "Identifier"
                 },
                 "init": {
@@ -26,12 +26,12 @@
         "declarations": [
             {
                 "id": {
-                    "name": "v_9e3a45e55f194055b5aec84f229b4ae9",
+                    "name": "v_71e7bd7d39ad4e4aa6e52e65a7a493ff",
                     "type": "Identifier"
                 },
                 "init": {
                     "object": {
-                        "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                        "name": "v_1baa61b4581c4db3a2e93dd4dca67a75",
                         "type": "Identifier"
                     },
                     "property": {
@@ -51,12 +51,12 @@
         "declarations": [
             {
                 "id": {
-                    "name": "v_54c5f1f39cc542799e4c576e3872293d",
+                    "name": "v_fd1b1d816f51404e9ebf3662e8da5fa9",
                     "type": "Identifier"
                 },
                 "init": {
                     "object": {
-                        "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                        "name": "v_1baa61b4581c4db3a2e93dd4dca67a75",
                         "type": "Identifier"
                     },
                     "property": {
@@ -76,13 +76,13 @@
         "declarations": [
             {
                 "id": {
-                    "name": "v_1c9eef079c204064ae38e6cd4b6f8ac5",
+                    "name": "v_7f9686c637c146cd824921d440be12b2",
                     "type": "Identifier"
                 },
                 "init": {
                     "callee": {
                         "object": {
-                            "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                            "name": "v_1baa61b4581c4db3a2e93dd4dca67a75",
                             "type": "Identifier"
                         },
                         "property": {
@@ -92,7 +92,23 @@
                         "computed": false,
                         "type": "MemberExpression"
                     },
-                    "arguments": [],
+                    "arguments": [
+                        {
+                            "raw": "-644425218",
+                            "value": -644425218,
+                            "type": "Literal"
+                        },
+                        {
+                            "raw": "445352897",
+                            "value": 445352897,
+                            "type": "Literal"
+                        },
+                        {
+                            "raw": "'ldzmsycnpp'",
+                            "value": "ldzmsycnpp",
+                            "type": "Literal"
+                        }
+                    ],
                     "type": "CallExpression"
                 },
                 "type": "VariableDeclarator"
@@ -105,13 +121,13 @@
         "declarations": [
             {
                 "id": {
-                    "name": "v_8fb868dba10545eea96499671e63824c",
+                    "name": "v_43ce94522e9b4484806b8ec919482f9b",
                     "type": "Identifier"
                 },
                 "init": {
                     "callee": {
                         "object": {
-                            "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                            "name": "v_1baa61b4581c4db3a2e93dd4dca67a75",
                             "type": "Identifier"
                         },
                         "property": {
@@ -134,13 +150,13 @@
         "declarations": [
             {
                 "id": {
-                    "name": "v_61e228946e204e759819f777b5326767",
+                    "name": "v_5a7fca5fbc33445f982bf23535c82d0c",
                     "type": "Identifier"
                 },
                 "init": {
                     "callee": {
                         "object": {
-                            "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                            "name": "v_1baa61b4581c4db3a2e93dd4dca67a75",
                             "type": "Identifier"
                         },
                         "property": {
@@ -163,13 +179,13 @@
         "declarations": [
             {
                 "id": {
-                    "name": "v_9818bdf5798a48aabc116f14e4505770",
+                    "name": "v_c5099a25590f4a37afec279456fe2baa",
                     "type": "Identifier"
                 },
                 "init": {
                     "callee": {
                         "object": {
-                            "name": "v_8fbbc0f0813c4474804a4a38b533fedf",
+                            "name": "v_1baa61b4581c4db3a2e93dd4dca67a75",
                             "type": "Identifier"
                         },
                         "property": {
