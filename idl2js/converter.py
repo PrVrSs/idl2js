@@ -10,10 +10,10 @@ from idl2js.js.nodes import (
     NewExpression,
 )
 from idl2js.storages import VariableStorage, DefinitionStorage
-from idl2js.visitor import Visitor, T
+from idl2js.visitor import AstType, Visitor
 
 
-class InterfaceTransformer(Visitor[T]):
+class InterfaceTransformer(Visitor[AstType]):
 
     def __init__(self, variable_storage: VariableStorage):
         self._variable_storage = variable_storage
@@ -60,7 +60,7 @@ class ConversionRule:
     pass
 
 
-class CollectTypedef(Visitor[T]):
+class CollectTypedef(Visitor[AstType]):
 
     def __init__(self, definition_storage):
         self._definition_storage = definition_storage
@@ -84,7 +84,7 @@ class CollectTypedef(Visitor[T]):
         return self.visit(idl_type)
 
 
-class DefinitionCollector(Visitor[T]):
+class DefinitionCollector(Visitor[AstType]):
 
     def __init__(self, definition_storage: DefinitionStorage):
         self._definition_storage = definition_storage

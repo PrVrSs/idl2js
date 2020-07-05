@@ -1,14 +1,16 @@
+from typing import Any, Dict, List
+
 import attr
 
+from .parser import Parser, SyntaxErrorInfo
 from .visitor import Visitor
-from .parser import Parser
 
 
-def validate(file: str):
+def validate(file: str) -> List[SyntaxErrorInfo]:
     return Parser(file).validate()
 
 
-def pretty_parse(file: str):
+def pretty_parse(file: str) -> List[Dict[str, Any]]:
     ast = Visitor(Parser(file).parse()).run()
 
     return [

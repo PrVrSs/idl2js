@@ -11,13 +11,6 @@
 *[WebIdl](/examples/raw.webidl)* → *[WebIdlAst](/examples/webidl_ast.json)* → *[JsAst](/examples/js_ast.json)* → *[Js](examples/result.js)*
 
 
-### RoadMap
-
-- [x] WebIdl Parser
-- [ ] WebIdlAst → JsAst
-- [ ] Unparse JsAst
-
-
 ### Links
 
 

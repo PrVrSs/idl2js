@@ -1,12 +1,12 @@
 from contextlib import contextmanager
 from pathlib import Path
 from types import SimpleNamespace
-from typing import NewType, Dict
+from typing import Dict, Iterator, NewType
 
 from idl2js.converter import InterfaceTransformer
 from idl2js.js.nodes import Ast as JsAst
 from idl2js.storages import VariableStorage
-from idl2js.visitor import Visitor, T
+from idl2js.visitor import AstType, Visitor
 from idl2js.webidl import WebIDLParser, WebIDLVisitor
 from idl2js.webidl.nodes import Ast as WebIDLAst
 
@@ -32,12 +32,12 @@ def interleave(iterable, func, separator):
     except StopIteration:
         pass
     else:
-        for x in it:
+        for item in it:
             separator()
-            func(x)
+            func(item)
 
 
-class Unparser(Visitor[T]):
+class Unparser(Visitor[AstType]):
     """
     Methods in this class recursively traverse an AST and output source code
     for the abstract syntax.
@@ -57,7 +57,6 @@ class Unparser(Visitor[T]):
             super().visit(node)
 
     def visit(self, node) -> str:
-        self._source = []
         self.traverse(node)
 
         return ''.join(self._source)
@@ -105,7 +104,7 @@ class Unparser(Visitor[T]):
         self.write(node.raw)
 
     @contextmanager
-    def _parentheses(self, paren: Parenthesis) -> None:
+    def _parentheses(self, paren: Parenthesis) -> Iterator[None]:
         self.write(_parentheses[paren].open)
         yield
         self.write(_parentheses[paren].close)

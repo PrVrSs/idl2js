@@ -5,10 +5,10 @@ import stringcase
 from attr import fields
 
 
-T = TypeVar('T')
+AstType = TypeVar('AstType')
 
 
-class Visitor(Generic[T]):
+class Visitor(Generic[AstType]):
 
     def visit(self, node):
         visitor = getattr(

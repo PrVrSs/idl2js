@@ -1,7 +1,7 @@
 from functools import reduce, update_wrapper
-from typing import Dict, ClassVar, List, NamedTuple, cast
+from typing import ClassVar, Dict, List, NamedTuple, cast
 
-from antlr4 import CommonTokenStream, FileStream, BailErrorStrategy
+from antlr4 import BailErrorStrategy, CommonTokenStream, FileStream
 from antlr4.error.ErrorListener import ErrorListener
 from antlr4.error.ErrorStrategy import DefaultErrorStrategy, ErrorStrategy
 from antlr4.Parser import ParserRuleContext
@@ -20,6 +20,7 @@ class SyntaxErrorInfo(NamedTuple):
 
 
 class WebIDLErrorListener(ErrorListener):
+
     def __init__(self):
         self._errors: List[SyntaxErrorInfo] = []
 
@@ -66,17 +67,20 @@ class Parser:
 
     @staticmethod
     def _build_parser(file: str) -> WebIDLParser:
+        stream = FileStream(fileName=file, encoding='utf-8')
+
         functions = (
-            FileStream,
             WebIDLLexer,
             CommonTokenStream,
             WebIDLParser,
         )
 
         return cast(
-            WebIDLParser, reduce(lambda acc, func: func(acc), functions, file))
+            WebIDLParser,
+            reduce(lambda acc, func: func(acc), functions, stream),
+        )
 
-    def setup_parser_strategy(self, strategy):
+    def setup_parser_strategy(self, strategy: str) -> None:
         self._parser._errHandler = self._error_strategies[strategy]
 
     @_setup_strategy('bail')

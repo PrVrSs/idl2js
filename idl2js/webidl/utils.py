@@ -1,12 +1,11 @@
 from collections import deque
 from contextlib import suppress
-from typing import Optional, TypeVar, Union
-
+from typing import Any, Optional, TypeVar, Union
 
 _U = TypeVar('_U')
 
 
-def setup_type(idl_type, type_):
+def setup_type(idl_type: Any, type_: str) -> None:
     todo = deque([idl_type])
 
     with suppress(IndexError):

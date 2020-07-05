@@ -1,8 +1,7 @@
-import string
 import uuid
-from random import choice, randint
 from typing import NamedTuple
 
+from idl2js.built_in_types import BuiltInTypes
 from idl2js.js.const import LET
 from idl2js.js.nodes import (
     Identifier,
@@ -26,40 +25,6 @@ class Variable(NamedTuple):
 i32 = (-2**31, 2**31 - 1)
 
 
-class StdTypes:
-    """
-    добавить, чтобы через конфиг задать какой-нибудь тип
-    и его возможные значения
-    мб также сделать возможным: задавать аргументы методов определенных объектов
-    как определенные значения так и рандомный диапозон
-
-    Blob:
-        slice:
-        - 0..=100
-        - random
-        - String:
-            ...
-
-    подумать над форматом, как содержимого так и самого конфига yaml, ini, etc.
-    """
-    def find_type(self, type_):
-        if type_ == 'long long':
-            return self.long_long()
-        elif type_ == 'DOMString':
-            return self.dom_string()
-
-        return type_
-
-    def long_long(self):
-        return randint(*i32)
-
-    def dom_string(self):
-        return ''.join(
-            choice(string.ascii_lowercase)
-            for _ in range(randint(1, 10))
-        )
-
-
 class VariableStorage:
     """
     сделать crud.
@@ -70,7 +35,7 @@ class VariableStorage:
 
     def __init__(self):
         self._interface = ''
-        self._std_types = StdTypes()
+        self._std_types = BuiltInTypes()
 
     @property
     def interface(self):
@@ -106,7 +71,7 @@ class VariableStorage:
         ]
 
     def create_variable_by_idl_type(self, node):
-        return Literal(value=self._std_types.find_type(node.idl_type))
+        return Literal(value=self._std_types.generate(node.idl_type))
 
 
 class DefinitionStorage:
