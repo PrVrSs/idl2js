@@ -10,7 +10,8 @@ AstType = TypeVar('AstType')
 
 class Visitor(Generic[AstType]):
 
-    def visit(self, node):
+    def visit(self, node: AstType):
+        """Visit a node."""
         visitor = getattr(
             self,
             f'visit_{stringcase.snakecase(node.__class__.__name__)}',
@@ -19,14 +20,16 @@ class Visitor(Generic[AstType]):
 
         return visitor(node)
 
-    def generic_visit(self, node):
+    def generic_visit(self, node: AstType):
+        """Called if no explicit visitor function exists for a node."""
+        ast_type = self.__orig_class__.__args__  # type: ignore
 
         for name in map(attrgetter('name'), fields(type(node))):
             field = getattr(node, name)
 
-            if isinstance(field, self.__orig_class__.__args__):
+            if isinstance(field, ast_type):
                 self.visit(field)
             elif isinstance(field, list):
                 for item in field:
-                    if isinstance(item, self.__orig_class__.__args__):
+                    if isinstance(item, ast_type):
                         self.visit(item)

@@ -7,7 +7,7 @@ from idl2js.converter import InterfaceTransformer
 from idl2js.js.nodes import Ast as JsAst
 from idl2js.storages import VariableStorage
 from idl2js.visitor import AstType, Visitor
-from idl2js.webidl import WebIDLParser, WebIDLVisitor
+from idl2js.webidl import parse
 from idl2js.webidl.nodes import Ast as WebIDLAst
 
 
@@ -129,7 +129,7 @@ def _dump_js(variables, file='tmp.json'):
 
 def main():
     raw_idl = (Path(__file__).parent / 'idl' / 'blob.webidl').resolve()
-    idl_ast = WebIDLVisitor(WebIDLParser(str(raw_idl)).parse()).run()
+    idl_ast = parse(str(raw_idl))
 
     var_store = VariableStorage()
 

@@ -6,18 +6,22 @@ import attr
 from .utils import escaped_name
 
 
+@attr.s
 class Ast(abc.ABC):
     ...
 
 
+@attr.s
 class Definition(Ast):
     ...
 
 
+@attr.s
 class Member(Ast):
     ...
 
 
+@attr.s
 class Expression(Ast):
     ...
 

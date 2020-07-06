@@ -22,9 +22,6 @@ class Variable(NamedTuple):
     type: str
 
 
-i32 = (-2**31, 2**31 - 1)
-
-
 class VariableStorage:
     """
     сделать crud.

@@ -4,6 +4,7 @@ from typing import Any, List
 import attr
 
 
+@attr.s
 class Ast(abc.ABC):
     ...
 

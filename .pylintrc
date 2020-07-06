@@ -23,6 +23,14 @@ disable=
     too-few-public-methods,
 
 
+[BASIC]
+
+# Good variable names which should always be accepted, separated by a comma.
+good-names=
+    id,
+    it,
+
+
 [CLASSES]
 
 # List of member names, which should be excluded from the protected access
