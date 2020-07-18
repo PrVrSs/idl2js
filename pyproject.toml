@@ -10,7 +10,12 @@ python = "^3.8"
 
 antlr4-python3-runtime = "^4.8"
 attrs = "^19.3.0"
+more_itertools = "^8.4.0"
 stringcase = "^1.2.0"
+click = "^7.1.2"
+Cython = "^0.29.21"
+GitPython = "^3.1.7"
+PyGithub = "^1.51"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.782"
@@ -18,9 +23,9 @@ pylint = "^2.5.3"
 pytest = "^5.4.3"
 pytest-cov = "^2.9.0"
 
+m2r = "^0.2.1"
 sphinx = "^3.1.1"
 sphinx_rtd_theme = "^0.5.0"
-m2r = "^0.2.1"
 
 [build-system]
 requires = ["poetry>=0.12"]

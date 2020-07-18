@@ -16,3 +16,5 @@
 
 * [searchfox - webidl](https://searchfox.org/mozilla-central/source/dom/webidl)
 * [original webidl parser](https://github.com/w3c/webidl2.js)
+* [TSJS-lib-generator](https://github.com/microsoft/TSJS-lib-generator/tree/master/inputfiles/idl)
+* [ECMAScript® 2021 Language Specification](https://tc39.es/ecma262/)
