@@ -103,7 +103,7 @@ class DefinitionCollector(Visitor[AstType]):
 
 
 def main():
-    raw_idl = (Path(__file__).parent / 'idl' / 'blob.webidl').resolve()
+    raw_idl = (Path(__file__).parent / 'idl' / 'std' / 'blob.webidl').resolve()
 
     idl_ast = WebIDLVisitor(WebIDLParser(str(raw_idl)).parse()).run()
 

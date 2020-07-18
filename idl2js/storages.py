@@ -23,10 +23,7 @@ class Variable(NamedTuple):
 
 
 class VariableStorage:
-    """
-    сделать crud.
-    отделить `vars` `vars_as_ast`
-    """
+
     vars = []
     vars_as_ast = []
 
@@ -69,6 +66,18 @@ class VariableStorage:
 
     def create_variable_by_idl_type(self, node):
         return Literal(value=self._std_types.generate(node.idl_type))
+
+
+class VariableCreator:
+
+    available_types = []
+
+    def __init__(self):
+        self._std_types = BuiltInTypes()
+        self._variable_storage = VariableStorage()
+
+    def create_literal(self, node):
+        Literal(value=self._std_types.generate(node.idl_type))
 
 
 class DefinitionStorage:

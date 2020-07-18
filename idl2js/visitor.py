@@ -1,5 +1,5 @@
 from operator import attrgetter
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar
 
 import stringcase
 from attr import fields
@@ -10,7 +10,7 @@ AstType = TypeVar('AstType')
 
 class Visitor(Generic[AstType]):
 
-    def visit(self, node: AstType):
+    def visit(self, node: AstType) -> Any:
         """Visit a node."""
         visitor = getattr(
             self,
@@ -20,7 +20,7 @@ class Visitor(Generic[AstType]):
 
         return visitor(node)
 
-    def generic_visit(self, node: AstType):
+    def generic_visit(self, node: AstType) -> None:
         """Called if no explicit visitor function exists for a node."""
         ast_type = self.__orig_class__.__args__  # type: ignore
 

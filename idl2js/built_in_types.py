@@ -12,6 +12,7 @@ LONG_LONG = 'long long'
 UNSIGNED_LONG_LONG = 'unsigned long long'
 
 DOM_STRING = 'DOMString'
+USV_STRING = 'USVString'
 
 INT = frozenset((
     BYTE,
@@ -22,6 +23,11 @@ INT = frozenset((
     UNSIGNED_LONG,
     LONG_LONG,
     UNSIGNED_LONG_LONG,
+))
+
+STRING = frozenset((
+    DOM_STRING,
+    USV_STRING,
 ))
 
 

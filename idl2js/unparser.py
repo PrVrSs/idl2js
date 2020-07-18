@@ -9,6 +9,7 @@ from idl2js.storages import VariableStorage
 from idl2js.visitor import AstType, Visitor
 from idl2js.webidl import parse
 from idl2js.webidl.nodes import Ast as WebIDLAst
+from idl2js.utils import interleave
 
 
 Parenthesis = NewType('Parenthesis', str)
@@ -24,25 +25,11 @@ _parentheses: Dict[Parenthesis, SimpleNamespace] = {
 }
 
 
-def interleave(iterable, func, separator):
-    it = iter(iterable)
-
-    try:
-        func(next(it))
-    except StopIteration:
-        pass
-    else:
-        for item in it:
-            separator()
-            func(item)
-
-
 class Unparser(Visitor[AstType]):
     """
     Methods in this class recursively traverse an AST and output source code
     for the abstract syntax.
     """
-
     def __init__(self):
         self._source = []
 
@@ -114,21 +101,8 @@ def unparse(ast: JsAst) -> str:
     return Unparser[JsAst]().visit(ast)
 
 
-def _dump_js(variables, file='tmp.json'):
-    # tmp
-    import attr
-    import json
-
-    with open(file, 'w') as f:
-        json.dump(
-            obj=[attr.asdict(variable) for variable in variables],
-            fp=f,
-            indent=4,
-        )
-
-
 def main():
-    raw_idl = (Path(__file__).parent / 'idl' / 'blob.webidl').resolve()
+    raw_idl = (Path(__file__).parent / 'idl' / 'std' / 'blob.webidl').resolve()
     idl_ast = parse(str(raw_idl))
 
     var_store = VariableStorage()
