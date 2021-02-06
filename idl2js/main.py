@@ -44,7 +44,7 @@ def _prepare_output_dir(_: Context, __: Option, value: Optional[str]) -> Optiona
     help='',
 )
 @click.option(
-    '--level', '-l',
+    '-l', '--level',
     default='debug',
     type=click.Choice(LOG_LEVELS.keys()),
     help='',
