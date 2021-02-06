@@ -1,0 +1,2 @@
+class IDLParseError(Exception):
+    pass

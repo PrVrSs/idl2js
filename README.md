@@ -6,9 +6,16 @@
 [![License](https://img.shields.io/cocoapods/l/A?style=plastic)](https://github.com/PrVrSs/idl2js/blob/master/LICENSE)
 
 
-### Example
+### CLI *WIP*
 
-*[WebIdl](/examples/raw.webidl)* → *[WebIdlAst](/examples/webidl_ast.json)* → *[JsAst](/examples/js_ast.json)* → *[Js](examples/result.js)*
+```
+python -m idl2js -f docs/examples/raw.webidl
+```
+
+
+### How it's work
+
+*[WebIdl](/docs/examples/raw.webidl)* → *[WebIdlAst](/docs/examples/webidl_ast.json)* → *[JsAst](/docs/examples/js_ast.json)* → *[Js](docs/examples/result.js)*
 
 
 ### Links

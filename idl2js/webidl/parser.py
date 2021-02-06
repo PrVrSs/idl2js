@@ -2,11 +2,14 @@ from functools import reduce, update_wrapper
 from typing import ClassVar, Dict, List, NamedTuple, cast
 
 from antlr4 import BailErrorStrategy, CommonTokenStream, FileStream
+from antlr4.error.Errors import ParseCancellationException
 from antlr4.error.ErrorListener import ErrorListener
 from antlr4.error.ErrorStrategy import DefaultErrorStrategy, ErrorStrategy
 from antlr4.Parser import ParserRuleContext
 
 from .generated import WebIDLLexer, WebIDLParser
+
+from ..error import IDLParseError
 
 
 class SyntaxErrorInfo(NamedTuple):
@@ -85,7 +88,10 @@ class Parser:
 
     @_setup_strategy('bail')
     def parse(self) -> ParserRuleContext:
-        return self._parser.webIDL()
+        try:
+            return self._parser.webIDL()
+        except ParseCancellationException:
+            raise IDLParseError
 
     @_setup_strategy('default')
     def validate(self) -> List[SyntaxErrorInfo]:

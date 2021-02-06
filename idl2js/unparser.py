@@ -5,7 +5,7 @@ from typing import Dict, Iterator, NewType
 
 from idl2js.converter import InterfaceTransformer
 from idl2js.js.nodes import Ast as JsAst
-from idl2js.storages import VariableStorage
+from idl2js.storage import Storage
 from idl2js.visitor import AstType, Visitor
 from idl2js.webidl import parse
 from idl2js.webidl.nodes import Ast as WebIDLAst
@@ -105,11 +105,11 @@ def main():
     raw_idl = (Path(__file__).parent / 'idl' / 'std' / 'blob.webidl').resolve()
     idl_ast = parse(str(raw_idl))
 
-    var_store = VariableStorage()
+    var_store = Storage()
 
     InterfaceTransformer[WebIDLAst](variable_storage=var_store).visit(idl_ast)
 
-    for variable in var_store.vars_as_ast:
+    for variable in var_store._var:
         print(unparse(variable))
 
 

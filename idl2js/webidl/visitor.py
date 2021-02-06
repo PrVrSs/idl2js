@@ -55,8 +55,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
             ],
         )
 
-    def visitExtendedDefinition(
-            self, ctx: WebIDLParser.ExtendedDefinitionContext):
+    def visitExtendedDefinition(self, ctx: WebIDLParser.ExtendedDefinitionContext):
         definition = ctx.definition().accept(self)
 
         if extended_attribute := ctx.extendedAttributeList():
@@ -80,8 +79,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
 
         return Typedef(idl_type=idl_type, name=ctx.IDENTIFIER().getText())
 
-    def visitIncludesStatement(
-            self, ctx: WebIDLParser.IncludesStatementContext):
+    def visitIncludesStatement(self, ctx: WebIDLParser.IncludesStatementContext):
         return Includes(
             target=ctx.target.text, includes=ctx.includes.text)  # type: ignore
 
@@ -102,8 +100,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
             members=[member.accept(self) for member in ctx.interfaceMembers()],
         )
 
-    def visitPartialInterfaceRest(
-            self, ctx: WebIDLParser.PartialInterfaceRestContext):
+    def visitPartialInterfaceRest(self, ctx: WebIDLParser.PartialInterfaceRestContext):
         return Interface(
             name=ctx.IDENTIFIER().getText(),
             members=[
@@ -151,8 +148,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
         return self._member_with_extended_attribute(
             ctx.mixinMember(), ctx.extendedAttributeList())
 
-    def visitPartialInterfaceMembers(
-            self, ctx: WebIDLParser.PartialInterfaceMembersContext):
+    def visitPartialInterfaceMembers(self, ctx: WebIDLParser.PartialInterfaceMembersContext):
         return self._member_with_extended_attribute(
             ctx.partialInterfaceMember(), ctx.extendedAttributeList())
 
@@ -160,13 +156,11 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
         return self._member_with_extended_attribute(
             ctx.interfaceMember(), ctx.extendedAttributeList())
 
-    def visitDictionaryMembers(
-            self, ctx: WebIDLParser.DictionaryMembersContext):
+    def visitDictionaryMembers(self, ctx: WebIDLParser.DictionaryMembersContext):
         return self._member_with_extended_attribute(
             ctx.dictionaryMember(), ctx.extendedAttributeList())
 
-    def visitCallbackInterfaceMembers(
-            self, ctx: WebIDLParser.CallbackInterfaceMembersContext):
+    def visitCallbackInterfaceMembers(self, ctx: WebIDLParser.CallbackInterfaceMembersContext):
         return self._member_with_extended_attribute(
             ctx.callbackInterfaceMember(), ctx.extendedAttributeList())
 
@@ -239,15 +233,13 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
 
         return attribute
 
-    def visitCallbackOrInterfaceOrMixin(
-            self, ctx: WebIDLParser.CallbackOrInterfaceOrMixinContext):
+    def visitCallbackOrInterfaceOrMixin(self, ctx: WebIDLParser.CallbackOrInterfaceOrMixinContext):
         if callback := ctx.callbackRestOrInterface():
             return callback.accept(self)
 
         return ctx.interfaceOrMixin().accept(self)
 
-    def visitCallbackRestOrInterface(
-            self, ctx: WebIDLParser.CallbackRestOrInterfaceContext):
+    def visitCallbackRestOrInterface(self, ctx: WebIDLParser.CallbackRestOrInterfaceContext):
         if callback_rest := ctx.callbackRest():
             return callback_rest.accept(self)
 
@@ -293,8 +285,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
             readonly=ctx.READONLY() is not None,
         )
 
-    def visitCallbackInterfaceMember(
-            self, ctx: WebIDLParser.CallbackInterfaceMemberContext):
+    def visitCallbackInterfaceMember(self, ctx: WebIDLParser.CallbackInterfaceMemberContext):
         if regular_operation := ctx.regularOperation():
             return self._operation(regular_operation)
 
@@ -371,8 +362,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
             ],
         )
 
-    def visitOptionalArgumentList(
-            self, ctx: WebIDLParser.OptionalArgumentListContext):
+    def visitOptionalArgumentList(self, ctx: WebIDLParser.OptionalArgumentListContext):
         if arg_list := ctx.argumentList():
             arg_list = arg_list.accept(self)
 
@@ -405,8 +395,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
 
         return argument
 
-    def visitExtendedAttributeList(
-            self, ctx: WebIDLParser.ExtendedAttributeListContext):
+    def visitExtendedAttributeList(self, ctx: WebIDLParser.ExtendedAttributeListContext):
         return [
             extendedAttribute.accept(self)
             for extendedAttribute in ctx.extendedAttribute()
@@ -416,8 +405,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
     def _extended_attribute(name, rhs=None, arguments=None):
         return ExtendedAttribute(name=name, rhs=rhs, arguments=arguments or [])
 
-    def visitExtendedAttributeNoArgs(
-            self, ctx: WebIDLParser.ExtendedAttributeNoArgsContext):
+    def visitExtendedAttributeNoArgs(self, ctx: WebIDLParser.ExtendedAttributeNoArgsContext):
         return self._extended_attribute(ctx.IDENTIFIER().getText())
 
     def visitExtendedAttributeNamedArgList(
@@ -428,22 +416,19 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
             rhs=Literal(type='identifier', value=ctx.rhs.text),  # type: ignore
         )
 
-    def visitExtendedAttributeArgList(
-            self, ctx: WebIDLParser.ExtendedAttributeArgListContext):
+    def visitExtendedAttributeArgList(self, ctx: WebIDLParser.ExtendedAttributeArgListContext):
         return self._extended_attribute(
             name=ctx.name.text,  # type: ignore
             arguments=ctx.argumentList().accept(self),
         )
 
-    def visitExtendedAttributeIdentList(
-            self, ctx: WebIDLParser.ExtendedAttributeIdentListContext):
+    def visitExtendedAttributeIdentList(self, ctx: WebIDLParser.ExtendedAttributeIdentListContext):
         return self._extended_attribute(
             name=ctx.name.text,  # type: ignore
             rhs=ctx.identifierList().accept(self)
         )
 
-    def visitExtendedAttributeIdent(
-            self, ctx: WebIDLParser.ExtendedAttributeIdentContext):
+    def visitExtendedAttributeIdent(self, ctx: WebIDLParser.ExtendedAttributeIdentContext):
         return self._extended_attribute(
             name=ctx.name.text, rhs=ctx.rhs.accept(self))  # type: ignore
 
@@ -639,8 +624,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
 
         return ctx.getChild(0).getText()
 
-    def visitUnrestrictedFloatType(
-            self, ctx: WebIDLParser.UnrestrictedFloatTypeContext):
+    def visitUnrestrictedFloatType(self, ctx: WebIDLParser.UnrestrictedFloatTypeContext):
         float_type = ctx.floatType().accept(self)
 
         if ctx.UNRESTRICTED():
