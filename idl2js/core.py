@@ -6,7 +6,7 @@ from idl2js.converter import InterfaceTransformer
 from idl2js.webidl.nodes import Ast as WebIDLAst
 from idl2js.unparser import unparse
 from idl2js.idl_processor import IDLProcessor
-from idl2js.builder import Builder
+from idl2js.builder import Builder, try_statement
 from idl2js.built_in_types import BuiltInTypes
 
 
@@ -35,7 +35,7 @@ class Idl2Js:
 
     def generate(self):
         return [
-            unparse(variable.ast)
+            unparse(try_statement(variable.ast))
             for variable in self._storage._var
         ]
 

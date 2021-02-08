@@ -1,7 +1,7 @@
-let v_1baa61b4581c4db3a2e93dd4dca67a75 = new Blob()
-let v_71e7bd7d39ad4e4aa6e52e65a7a493ff = v_1baa61b4581c4db3a2e93dd4dca67a75.size
-let v_fd1b1d816f51404e9ebf3662e8da5fa9 = v_1baa61b4581c4db3a2e93dd4dca67a75.type
-let v_7f9686c637c146cd824921d440be12b2 = v_1baa61b4581c4db3a2e93dd4dca67a75.slice(-644425218, 445352897, 'ldzmsycnpp')
-let v_43ce94522e9b4484806b8ec919482f9b = v_1baa61b4581c4db3a2e93dd4dca67a75.stream()
-let v_5a7fca5fbc33445f982bf23535c82d0c = v_1baa61b4581c4db3a2e93dd4dca67a75.text()
-let v_c5099a25590f4a37afec279456fe2baa = v_1baa61b4581c4db3a2e93dd4dca67a75.arrayBuffer()
+try {v_bc03190cbb804e79bc6c509b720def2a = new Blob()} catch(e){}
+try {v_646cb8930b1945dcb84275a1357519eb = v_bc03190cbb804e79bc6c509b720def2a.size} catch(e){}
+try {v_b0b6b18c2c2d4c67b2e3ea18180037a9 = v_bc03190cbb804e79bc6c509b720def2a.type} catch(e){}
+try {v_272b851e7a244fb2a1ab6d48fe7b3adc = v_bc03190cbb804e79bc6c509b720def2a.slice(-5316829615328135670, -8185895346671907014, 'xj')} catch(e){}
+try {v_5bbe219bd08644469a6969b24047bb81 = v_bc03190cbb804e79bc6c509b720def2a.stream()} catch(e){}
+try {v_69ae1795bee646deaa325714bc9e8acc = v_bc03190cbb804e79bc6c509b720def2a.text()} catch(e){}
+try {v_cd11e74f8d4c4d7b9662fb6395fbc226 = v_bc03190cbb804e79bc6c509b720def2a.arrayBuffer()} catch(e){}

@@ -3,7 +3,7 @@ from .builder import (
     create_variable,
     create_object,
     create_operation,
-    unique_name_generator,
+    unique_name,
     Builder,
 )
 from .visitor import AstType, Visitor
@@ -24,7 +24,7 @@ class InterfaceTransformer(Visitor[AstType]):
             return
 
         self._type = node.name
-        self._name = unique_name_generator()
+        self._name = unique_name()
 
         self.generic_visit(node)
 
@@ -43,7 +43,7 @@ class InterfaceTransformer(Visitor[AstType]):
             create_variable(
                 type_=node.idl_type.idl_type,
                 ast=create_attribute(
-                    name=unique_name_generator(),
+                    name=unique_name(),
                     progenitor=self._name,
                     method=node.name
                 ),
@@ -57,7 +57,7 @@ class InterfaceTransformer(Visitor[AstType]):
             create_variable(
                 type_=node.idl_type.idl_type,
                 ast=create_operation(
-                    name=unique_name_generator(),
+                    name=unique_name(),
                     progenitor=self._name,
                     method=node.name,
                     arguments=self._builder.create_arguments(node.arguments),

@@ -1,23 +1,29 @@
 import uuid
 
-from typing import NamedTuple, Union
+from typing import NamedTuple
 
 from idl2js.storage import Storage
 from idl2js.built_in_types import BuiltInTypes
 from idl2js.js.const import LET
 from idl2js.js.nodes import (
+    AssignmentExpression,
     Ast,
+    BlockStatement,
+    Expression,
+    ExpressionStatement,
     CallExpression,
+    CatchClause,
     Identifier,
     Literal,
     NewExpression,
     MemberExpression,
+    TryStatement,
     VariableDeclaration,
     VariableDeclarator,
 )
 
 
-Expression = Union[NewExpression, MemberExpression, CallExpression]
+CATCH_CONSTANT: str = 'e'
 
 
 class Variable(NamedTuple):
@@ -25,7 +31,7 @@ class Variable(NamedTuple):
     ast: Ast
 
 
-def unique_name_generator():
+def unique_name():
     return f'v_{uuid.uuid4().hex}'
 
 
@@ -38,8 +44,17 @@ def variable_ast(name: str, expression: Expression) -> VariableDeclaration:
     )
 
 
-def create_object(name, progenitor, arguments) -> VariableDeclaration:
-    return variable_ast(
+def create_expression(name: str, expression: Expression) -> ExpressionStatement:
+    return ExpressionStatement(
+            expression=AssignmentExpression(
+                left=Identifier(name=name),
+                right=expression,
+            )
+    )
+
+
+def create_object(name, progenitor, arguments) -> ExpressionStatement:
+    return create_expression(
         name=name,
         expression=NewExpression(
             callee=Identifier(name=progenitor),
@@ -48,8 +63,8 @@ def create_object(name, progenitor, arguments) -> VariableDeclaration:
     )
 
 
-def create_attribute(name, progenitor, method) -> VariableDeclaration:
-    return variable_ast(
+def create_attribute(name, progenitor, method) -> ExpressionStatement:
+    return create_expression(
         name=name,
         expression=MemberExpression(
             object=Identifier(name=progenitor),
@@ -58,8 +73,8 @@ def create_attribute(name, progenitor, method) -> VariableDeclaration:
     )
 
 
-def create_operation(name, progenitor, method, arguments) -> VariableDeclaration:
-    return variable_ast(
+def create_operation(name, progenitor, method, arguments) -> ExpressionStatement:
+    return create_expression(
         name=name,
         expression=CallExpression(
             arguments=arguments,
@@ -68,6 +83,16 @@ def create_operation(name, progenitor, method, arguments) -> VariableDeclaration
                 property=Identifier(name=method),
             ),
         )
+    )
+
+
+def try_statement(var: VariableDeclaration) -> TryStatement:
+    return TryStatement(
+        block=BlockStatement(body=[var]),
+        handler=CatchClause(
+            param=Identifier(name=CATCH_CONSTANT),
+            block=BlockStatement(body=[]),
+        ),
     )
 
 

@@ -1,5 +1,5 @@
 import abc
-from typing import Any, List
+from typing import Any, List, Optional, Union
 
 import attr
 
@@ -82,8 +82,42 @@ class Literal(Ast):
 
 
 @attr.s
+class BlockStatement(Ast):
+
+    body: List[Any] = attr.ib(factory=list)
+    type: str = attr.ib(default='BlockStatement')
+
+
+@attr.s
+class CatchClause:
+    param: Identifier = attr.ib()
+    block: BlockStatement = attr.ib()
+    type: str = attr.ib(default='CatchClause')
+
+
+@attr.s
+class TryStatement(Ast):
+
+    handler = attr.ib()
+    block: BlockStatement = attr.ib()
+    finalizer: Optional[Any] = attr.ib(default=None)
+    type: str = attr.ib(default='TryStatement')
+
+
+@attr.s
 class AssignmentExpression(Ast):
-    ...
+
+    left: Identifier = attr.ib()
+    right: Any = attr.ib()
+    operator: str = attr.ib(default='=')
+    type: str = attr.ib(default='AssignmentExpression')
+
+
+@attr.s
+class ExpressionStatement(Ast):
+
+    expression: Any = attr.ib()
+    type: str = attr.ib(default='ExpressionStatement')
 
 
 @attr.s
@@ -99,3 +133,11 @@ class ObjectExpression(Ast):
 @attr.s
 class Property(Ast):
     ...
+
+
+Expression = Union[
+    AssignmentExpression,
+    NewExpression,
+    MemberExpression,
+    CallExpression,
+]

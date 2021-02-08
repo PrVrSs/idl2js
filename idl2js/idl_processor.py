@@ -23,7 +23,7 @@ class IDLProcessor:
         self._idl_files = idl_files
 
     def run(self) -> List[Ast]:
-        return list(filter(None, (parse_idl(file) for file in self._idl_files)))
+        return list(filter(None, map(parse_idl, self._idl_files)))
 
 
 def main():
