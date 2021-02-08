@@ -6,13 +6,6 @@
 [![License](https://img.shields.io/cocoapods/l/A?style=plastic)](https://github.com/PrVrSs/idl2js/blob/master/LICENSE)
 
 
-### CLI *WIP*
-
-```
-python -m idl2js -f docs/examples/raw.webidl
-```
-
-
 ### How it's work
 
 *[WebIdl](/docs/examples/raw.webidl)* → *[WebIdlAst](/docs/examples/webidl_ast.json)* → *[JsAst](/docs/examples/js_ast.json)* → *[Js](docs/examples/result.js)*
@@ -25,3 +18,13 @@ python -m idl2js -f docs/examples/raw.webidl
 * [original webidl parser](https://github.com/w3c/webidl2.js)
 * [TSJS-lib-generator](https://github.com/microsoft/TSJS-lib-generator/tree/master/inputfiles/idl)
 * [ECMAScript® 2021 Language Specification](https://tc39.es/ecma262/)
+
+
+## Contributing
+
+Any help is welcome and appreciated.
+
+
+## License
+
+*idl2js* is licensed under the terms of the Apache-2.0 License (see the file LICENSE).
