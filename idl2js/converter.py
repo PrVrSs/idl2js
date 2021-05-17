@@ -1,25 +1,72 @@
-from .builder import (
+from typing import Type
+
+from .js.statements import (
     create_attribute,
-    create_variable,
     create_object,
     create_operation,
-    unique_name,
-    Builder,
+    create_dict,
+    create_property,
 )
-from .visitor import AstType, Visitor
-from .storage import Storage
+from .js.variable import Variable as JsVariable, create_js_variable
+from .visitor import Visitor
+from .utils import unique_name
+from .webidl.nodes import (
+    Ast as WebIDLAst,
+    Attribute,
+    Constructor,
+    Definition,
+    Dictionary,
+    Interface,
+    Operation,
+)
 
 
-class InterfaceTransformer(Visitor[AstType]):
+class Converter(Visitor[WebIDLAst]):
 
-    def __init__(self, storage: Storage, builder: Builder):
-        self._storage = storage
+    def __init__(self, builder):
+        self.variables: list[JsVariable] = []
+        self.dependencies: list[Converter] = []
+
         self._builder = builder
+
+    def _calculate_node(self, node: WebIDLAst):
+        dependency, property_ = self._builder.create(node)
+
+        if dependency is not None:
+            self.dependencies.append(dependency)
+
+        return property_
+
+
+class DictionaryConverter(Converter):
+
+    def visit_dictionary(self, node: Dictionary) -> None:
+        self.variables.append(
+            create_js_variable(
+                type_=node.name,
+                ast=create_dict(
+                    name=unique_name(),
+                    properties=[
+                        create_property(
+                            key=member.name,  # type: ignore
+                            value=self._calculate_node(node=member),
+                        )
+                        for member in node.members
+                    ]
+                )
+            )
+        )
+
+
+class InterfaceConverter(Converter):
+
+    def __init__(self, builder):
+        super().__init__(builder=builder)
 
         self._type = None
         self._name = None
 
-    def visit_interface(self, node) -> None:
+    def visit_interface(self, node: Interface) -> None:
         if node.partial is True:
             return
 
@@ -28,20 +75,27 @@ class InterfaceTransformer(Visitor[AstType]):
 
         self.generic_visit(node)
 
-    def visit_constructor(self, node):
-        self._storage.add(
-            create_variable(
+    def visit_constructor(self, node: Constructor) -> None:
+        self.variables.append(
+            create_js_variable(
                 type_=self._type,
-                ast=create_object(name=self._name, progenitor=self._type, arguments=[]),
+                ast=create_object(
+                    name=self._name,
+                    progenitor=self._type,
+                    arguments=[
+                        self._calculate_node(node=argument)
+                        for argument in node.arguments
+                    ],
+                ),
             )
         )
 
         self.generic_visit(node)
 
-    def visit_attribute(self, node) -> None:
-        self._storage.add(
-            create_variable(
-                type_=node.idl_type.idl_type,
+    def visit_attribute(self, node: Attribute) -> None:
+        self.variables.append(
+            create_js_variable(
+                type_=node.idl_type.idl_type,  # type: ignore
                 ast=create_attribute(
                     name=unique_name(),
                     progenitor=self._name,
@@ -52,15 +106,18 @@ class InterfaceTransformer(Visitor[AstType]):
 
         self.generic_visit(node)
 
-    def visit_operation(self, node) -> None:
-        self._storage.add(
-            create_variable(
-                type_=node.idl_type.idl_type,
+    def visit_operation(self, node: Operation) -> None:
+        self.variables.append(
+            create_js_variable(
+                type_=node.idl_type.idl_type,  # type: ignore
                 ast=create_operation(
                     name=unique_name(),
                     progenitor=self._name,
                     method=node.name,
-                    arguments=self._builder.create_arguments(node.arguments),
+                    arguments=[
+                        self._calculate_node(node=argument)
+                        for argument in node.arguments
+                    ],
                 )
             )
         )
@@ -68,25 +125,14 @@ class InterfaceTransformer(Visitor[AstType]):
         self.generic_visit(node)
 
 
-class CollectTypedef(Visitor[AstType]):
+CONVERTER_MAP: dict[str, Type[Converter]] = {
+    'dictionary': DictionaryConverter,
+    'interface': InterfaceConverter,
+}
 
-    def __init__(self, definition_storage):
-        self._definition_storage = definition_storage
 
-    def visit_typedef(self, node):
-        self._definition_storage.add_typedef(
-            node.name, self.visit(node.idl_type))
-
-    def visit_idl_type(self, node):
-        idl_type = node.idl_type
-
-        if idl_type is None:
-            return
-
-        if isinstance(idl_type, str):
-            return idl_type
-
-        if isinstance(idl_type, list):
-            return [self.visit(idl) for idl in idl_type]
-
-        return self.visit(idl_type)
+def convert(builder, definition: Definition) -> Converter:
+    return (
+        (converter := CONVERTER_MAP[definition.type](builder=builder)).visit(definition) or
+        converter
+    )

@@ -1,112 +1,55 @@
-import uuid
+from functools import cached_property
+from operator import attrgetter
+from collections import deque
 
-from typing import NamedTuple
+from more_itertools import flatten, first_true, first
 
-from idl2js.storage import Storage
-from idl2js.built_in_types import BuiltInTypes
-from idl2js.js.const import LET
-from idl2js.js.nodes import (
-    AssignmentExpression,
-    Ast,
-    BlockStatement,
-    Expression,
-    ExpressionStatement,
-    CallExpression,
-    CatchClause,
-    Identifier,
-    Literal,
-    NewExpression,
-    MemberExpression,
-    TryStatement,
-    VariableDeclaration,
-    VariableDeclarator,
-)
+from .built_in_types import BuiltInTypes
+from .converter import convert
+from .js.statements import create_literal, create_identifier
 
 
-CATCH_CONSTANT: str = 'e'
+class DefinitionStorage:
 
+    def __init__(self, idls):
+        self._definitions = list(flatten(map(attrgetter('definitions'), idls)))
 
-class Variable(NamedTuple):
-    type: str
-    ast: Ast
-
-
-def unique_name():
-    return f'v_{uuid.uuid4().hex}'
-
-
-def variable_ast(name: str, expression: Expression) -> VariableDeclaration:
-    return VariableDeclaration(
-        kind=LET,
-        declarations=[
-            VariableDeclarator(id=Identifier(name=name), init=expression),
+    @cached_property
+    def build_definition(self):
+        return [
+            definition
+            for definition in self._definitions
+            if definition.type == 'interface' and definition.partial is False
         ]
-    )
 
-
-def create_expression(name: str, expression: Expression) -> ExpressionStatement:
-    return ExpressionStatement(
-            expression=AssignmentExpression(
-                left=Identifier(name=name),
-                right=expression,
-            )
-    )
-
-
-def create_object(name, progenitor, arguments) -> ExpressionStatement:
-    return create_expression(
-        name=name,
-        expression=NewExpression(
-            callee=Identifier(name=progenitor),
-            arguments=arguments,
-        )
-    )
-
-
-def create_attribute(name, progenitor, method) -> ExpressionStatement:
-    return create_expression(
-        name=name,
-        expression=MemberExpression(
-            object=Identifier(name=progenitor),
-            property=Identifier(name=method),
-        )
-    )
-
-
-def create_operation(name, progenitor, method, arguments) -> ExpressionStatement:
-    return create_expression(
-        name=name,
-        expression=CallExpression(
-            arguments=arguments,
-            callee=MemberExpression(
-                object=Identifier(name=progenitor),
-                property=Identifier(name=method),
-            ),
-        )
-    )
-
-
-def try_statement(var: VariableDeclaration) -> TryStatement:
-    return TryStatement(
-        block=BlockStatement(body=[var]),
-        handler=CatchClause(
-            param=Identifier(name=CATCH_CONSTANT),
-            block=BlockStatement(body=[]),
-        ),
-    )
-
-
-def create_variable(type_: str, ast: Ast) -> Variable:
-    return Variable(type=type_, ast=ast)
+    def find_by_type(self, idl_type):
+        return first_true(self._definitions, pred=lambda definition: definition.name == idl_type)
 
 
 class Builder:
-    def __init__(self, storage: Storage, std_types: BuiltInTypes):
-        self._storage = storage
-        self._std_types = std_types
 
-    def create_arguments(self, arguments):
-        return [
-            Literal(value=self._std_types.generate(argument.idl_type.idl_type))
-            for argument in arguments
-        ]
+    def __init__(self, std_types: BuiltInTypes, definition_storage: DefinitionStorage):
+        self._std_types = std_types
+        self._definition_storage = definition_storage
+
+    def create(self, node):
+        if node.idl_type.idl_type in self._std_types:
+            return None, create_literal(self._std_types.generate(node.idl_type.idl_type))
+
+        definition = self._definition_storage.find_by_type(node.idl_type.idl_type)
+        converter = convert(builder=self, definition=definition)
+
+        return converter, create_identifier(first(converter.variables).ast.expression.left.name)
+
+
+def build(definition_storage, builder):
+    for definition in definition_storage.build_definition:
+        result = []
+
+        todo = deque([convert(builder=builder, definition=definition)])
+        while todo:
+            item = todo.popleft()
+            result.append(item.variables)
+            todo.extendleft(item.dependencies)
+
+        yield from flatten(reversed(result))

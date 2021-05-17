@@ -3,12 +3,12 @@ language : python
 dist: bionic
 
 python:
-    - "3.8"
+    - "3.9"
 
 before_install:
   - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
   - source "$HOME/.poetry/env"
-  - wget https://www.antlr.org/download/antlr-4.8-complete.jar
+  - wget https://www.antlr.org/download/antlr-4.9.2-complete.jar
 
 install: poetry install
 

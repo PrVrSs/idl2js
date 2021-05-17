@@ -12,8 +12,9 @@ ignore=
 disable=
     abstract-method,
     access-member-before-definition,
-    duplicate-code,
     bad-mcs-classmethod-argument,
+    broad-except,
+    duplicate-code,
     empty-docstring,
     inconsistent-return-statements,
     missing-docstring,
@@ -29,6 +30,7 @@ disable=
 good-names=
     id,
     it,
+    fp,
 
 
 [CLASSES]

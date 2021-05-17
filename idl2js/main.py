@@ -1,26 +1,20 @@
 from itertools import chain
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional, Union
 
 import click
-from click import Context, Option
+from click import Context, Option, Parameter
 
 from .core import Idl2Js
 from .logger import LOG_LEVELS, configure_logging
+from .utils import save
 
 
-def _idl_files(_: Context, __: Option, value: Optional[str]) -> Tuple[str, ...]:
+def _idl_files(_: Context, __: Union[Option, Parameter], value: Optional[str]) -> tuple[str, ...]:
     if value is None:
         return ()
 
     return tuple(map(str, Path(value).rglob('*.webidl')))
-
-
-def _prepare_output_dir(_: Context, __: Option, value: Optional[str]) -> Optional[str]:
-    if value is not None:
-        Path(value).resolve().mkdir(parents=True, exist_ok=True)
-
-    return value
 
 
 @click.command()
@@ -38,9 +32,8 @@ def _prepare_output_dir(_: Context, __: Option, value: Optional[str]) -> Optiona
 )
 @click.option(
     '-o', '--output',
-    type=click.Path(file_okay=False, resolve_path=True),
-    callback=_prepare_output_dir,
-    default='.output',
+    type=click.Path(dir_okay=False, resolve_path=True),
+    default='/dev/stdout',
     help='',
 )
 @click.option(
@@ -49,10 +42,10 @@ def _prepare_output_dir(_: Context, __: Option, value: Optional[str]) -> Optiona
     type=click.Choice(LOG_LEVELS.keys()),
     help='',
 )
-def cli(file: Tuple[str, ...], directory: Tuple[str, ...], output: str, level: str) -> None:
+def cli(file: tuple[str, ...], directory: tuple[str, ...], output: str, level: str) -> None:
     configure_logging(level)
 
-    Idl2Js(
-        idl=tuple(chain(file, directory)),
-        output=output,
+    save(
+        file_name=output,
+        content=Idl2Js(idl=tuple(chain(file, directory))).generate()
     )

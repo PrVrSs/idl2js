@@ -45,10 +45,14 @@ _INT_RANGES = {
 
 class BuiltInTypes:
 
+    def __contains__(self, item):
+        return item in INT | STRING
+
     def generate(self, type_):
         if type_ in INT:
             return self.generate_int(type_)
-        elif type_ == DOM_STRING:
+
+        if type_ == DOM_STRING:
             return self.generate_string()
 
         return type_
