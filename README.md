@@ -2,13 +2,15 @@
 
 [![Build Status](https://img.shields.io/travis/PrVrSs/idl2js/master?style=plastic)](https://travis-ci.org/github/PrVrSs/idl2js)
 [![Codecov](https://img.shields.io/codecov/c/github/PrVrSs/idl2js?style=plastic)](https://codecov.io/gh/PrVrSs/idl2js)
-[![Python Version](https://img.shields.io/badge/python-3.8-blue?style=plastic)](https://www.python.org/)
+[![Python Version](https://img.shields.io/badge/python-3.9-blue?style=plastic)](https://www.python.org/)
 [![License](https://img.shields.io/cocoapods/l/A?style=plastic)](https://github.com/PrVrSs/idl2js/blob/master/LICENSE)
 
 
-### How it's work
+## Quick start
 
-*[WebIdl](/docs/examples/raw.webidl)* → *[WebIdlAst](/docs/examples/webidl_ast.json)* → *[JsAst](/docs/examples/js_ast.json)* → *[Js](docs/examples/result.js)*
+```shell script
+pip install idl2js
+```
 
 
 ### Links
