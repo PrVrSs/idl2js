@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-ANTLR4 := java -jar antlr-4.8-complete.jar
+ANTLR4 := java -jar antlr-4.9.2-complete.jar
 PROJECT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY: unit
@@ -27,4 +27,4 @@ grammar:
 		-o $(PROJECT_DIR)/idl2js/webidl/generated \
 		$(PROJECT_DIR)/grammar/WebIDLParser.g4 $(PROJECT_DIR)/grammar/WebIDLLexer.g4
 
-test: unit
+test: mypy lint unit

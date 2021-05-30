@@ -1,15 +1,10 @@
 from contextlib import contextmanager
-from pathlib import Path
 from types import SimpleNamespace
 from typing import Dict, Iterator, NewType
 
-from idl2js.converter import InterfaceTransformer
-from idl2js.js.nodes import Ast as JsAst
-from idl2js.storage import Storage
-from idl2js.visitor import AstType, Visitor
-from idl2js.webidl import parse
-from idl2js.webidl.nodes import Ast as WebIDLAst
-from idl2js.utils import interleave
+from .js.nodes import Ast as JsAst
+from .visitor import Visitor
+from .utils import interleave
 
 
 Parenthesis = NewType('Parenthesis', str)
@@ -25,7 +20,7 @@ _parentheses: Dict[Parenthesis, SimpleNamespace] = {
 }
 
 
-class Unparser(Visitor[AstType]):
+class Unparser(Visitor[JsAst]):
     """
     Methods in this class recursively traverse an AST and output source code
     for the abstract syntax.
@@ -68,7 +63,26 @@ class Unparser(Visitor[AstType]):
         self.traverse(node.callee)
 
         with self._parentheses(PAREN):
-            self.traverse(node.arguments)
+            interleave(
+                iterable=node.arguments,
+                func=self.traverse,
+                separator=lambda: self.write(', ')
+            )
+
+    def visit_object_expression(self, node):
+        with self._parentheses(BRACE):
+            interleave(
+                iterable=node.properties,
+                func=self.traverse,
+                separator=lambda: self.write(', ')
+            )
+
+    def visit_property(self, node):
+        self.write(node.key)
+
+        self.write(': ')
+
+        self.traverse(node.value)
 
     def visit_member_expression(self, node):
         self.traverse(node.object)
@@ -129,26 +143,4 @@ class Unparser(Visitor[AstType]):
 
 
 def unparse(ast: JsAst) -> str:
-    return Unparser[JsAst]().visit(ast)
-
-
-def main():
-    from idl2js.builder import Builder, try_statement
-    from idl2js.built_in_types import BuiltInTypes
-
-    raw_idl = (Path(__file__).parent.parent / 'blob.webidl').resolve()
-    idl_ast = parse(str(raw_idl))
-
-    var_store = Storage()
-
-    InterfaceTransformer[WebIDLAst](
-        storage=var_store,
-        builder=Builder(storage=var_store, std_types=BuiltInTypes())
-    ).visit(idl_ast)
-
-    for variable in var_store._var:
-        print(unparse(try_statement(variable.ast)))
-
-
-if __name__ == '__main__':
-    main()
+    return Unparser().visit(ast)

@@ -22,7 +22,7 @@ class Visitor(Generic[AstType]):
 
     def generic_visit(self, node: AstType) -> None:
         """Called if no explicit visitor function exists for a node."""
-        ast_type = self.__orig_class__.__args__  # type: ignore
+        ast_type = self.__orig_bases__[0].__args__  # type: ignore
 
         for name in map(attrgetter('name'), fields(type(node))):
             field = getattr(node, name)

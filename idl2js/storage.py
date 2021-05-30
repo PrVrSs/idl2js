@@ -4,11 +4,11 @@ from collections import defaultdict
 class Storage:
 
     def __init__(self):
-        self._var = []
+        self.variables = []
         self._by_type = defaultdict(list)
 
     def add(self, variable):
-        self._var.append(variable)
+        self.variables.append(variable)
 
     def __setitem__(self, key, value):
         self._by_type[key].append(value)

@@ -90,8 +90,8 @@ class Parser:
     def parse(self) -> ParserRuleContext:
         try:
             return self._parser.webIDL()
-        except ParseCancellationException:
-            raise IDLParseError
+        except ParseCancellationException as exc:
+            raise IDLParseError from exc
 
     @_setup_strategy('default')
     def validate(self) -> List[SyntaxErrorInfo]:

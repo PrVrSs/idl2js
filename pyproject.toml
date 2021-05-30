@@ -1,14 +1,27 @@
 [tool.poetry]
 name = "idl2js"
 version = "0.1.0"
-description = ""
+description = "Grammar-based Fuzzer that uses WebIDL as a grammar."
 authors = ["Sergey Reshetnikov <resh.sersh@gmail.com>"]
 license = "Apache-2.0"
 
-[tool.poetry.dependencies]
-python = "^3.8"
+readme = "README.md"
+repository = "https://github.com/PrVrSs/idl2js"
+homepage = "https://github.com/PrVrSs/idl2js"
 
-antlr4-python3-runtime = "^4.8"
+keywords = [
+    "WebIDL",
+    "fuzzer",
+    "ast",
+    "grammar",
+    "fuzzing",
+    "transpiler",
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+antlr4-python3-runtime = "^4.9.2"
 attrs = "^19.3.0"
 more_itertools = "^8.4.0"
 stringcase = "^1.2.0"
@@ -16,8 +29,8 @@ click = "^7.1.2"
 graphviz = "^0.16"
 
 [tool.poetry.dev-dependencies]
-mypy = "^0.782"
-pylint = "^2.5.3"
+mypy = "^0.812"
+pylint = "^2.8.2"
 pytest = "^5.4.3"
 pytest-cov = "^2.9.0"
 
