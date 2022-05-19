@@ -2,9 +2,9 @@ from contextlib import contextmanager
 from types import SimpleNamespace
 from typing import Dict, Iterator, NewType
 
-from .js.nodes import Ast as JsAst
-from .visitor import Visitor
-from .utils import interleave
+from .nodes import Ast as JsAst
+from ..visitor import Visitor
+from ..utils import interleave
 
 
 Parenthesis = NewType('Parenthesis', str)
@@ -97,6 +97,14 @@ class Unparser(Visitor[JsAst]):
         with self._parentheses(PAREN):
             interleave(
                 iterable=node.arguments,
+                func=self.traverse,
+                separator=lambda: self.write(', ')
+            )
+
+    def visit_array_expression(self, node):
+        with self._parentheses(BRACKET):
+            interleave(
+                iterable=node.elements,
                 func=self.traverse,
                 separator=lambda: self.write(', ')
             )

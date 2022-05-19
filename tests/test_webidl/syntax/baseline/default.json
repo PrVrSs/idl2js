@@ -73,7 +73,7 @@
                         },
                         "default": {
                             "type": "dictionary",
-                            "value": []
+                            "value": {}
                         },
                         "optional": true,
                         "variadic": false

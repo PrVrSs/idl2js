@@ -37,7 +37,6 @@ from .utils import setup_type
 
 @final
 class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
-
     def __init__(self, tree):
         self._tree = tree
 
@@ -493,7 +492,7 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
             return const_value.accept(self)
 
         if ctx.LEFT_BRACE():
-            return Literal(type='dictionary', value=[])
+            return Literal(type='dictionary', value={})
 
         if ctx.NULL():
             return Null()
@@ -658,6 +657,9 @@ class Visitor(WebIDLParserVisitor):  # pylint: disable=too-many-public-methods
 
     def visitInheritance(self, ctx: WebIDLParser.InheritanceContext):
         return ctx.IDENTIFIER().getText()
+
+    def visitBufferRelatedType(self, ctx: WebIDLParser.BufferRelatedTypeContext):
+        return ctx.getText()
 
     def visitOther(self, ctx: WebIDLParser.OtherContext):
         if ctx.IntegerLiteral():

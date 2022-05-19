@@ -11,7 +11,6 @@ class Ast(abc.ABC):
 
 @attr.s
 class Module(Ast):
-
     type: str = attr.ib(default='module')
     source_type: str = attr.ib(default='Program')
     body: List[Any] = attr.ib(factory=list)
@@ -19,7 +18,6 @@ class Module(Ast):
 
 @attr.s
 class NewExpression(Ast):
-
     callee = attr.ib()
     arguments = attr.ib(factory=list)
     type = attr.ib(default='NewExpression')
@@ -27,7 +25,6 @@ class NewExpression(Ast):
 
 @attr.s
 class VariableDeclaration(Ast):
-
     type: str = attr.ib(default='VariableDeclaration')
     kind: str = attr.ib(default='let')
     declarations: List[Any] = attr.ib(factory=list)
@@ -35,7 +32,6 @@ class VariableDeclaration(Ast):
 
 @attr.s
 class VariableDeclarator(Ast):
-
     id = attr.ib()
     init = attr.ib()
     type: str = attr.ib(default='VariableDeclarator')
@@ -43,14 +39,12 @@ class VariableDeclarator(Ast):
 
 @attr.s
 class Identifier(Ast):
-
     name: str = attr.ib()
     type: str = attr.ib(default='Identifier')
 
 
 @attr.s
 class MemberExpression(Ast):
-
     object = attr.ib()
     property = attr.ib()
     computed: bool = attr.ib(default=False)
@@ -59,7 +53,6 @@ class MemberExpression(Ast):
 
 @attr.s
 class CallExpression(Ast):
-
     callee = attr.ib()
     arguments = attr.ib(factory=list)
     type: str = attr.ib(default='CallExpression')
@@ -67,13 +60,14 @@ class CallExpression(Ast):
 
 @attr.s
 class Literal(Ast):
-
     raw = attr.ib(init=False)
     value = attr.ib()
     type: str = attr.ib(default='Literal')
 
     def __attrs_post_init__(self):
-        if isinstance(self.value, int):
+        if isinstance(self.value, bool):
+            self.raw = 'true' if self.value is True else 'false'
+        elif isinstance(self.value, int):
             self.raw = str(self.value)
         elif isinstance(self.value, str):
             self.raw = f"'{self.value}'"
@@ -83,7 +77,6 @@ class Literal(Ast):
 
 @attr.s
 class BlockStatement(Ast):
-
     body: List[Any] = attr.ib(factory=list)
     type: str = attr.ib(default='BlockStatement')
 
@@ -97,7 +90,6 @@ class CatchClause:
 
 @attr.s
 class TryStatement(Ast):
-
     handler = attr.ib()
     block: BlockStatement = attr.ib()
     finalizer: Optional[Any] = attr.ib(default=None)
@@ -106,7 +98,6 @@ class TryStatement(Ast):
 
 @attr.s
 class AssignmentExpression(Ast):
-
     left: Identifier = attr.ib()
     right: Any = attr.ib()
     operator: str = attr.ib(default='=')
@@ -115,19 +106,18 @@ class AssignmentExpression(Ast):
 
 @attr.s
 class ExpressionStatement(Ast):
-
     expression: Any = attr.ib()
     type: str = attr.ib(default='ExpressionStatement')
 
 
 @attr.s
 class ArrayExpression(Ast):
-    ...
+    type: str = attr.ib(default='ArrayExpression')
+    elements: List[Any] = attr.ib(factory=list)
 
 
 @attr.s
 class Property(Ast):
-
     key: Any = attr.ib()
     value: Any = attr.ib()
     type: str = attr.ib(default='Property')
@@ -138,7 +128,6 @@ class Property(Ast):
 
 @attr.s
 class ObjectExpression(Ast):
-
     type: str = attr.ib(default='ObjectExpression')
     properties: List[Property] = attr.ib(factory=list)
 
@@ -149,4 +138,5 @@ Expression = Union[
     MemberExpression,
     CallExpression,
     ObjectExpression,
+    ArrayExpression,
 ]

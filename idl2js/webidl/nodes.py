@@ -13,7 +13,6 @@ class Ast(abc.ABC):
 
 @attr.s
 class Definition(Ast):
-
     type: str = attr.ib()
 
 
@@ -29,32 +28,27 @@ class Expression(Ast):
 
 @attr.s
 class Definitions(Ast):
-
     definitions: List[Definition] = attr.ib(factory=list)
 
 
 @attr.s
 class Null(Expression):
-
     type: str = attr.ib(default='null')
 
 
 @attr.s
 class NaN(Expression):
-
     type: str = attr.ib(default='NaN')
 
 
 @attr.s
 class Infinity(Expression):
-
     negative: bool = attr.ib()
     type: str = attr.ib(default='Infinity')
 
 
 @attr.s
 class Literal(Expression):
-
     type: Optional[str] = attr.ib()
     value: Union[str, list] = attr.ib()
 
@@ -64,7 +58,6 @@ class Literal(Expression):
 
 @attr.s
 class Value(Expression):
-
     value: str = attr.ib()
 
     def __attrs_post_init__(self):
@@ -73,14 +66,12 @@ class Value(Expression):
 
 @attr.s
 class LiteralList(Expression):
-
     type: str = attr.ib()
     value: List[Value] = attr.ib(factory=list)
 
 
 @attr.s
 class ExtendedAttribute(Ast):
-
     name: str = attr.ib()
     arguments: List[str] = attr.ib(factory=list)
     rhs: Optional[Union[Literal, LiteralList]] = attr.ib(default=None)
@@ -89,7 +80,6 @@ class ExtendedAttribute(Ast):
 
 @attr.s
 class IdlType(Ast):
-
     idl_type: Union[List['IdlType'], 'IdlType', str] = attr.ib()
     type: Optional[str] = attr.ib(default=None)
     ext_attrs: List[ExtendedAttribute] = attr.ib(factory=list)
@@ -103,7 +93,6 @@ class IdlType(Ast):
 
 @attr.s
 class Argument(Ast):
-
     name: str = attr.ib()
     idl_type: IdlType = attr.ib()
     ext_attrs: List[ExtendedAttribute] = attr.ib(factory=list)
@@ -118,7 +107,6 @@ class Argument(Ast):
 
 @attr.s
 class Operation(Member):
-
     name: str = attr.ib()
     idl_type: Optional[IdlType] = attr.ib()
     arguments: List[Argument] = attr.ib(factory=list)
@@ -129,7 +117,6 @@ class Operation(Member):
 
 @attr.s
 class Iterable_(Member):  # pylint: disable=invalid-name
-
     idl_type: List[IdlType] = attr.ib()
     arguments: List[Argument] = attr.ib()
     async_: bool = attr.ib()
@@ -140,7 +127,6 @@ class Iterable_(Member):  # pylint: disable=invalid-name
 
 @attr.s
 class Attribute(Member):
-
     idl_type: IdlType = attr.ib()
     name: str = attr.ib()
     ext_attrs: List[ExtendedAttribute] = attr.ib(factory=list)
@@ -154,7 +140,6 @@ class Attribute(Member):
 
 @attr.s
 class Const(Member):
-
     name: str = attr.ib()
     value: Expression = attr.ib()
     idl_type: IdlType = attr.ib()
@@ -164,7 +149,6 @@ class Const(Member):
 
 @attr.s
 class Constructor(Member):
-
     arguments: List[Argument] = attr.ib(factory=list)
     ext_attrs: List[ExtendedAttribute] = attr.ib(factory=list)
     type: str = attr.ib(default='constructor')
@@ -172,7 +156,6 @@ class Constructor(Member):
 
 @attr.s
 class MapLike(Member):
-
     readonly: bool = attr.ib()
     idl_type: List[IdlType] = attr.ib()
     arguments: List[Argument] = attr.ib(factory=list)
@@ -183,7 +166,6 @@ class MapLike(Member):
 
 @attr.s
 class SetLike(Member):
-
     readonly: bool = attr.ib()
     idl_type: List[IdlType] = attr.ib()
     arguments: List[Argument] = attr.ib(factory=list)
@@ -194,7 +176,6 @@ class SetLike(Member):
 
 @attr.s
 class Field(Member):
-
     idl_type: IdlType = attr.ib()
     name: str = attr.ib()
     default: Optional[Literal] = attr.ib()
@@ -205,7 +186,6 @@ class Field(Member):
 
 @attr.s
 class CallbackInterface(Definition):
-
     name: str = attr.ib()
     members: List[Member] = attr.ib()
     inheritance: Optional[str] = attr.ib()
@@ -216,7 +196,6 @@ class CallbackInterface(Definition):
 
 @attr.s
 class Callback(Definition):
-
     name: str = attr.ib()
     idl_type: IdlType = attr.ib()
     arguments: List[Argument] = attr.ib(factory=list)
@@ -226,7 +205,6 @@ class Callback(Definition):
 
 @attr.s
 class Interface(Definition):
-
     members: List[Member] = attr.ib()
     name: str = attr.ib()
     inheritance: Optional[str] = attr.ib(default=None)
@@ -241,7 +219,6 @@ class Interface(Definition):
 
 @attr.s
 class InterfaceMixin(Definition):
-
     members: List[Member] = attr.ib()
     name: str = attr.ib()
     inheritance: Optional[str] = attr.ib(default=None)
@@ -256,7 +233,6 @@ class InterfaceMixin(Definition):
 
 @attr.s
 class Enum(Definition):
-
     name: str = attr.ib()
     type: str = attr.ib(default='enum')
     values: List[Literal] = attr.ib(factory=list)
@@ -265,7 +241,6 @@ class Enum(Definition):
 
 @attr.s
 class Dictionary(Definition):
-
     name: str = attr.ib()
     inheritance: Optional[str] = attr.ib(default=None)
     members: List[Member] = attr.ib(factory=list)
@@ -279,7 +254,6 @@ class Dictionary(Definition):
 
 @attr.s
 class Includes(Definition):
-
     target: str = attr.ib()
     includes: str = attr.ib()
     type: str = attr.ib(default='includes')
@@ -292,7 +266,6 @@ class Includes(Definition):
 
 @attr.s
 class Typedef(Definition):
-
     idl_type: IdlType = attr.ib()
     name: str = attr.ib()
     type: str = attr.ib(default='typedef')
@@ -304,7 +277,6 @@ class Typedef(Definition):
 
 @attr.s
 class Namespace(Definition):
-
     members: List[Member] = attr.ib()
     name: str = attr.ib()
     inheritance: Optional[str] = attr.ib(default=None)

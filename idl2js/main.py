@@ -5,8 +5,8 @@ from typing import Optional, Union
 import click
 from click import Context, Option, Parameter
 
-from .core import Idl2Js
 from .logger import LOG_LEVELS, configure_logging
+from .transpiler import Transpiler
 from .utils import save
 
 
@@ -39,7 +39,7 @@ def _idl_files(_: Context, __: Union[Option, Parameter], value: Optional[str]) -
 @click.option(
     '-l', '--level',
     default='debug',
-    type=click.Choice(LOG_LEVELS.keys()),
+    type=click.Choice(tuple(LOG_LEVELS.keys())),
     help='',
 )
 def cli(file: tuple[str, ...], directory: tuple[str, ...], output: str, level: str) -> None:
@@ -47,5 +47,5 @@ def cli(file: tuple[str, ...], directory: tuple[str, ...], output: str, level: s
 
     save(
         file_name=output,
-        content=Idl2Js(idl=tuple(chain(file, directory))).generate()
+        content=Transpiler(idls=tuple(chain(file, directory))).idl_to_js()
     )

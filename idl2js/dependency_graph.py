@@ -12,9 +12,7 @@ def get_unknown_dependencies(graph: GRAPH[_T]) -> set[_T]:
 
 
 def topological_order(graph: GRAPH[_T]) -> tuple[tuple[set[_T], ...], GRAPH[_T]]:
-    """
-    TODO: return `raw_graph` split into cycle and unreachable.
-    """
+    """TODO: return `raw_graph` split into cycle and unreachable."""
     _ = get_unknown_dependencies(graph)
 
     raw_graph = copy.deepcopy(graph)

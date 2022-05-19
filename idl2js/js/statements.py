@@ -1,6 +1,7 @@
 from .const import CATCH_CONSTANT, LET
 from .nodes import (
     AssignmentExpression,
+    ArrayExpression,
     BlockStatement,
     Expression,
     ExpressionStatement,
@@ -76,6 +77,10 @@ def create_operation(name, progenitor, method, arguments) -> ExpressionStatement
             ),
         )
     )
+
+
+def create_array(elements):
+    return ArrayExpression(elements=elements)
 
 
 def try_statement(var: VariableDeclaration) -> TryStatement:

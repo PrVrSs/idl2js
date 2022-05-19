@@ -1,7 +1,3 @@
-import string
-from random import randint, choice
-
-
 BYTE = 'byte'
 OCTET = 'octet'
 SHORT = 'short'
@@ -13,6 +9,9 @@ UNSIGNED_LONG_LONG = 'unsigned long long'
 
 DOM_STRING = 'DOMString'
 USV_STRING = 'USVString'
+
+BOOLEAN = 'boolean'
+
 
 INT = frozenset((
     BYTE,
@@ -31,7 +30,7 @@ STRING = frozenset((
 ))
 
 
-_INT_RANGES = {
+INT_RANGES = {
     BYTE: [-2 ** 7, 2 ** 7 - 1],  # int8
     OCTET: [0, 2 ** 8 - 1],  # uint8
     SHORT: [-2 ** 15, 2 ** 15 - 1],  # int16
@@ -41,29 +40,3 @@ _INT_RANGES = {
     LONG_LONG: [-2 ** 63, 2 ** 63 - 1],  # int64
     UNSIGNED_LONG_LONG: [0, 2 ** 64 - 1],  # uint64
 }
-
-
-class BuiltInTypes:
-
-    def __contains__(self, item):
-        return item in INT | STRING
-
-    def generate(self, type_):
-        if type_ in INT:
-            return self.generate_int(type_)
-
-        if type_ == DOM_STRING:
-            return self.generate_string()
-
-        return type_
-
-    @staticmethod
-    def generate_int(int_type):
-        return randint(*_INT_RANGES[int_type])
-
-    @staticmethod
-    def generate_string():
-        return ''.join(
-            choice(string.ascii_lowercase)
-            for _ in range(randint(1, 10))
-        )

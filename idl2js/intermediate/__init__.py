@@ -1,0 +1,9 @@
+"""
+FInterface(
+    name='Blob',
+    attributes=[
+        FFunction(
+            FOptional[FSequence[FExpression()]],
+        ),
+    ]
+"""

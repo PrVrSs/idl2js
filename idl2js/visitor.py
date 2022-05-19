@@ -9,7 +9,6 @@ AstType = TypeVar('AstType')
 
 
 class Visitor(Generic[AstType]):
-
     def visit(self, node: AstType) -> Any:
         """Visit a node."""
         visitor = getattr(

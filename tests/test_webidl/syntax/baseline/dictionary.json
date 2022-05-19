@@ -110,7 +110,7 @@
                 },
                 "default": {
                     "type": "dictionary",
-                    "value": []
+                    "value": {}
                 },
                 "required": false
             }

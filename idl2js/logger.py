@@ -41,7 +41,6 @@ LOGGING_CONFIG = {
 
 
 class IDL2JSFormatter(logging.Formatter):
-
     level_name_colors = {
         TRACE_LOG_LEVEL: lambda message: click.style(message, fg='blue'),
         logging.DEBUG: lambda message: click.style(message, fg='cyan'),

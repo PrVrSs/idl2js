@@ -8,8 +8,7 @@ from antlr4.error.ErrorStrategy import DefaultErrorStrategy, ErrorStrategy
 from antlr4.Parser import ParserRuleContext
 
 from .generated import WebIDLLexer, WebIDLParser
-
-from ..error import IDLParseError
+from ..exceptions import IDLParseError
 
 
 class SyntaxErrorInfo(NamedTuple):
@@ -23,7 +22,6 @@ class SyntaxErrorInfo(NamedTuple):
 
 
 class WebIDLErrorListener(ErrorListener):
-
     def __init__(self):
         self._errors: List[SyntaxErrorInfo] = []
 

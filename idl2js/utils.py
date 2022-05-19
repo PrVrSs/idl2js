@@ -5,8 +5,8 @@ from pathlib import Path
 import attr
 
 
-def dump_js(variables, file='tmp.json'):
-    with open(file, 'w') as fp:
+def dump_js(variables, file: str = 'tmp.json'):
+    with open(file, 'w', encoding='utf-8') as fp:
         json.dump(
             obj=[attr.asdict(variable) for variable in variables],
             fp=fp,
@@ -27,10 +27,10 @@ def interleave(iterable, func, separator):
             func(item)
 
 
-def unique_name():
+def unique_name() -> str:
     return f'v_{uuid.uuid4().hex}'
 
 
-def save(file_name, content):
-    with open(Path(file_name), 'w') as file:
+def save(file_name: str, content: list[str]) -> None:
+    with open(Path(file_name), 'w', encoding='utf-8') as file:
         file.write('\n'.join(content))
