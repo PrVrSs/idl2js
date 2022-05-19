@@ -3,7 +3,7 @@ language : python
 dist: bionic
 
 python:
-    - "3.9"
+    - "3.10"
 
 before_install:
   - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
@@ -14,7 +14,7 @@ install: poetry install
 
 before_script: make grammar
 
-script: make test
+script: make unit
 
 after_success:
   - pip install codecov
