@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "idl2js"
-version = "0.1.2"
+version = "0.1.3"
 description = "Grammar-based Fuzzer that uses WebIDL as a grammar."
 authors = ["Sergey Reshetnikov <resh.sersh@gmail.com>"]
 license = "Apache-2.0"
