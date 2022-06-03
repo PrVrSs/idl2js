@@ -4,9 +4,20 @@ from typing import Any, List, Optional, Union
 import attr
 
 
+ast_node_map = {}
+
+
 @attr.s
 class Ast(abc.ABC):
-    ...
+    def __init_subclass__(cls, **kwargs):
+        ast_node_map[cls.__name__] = cls
+
+
+@attr.s
+class Program(Ast):
+    type: str = attr.ib(default='Program')
+    source_type: str = attr.ib(default='script')
+    body: List[Any] = attr.ib(factory=list)
 
 
 @attr.s
@@ -82,7 +93,7 @@ class BlockStatement(Ast):
 
 
 @attr.s
-class CatchClause:
+class CatchClause(Ast):
     param: Identifier = attr.ib()
     block: BlockStatement = attr.ib()
     type: str = attr.ib(default='CatchClause')

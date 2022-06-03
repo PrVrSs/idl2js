@@ -4,7 +4,6 @@ from .nodes import Ast
 
 
 class Variable(NamedTuple):
-
     type: str
     ast: Ast
 
