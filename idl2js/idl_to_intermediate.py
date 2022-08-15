@@ -1,4 +1,16 @@
 from more_itertools import first_true
+from pywebidl2.expr import (
+    Ast as WebIDLAst,
+    Interface,
+    Constructor,
+    Definition,
+    Argument,
+    Typedef,
+    Enum,
+    Dictionary,
+    Field,
+    Namespace,
+)
 
 from .intermediate.ftypes import (
     FInterface,
@@ -12,18 +24,6 @@ from .intermediate.ftypes import (
     FConst,
 )
 from .visitor import Visitor
-from .webidl.nodes import (
-    Ast as WebIDLAst,
-    Interface,
-    Constructor,
-    Definition,
-    Argument,
-    Typedef,
-    Enum,
-    Dictionary,
-    Field,
-    Namespace,
-)
 
 
 def prepare_idl_type(idl_type):

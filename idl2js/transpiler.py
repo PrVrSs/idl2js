@@ -10,7 +10,7 @@ from .js.built_in.jtypes import type_class_dict
 from .std.builder import STDBuilder
 from .std.typed_array import TYPED_ARRAY_MAP
 from .targets import BaseTarget
-from .webidl.webidl import project_idl_list
+from .utils import project_idl_list
 
 
 logger = logging.getLogger(__name__)

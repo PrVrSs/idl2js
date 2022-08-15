@@ -2,11 +2,10 @@ import logging
 from concurrent.futures import ProcessPoolExecutor
 from typing import Iterator, NamedTuple, Optional
 
+from pywebidl2 import parse, validate
+from pywebidl2.exceptions import IDLParseError
+from pywebidl2.expr import Ast
 from more_itertools import partition
-
-from .exceptions import IDLParseError
-from .webidl import parse, validate
-from .webidl.nodes import Ast
 
 
 logger = logging.getLogger(__name__)

@@ -31,6 +31,13 @@ def unique_name() -> str:
     return f'v_{uuid.uuid4().hex}'
 
 
+def project_idl_list() -> list[str]:
+    return [
+        str(file)
+        for file in (Path(__file__).parent / 'webidls').resolve().glob('*.webidl')
+    ]
+
+
 def save(file_name: str, content: list[str]) -> None:
     with open(Path(file_name), 'w', encoding='utf-8') as file:
         file.write('\n'.join(content))
