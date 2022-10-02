@@ -24,16 +24,6 @@ cd idl2js
 poetry install
 ```
 
-*Download ANTLR tool*
-```shell script
-wget https://www.antlr.org/download/antlr-4.10.1-complete.jar
-```
-
-*Generate parser*
-```shell script
-make grammar
-```
-
 *Run tests*
 ```shell script
 make unit
