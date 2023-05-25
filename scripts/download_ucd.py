@@ -53,9 +53,11 @@ def unzip(filename: str) -> dict[str, bytes]:
             for name in fp.namelist()
         }
 
+
 def save(data: dict[str, list[int]], filename: str = 'ucd.json') -> None:
     with open(filename, 'w') as fp:
         json.dump(data, fp)
+
 
 def prepare_ucd(data: bytes) -> dict[str, list[int]]:
     with create_zip_file(data=data) as filename:

@@ -1,7 +1,7 @@
 import json
 import sys
-from itertools import chain
 from functools import cached_property
+from itertools import chain
 from pathlib import Path
 
 
