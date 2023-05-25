@@ -1,8 +1,8 @@
-import random
+from idl2js.generators.rng import idl2js_random
 
 
 def _flip_coin(p: float) -> bool:
-    return random.uniform(0, 1) <= p
+    return idl2js_random.uniform(0, 1) <= p
 
 
 def _factor(n: int) -> int:
