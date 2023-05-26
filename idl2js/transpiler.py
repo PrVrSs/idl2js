@@ -3,9 +3,9 @@ from collections import defaultdict
 from typing import Optional
 
 from .environment import Environment
-from .intermediate_to_js import transform_from_intermediate_to_js
 from .idl_processor import process_idl
 from .idl_to_intermediate import transform_from_idl_to_intermediate
+from .intermediate_to_js import transform_from_intermediate_to_js
 from .js.built_in.jtypes import type_class_dict
 from .std.builder import STDBuilder
 from .std.typed_array import TYPED_ARRAY_MAP

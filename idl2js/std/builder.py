@@ -1,9 +1,9 @@
 import string
-from random import randint, choice
+from random import choice, randint
 
+from ..js.built_in.constants import INT_RANGES, LONG_LONG, UNSIGNED_LONG, UNSIGNED_LONG_LONG
 from .integer import Any, Boolean, LongLong, UnsignedLong, UnsignedLongLong
-from .string import USVString, DOMString
-from ..js.built_in.constants import INT_RANGES, UNSIGNED_LONG, UNSIGNED_LONG_LONG, LONG_LONG
+from .string import DOMString, USVString
 
 
 def generate_int(int_type):

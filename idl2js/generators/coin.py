@@ -1,4 +1,5 @@
-from idl2js.generators.rng import idl2js_random
+# pylint: disable=invalid-name
+from .rng import idl2js_random
 
 
 def _flip_coin(p: float) -> bool:

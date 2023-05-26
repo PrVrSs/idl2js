@@ -26,7 +26,7 @@ class FInterface(BaseFType):
         self.namespace = namespace
 
     def __repr__(self):
-        attrs = ",\n".join(map(str, self.attributes.values()))
+        attrs = ',\n'.join(map(str, self.attributes.values()))
         return f'{self.type}(\n\t{attrs},\n)'
 
     @property

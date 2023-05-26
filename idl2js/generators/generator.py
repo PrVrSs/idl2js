@@ -2,8 +2,8 @@ import sys
 
 from more_itertools import first
 
-from idl2js.generators.ucd import ucd
-from idl2js.generators.vose_sampler import VoseSampler
+from .ucd import ucd
+from .vose_sampler import VoseSampler
 
 
 class Generator:

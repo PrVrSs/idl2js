@@ -1,24 +1,26 @@
 import logging
 from concurrent.futures import ProcessPoolExecutor
-from typing import Iterator, NamedTuple, Optional
+from typing import Iterator, NamedTuple
 
-from pywebidl2 import parse, validate
+from more_itertools import partition
+from pywebidl2 import raw_parse, validate
 from pywebidl2.exceptions import IDLParseError
 from pywebidl2.expr import Ast
-from more_itertools import partition
+
+from .utils import read_file
 
 
 logger = logging.getLogger(__name__)
 
 
 class ParseResult(NamedTuple):
-    item: Optional[Ast] = None
-    error: Optional[str] = None
+    item: Ast | None = None
+    error: str | None = None
 
 
 def parse_idl(file: str) -> ParseResult:
     try:
-        return ParseResult(item=parse(file))
+        return ParseResult(item=raw_parse(file))
     except IDLParseError:
         return ParseResult(
             error='Skipped {file}\n{errors}'.format(  # pylint: disable=consider-using-f-string
@@ -37,7 +39,7 @@ class IDLProcessor:
 
     def _parse(self) -> Iterator[ParseResult]:
         with ProcessPoolExecutor(self._process) as pool:
-            yield from pool.map(parse_idl, self._idl_files)
+            yield from pool.map(parse_idl, map(read_file, self._idl_files))
 
     def parse(self) -> list[Ast]:
         successes, fails = partition(

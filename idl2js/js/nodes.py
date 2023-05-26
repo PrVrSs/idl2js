@@ -1,81 +1,80 @@
 import abc
-from typing import Any, List, Optional, Union
-
-import attr
-
-
-ast_node_map = {}
+from dataclasses import dataclass, field
+from typing import Any, Union
 
 
-@attr.s
+ast_node_map: dict[str, 'Ast'] = {}
+
+
+@dataclass
 class Ast(abc.ABC):
     def __init_subclass__(cls, **kwargs):
         ast_node_map[cls.__name__] = cls
 
 
-@attr.s
+@dataclass
 class Program(Ast):
-    type: str = attr.ib(default='Program')
-    source_type: str = attr.ib(default='script')
-    body: List[Any] = attr.ib(factory=list)
+    type: str = field(default='Program')
+    source_type: str = field(default='script')
+    body: list[Any] = field(default_factory=list)
 
 
-@attr.s
+@dataclass
 class Module(Ast):
-    type: str = attr.ib(default='module')
-    source_type: str = attr.ib(default='Program')
-    body: List[Any] = attr.ib(factory=list)
+    type: str = field(default='module')
+    source_type: str = field(default='Program')
+    body: list[Any] = field(default_factory=list)
 
 
-@attr.s
+@dataclass
 class NewExpression(Ast):
-    callee = attr.ib()
-    arguments = attr.ib(factory=list)
-    type = attr.ib(default='NewExpression')
+    callee: Any
+    arguments: list[Any] = field(default_factory=list)
+    type: str = field(default='NewExpression')
 
 
-@attr.s
+@dataclass
 class VariableDeclaration(Ast):
-    type: str = attr.ib(default='VariableDeclaration')
-    kind: str = attr.ib(default='let')
-    declarations: List[Any] = attr.ib(factory=list)
+    type: str = field(default='VariableDeclaration')
+    kind: str = field(default='let')
+    declarations: list[Any] = field(default_factory=list)
 
 
-@attr.s
+@dataclass
 class VariableDeclarator(Ast):
-    id = attr.ib()
-    init = attr.ib()
-    type: str = attr.ib(default='VariableDeclarator')
+    id: str
+    init: Any
+    type: str = field(default='VariableDeclarator')
 
 
-@attr.s
+@dataclass
 class Identifier(Ast):
-    name: str = attr.ib()
-    type: str = attr.ib(default='Identifier')
+    name: str
+    type: str = field(default='Identifier')
 
 
-@attr.s
+@dataclass
 class MemberExpression(Ast):
-    object = attr.ib()
-    property = attr.ib()
-    computed: bool = attr.ib(default=False)
-    type: str = attr.ib(default='MemberExpression')
+    object: Any
+    property: Any
+    computed: bool = field(default=False)
+    type: str = field(default='MemberExpression')
 
 
-@attr.s
+@dataclass
 class CallExpression(Ast):
-    callee = attr.ib()
-    arguments = attr.ib(factory=list)
-    type: str = attr.ib(default='CallExpression')
+    callee: Any
+    arguments: list[Any] = field(default_factory=list)
+    type: str = field(default='CallExpression')
 
 
-@attr.s
+@dataclass
 class Literal(Ast):
-    raw = attr.ib(init=False)
-    value = attr.ib()
-    type: str = attr.ib(default='Literal')
+    raw: Any = field(init=False)
+    value: Any
+    type: str = field(default='Literal')
 
-    def __attrs_post_init__(self):
+    def __post_init__(self):
         if isinstance(self.value, bool):
             self.raw = 'true' if self.value is True else 'false'
         elif isinstance(self.value, int):
@@ -86,61 +85,61 @@ class Literal(Ast):
             self.raw = self.value
 
 
-@attr.s
+@dataclass
 class BlockStatement(Ast):
-    body: List[Any] = attr.ib(factory=list)
-    type: str = attr.ib(default='BlockStatement')
+    body: list[Any] = field(default_factory=list)
+    type: str = field(default='BlockStatement')
 
 
-@attr.s
+@dataclass
 class CatchClause(Ast):
-    param: Identifier = attr.ib()
-    block: BlockStatement = attr.ib()
-    type: str = attr.ib(default='CatchClause')
+    param: Identifier = field()
+    block: BlockStatement = field()
+    type: str = field(default='CatchClause')
 
 
-@attr.s
+@dataclass
 class TryStatement(Ast):
-    handler = attr.ib()
-    block: BlockStatement = attr.ib()
-    finalizer: Optional[Any] = attr.ib(default=None)
-    type: str = attr.ib(default='TryStatement')
+    handler: Any
+    block: BlockStatement = field()
+    finalizer: Any | None = field(default=None)
+    type: str = field(default='TryStatement')
 
 
-@attr.s
+@dataclass
 class AssignmentExpression(Ast):
-    left: Identifier = attr.ib()
-    right: Any = attr.ib()
-    operator: str = attr.ib(default='=')
-    type: str = attr.ib(default='AssignmentExpression')
+    left: Identifier
+    right: Any
+    operator: str = field(default='=')
+    type: str = field(default='AssignmentExpression')
 
 
-@attr.s
+@dataclass
 class ExpressionStatement(Ast):
-    expression: Any = attr.ib()
-    type: str = attr.ib(default='ExpressionStatement')
+    expression: Any = field()
+    type: str = field(default='ExpressionStatement')
 
 
-@attr.s
+@dataclass
 class ArrayExpression(Ast):
-    type: str = attr.ib(default='ArrayExpression')
-    elements: List[Any] = attr.ib(factory=list)
+    type: str = field(default='ArrayExpression')
+    elements: list[Any] = field(default_factory=list)
 
 
-@attr.s
+@dataclass
 class Property(Ast):
-    key: Any = attr.ib()
-    value: Any = attr.ib()
-    type: str = attr.ib(default='Property')
-    method: bool = attr.ib(default=False)
-    shorthand: bool = attr.ib(default=False)
-    computed: bool = attr.ib(default=False)
+    key: Any = field()
+    value: Any = field()
+    type: str = field(default='Property')
+    method: bool = field(default=False)
+    shorthand: bool = field(default=False)
+    computed: bool = field(default=False)
 
 
-@attr.s
+@dataclass
 class ObjectExpression(Ast):
-    type: str = attr.ib(default='ObjectExpression')
-    properties: List[Property] = attr.ib(factory=list)
+    type: str = field(default='ObjectExpression')
+    properties: list[Property] = field(default_factory=list)
 
 
 Expression = Union[

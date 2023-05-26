@@ -1,29 +1,29 @@
 import random
 from types import MethodType
 
+from .environment import Environment
 from .intermediate.ftypes import (
+    FArgument,
+    FConst,
+    FDictionary,
     FInterface,
     FOptional,
-    FType,
-    FArgument,
     FSequence,
+    FType,
     FUnion,
-    FDictionary,
-    FConst,
 )
+from .js.built_in.jtypes import PrimitiveType
+from .js.instance import Instance as JSInstance
 from .js.statements import (
-    create_expression,
-    create_object,
-    create_identifier,
-    create_literal,
     create_array,
     create_dict,
+    create_expression,
+    create_identifier,
+    create_literal,
+    create_object,
     create_property,
 )
-from .js.instance import Instance as JSInstance
-from .js.built_in.jtypes import PrimitiveType
 from .utils import unique_name
-from .environment import Environment
 
 
 class NodeTransformer:
@@ -100,7 +100,7 @@ def f_type_handler(transformer, target: FType):
     )
 
 
-def base_type_handler(transformer, target: PrimitiveType):
+def base_type_handler(_, target: PrimitiveType):
     return create_literal(target.build())
 
 
@@ -141,7 +141,7 @@ def f_dictionary_handler(transformer, target: FDictionary):
     return instance
 
 
-def f_const_handler(transformer, target: FConst):
+def f_const_handler(_, target: FConst):
     return create_literal(target.value)
 
 

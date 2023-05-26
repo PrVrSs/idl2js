@@ -9,7 +9,7 @@ UCD_DATA = (Path(__file__).parent / 'ucd.json').resolve()
 
 
 def _read_ucd(ucd_file: str) -> dict[str, list[int]]:
-    with open(ucd_file) as fp:
+    with open(ucd_file, encoding='utf-8') as fp:
         return json.load(fp)
 
 class UCD:

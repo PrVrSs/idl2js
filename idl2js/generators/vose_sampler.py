@@ -1,22 +1,22 @@
+from collections import Counter
 from decimal import Decimal
 from typing import Generic, TypeVar
 
-from idl2js.generators.rng import idl2js_random
+from .rng import idl2js_random
 
 
 T = TypeVar('T')
 
 
-def proportions(items: T) -> dict[T, Decimal]:
-    increment = Decimal(1) / len(items)
-
+def proportions(items: list[T]) -> dict[T, Decimal]:
     return {
-        item: increment
-        for item in items
+        item: Decimal(count) / len(items)
+        for item, count in Counter(items).items()
     }
 
 
 class VoseSampler(Generic[T]):
+    # pylint: disable=invalid-name
     """http://www.keithschwarz.com/darts-dice-coins/"""
     def __init__(self, data: list[T]):
         self.data = proportions(data)

@@ -105,7 +105,6 @@ try {v_5e251ff6ba8647e48a2d633ba42386f8 = new WebAssembly.Memory(v_06ab1c4441d54
 * [original webidl parser](https://github.com/w3c/webidl2.js)
 * [TSJS-lib-generator](https://github.com/microsoft/TSJS-lib-generator/tree/master/inputfiles/idl)
 * [ECMAScript® 2021 Language Specification](https://tc39.es/ecma262/)
-* [Web IDL](https://heycam.github.io/webidl)
 * [Web IDL Spec](https://webidl.spec.whatwg.org/)
 
 

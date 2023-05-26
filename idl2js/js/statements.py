@@ -1,21 +1,23 @@
+from typing import Any
+
 from .const import CATCH_CONSTANT, LET
 from .nodes import (
-    AssignmentExpression,
     ArrayExpression,
+    AssignmentExpression,
     BlockStatement,
-    Expression,
-    ExpressionStatement,
     CallExpression,
     CatchClause,
+    Expression,
+    ExpressionStatement,
     Identifier,
     Literal,
     MemberExpression,
     NewExpression,
+    ObjectExpression,
+    Property,
     TryStatement,
     VariableDeclaration,
     VariableDeclarator,
-    ObjectExpression,
-    Property,
 )
 
 
@@ -79,7 +81,7 @@ def create_operation(name, progenitor, method, arguments) -> ExpressionStatement
     )
 
 
-def create_array(elements):
+def create_array(elements: list[Any]) -> ArrayExpression:
     return ArrayExpression(elements=elements)
 
 
@@ -93,13 +95,13 @@ def try_statement(var: VariableDeclaration) -> TryStatement:
     )
 
 
-def create_literal(value) -> Literal:
+def create_literal(value: Any) -> Literal:
     return Literal(value=value)
 
 
-def create_identifier(name) -> Identifier:
+def create_identifier(name: str) -> Identifier:
     return Identifier(name=name)
 
 
-def create_property(key, value) -> Property:
+def create_property(key: Any, value: Any) -> Property:
     return Property(key=key, value=value)

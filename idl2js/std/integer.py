@@ -1,5 +1,5 @@
-from ..js.built_in.jtypes import PrimitiveType
 from ..js.built_in.constants import BOOLEAN, LONG_LONG, UNSIGNED_LONG, UNSIGNED_LONG_LONG
+from ..js.built_in.jtypes import PrimitiveType
 
 
 class LongLong(PrimitiveType, name=LONG_LONG):

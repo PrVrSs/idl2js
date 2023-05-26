@@ -1,27 +1,27 @@
 from more_itertools import first_true
+from pywebidl2.expr import Argument
+from pywebidl2.expr import Ast as WebIDLAst
 from pywebidl2.expr import (
-    Ast as WebIDLAst,
-    Interface,
     Constructor,
     Definition,
-    Argument,
-    Typedef,
-    Enum,
     Dictionary,
+    Enum,
     Field,
+    Interface,
     Namespace,
+    Typedef,
 )
 
 from .intermediate.ftypes import (
-    FInterface,
-    FFunction,
-    FOptional,
-    FType,
-    FSequence,
     FArgument,
-    FUnion,
-    FDictionary,
     FConst,
+    FDictionary,
+    FFunction,
+    FInterface,
+    FOptional,
+    FSequence,
+    FType,
+    FUnion,
 )
 from .visitor import Visitor
 
@@ -36,6 +36,9 @@ def prepare_idl_type(idl_type):
     if idl_type.generic == 'sequence':
         return FSequence(items=prepare_idl_type(idl_type.idl_type))
 
+    if idl_type.union is True:
+        return FUnion(items=[prepare_idl_type(idl_t) for idl_t in idl_type.idl_type])
+
     return FType(value=idl_type.idl_type)
 
 
@@ -47,7 +50,10 @@ class InterfaceTransformation(Visitor[WebIDLAst]):
             name=node.name,
             attributes={'constructor': constructor},
             namespace=(
-                namespace := first_true(node.ext_attrs, pred=lambda attr: attr.name == 'LegacyNamespace')
+                namespace := first_true(
+                    node.ext_attrs,
+                    pred=lambda attr: attr.name == 'LegacyNamespace',
+                )
             ) and namespace.rhs.value
         )
 

@@ -2,9 +2,9 @@ from contextlib import contextmanager
 from types import SimpleNamespace
 from typing import Dict, Iterator, NewType
 
-from .nodes import Ast as JsAst
-from ..visitor import Visitor
 from ..utils import interleave
+from ..visitor import Visitor
+from .nodes import Ast as JsAst
 
 
 Parenthesis = NewType('Parenthesis', str)

@@ -1,15 +1,15 @@
+from dataclasses import fields
 from operator import attrgetter
 from typing import Any, Generic, TypeVar
 
 import stringcase
-from attr import fields
 
 
-AstType = TypeVar('AstType')
+AstTypeT = TypeVar('AstTypeT')
 
 
 class BaseVisitor:
-    def visit(self, node: AstType) -> Any:
+    def visit(self, node: AstTypeT) -> Any:
         """Visit a node."""
         visitor = getattr(
             self,
@@ -19,12 +19,12 @@ class BaseVisitor:
 
         return visitor(node)
 
-    def generic_visit(self, node: AstType) -> None:
+    def generic_visit(self, node: AstTypeT) -> None:
         raise NotImplementedError
 
 
-class Visitor(BaseVisitor, Generic[AstType]):
-    def generic_visit(self, node: AstType) -> None:
+class Visitor(BaseVisitor, Generic[AstTypeT]):
+    def generic_visit(self, node: AstTypeT) -> None:
         """Called if no explicit visitor function exists for a node."""
         ast_type = self.__orig_bases__[0].__args__  # type: ignore
 
@@ -39,7 +39,7 @@ class Visitor(BaseVisitor, Generic[AstType]):
                         self.visit(item)
 
 
-class NodeTransformer(BaseVisitor, Generic[AstType]):
+class NodeTransformer(BaseVisitor, Generic[AstTypeT]):
     def generic_visit(self, node):
         ast_type = self.__orig_bases__[0].__args__  # type: ignore
 
@@ -53,7 +53,7 @@ class NodeTransformer(BaseVisitor, Generic[AstType]):
                         value = self.visit(value)
                         if value is None:
                             continue
-                        elif not isinstance(value, ast_type):
+                        if not isinstance(value, ast_type):
                             new_values.extend(value)
                             continue
                     new_values.append(value)

@@ -1,4 +1,5 @@
-from ..intermediate.ftypes import FInterface, FFunction
+from ..intermediate.ftypes import FFunction, FInterface
+
 
 # https://webidl.spec.whatwg.org/#idl-buffer-source-types
 # https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/TypedArray#Syntax
