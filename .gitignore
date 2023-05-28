@@ -12,3 +12,4 @@ venv/
 dmypy.json
 
 dist
+_build
