@@ -7,6 +7,7 @@ from .vose_sampler import VoseSampler
 
 
 class Generator:
+
     def generate(self):
         raise NotImplementedError(f'{type(self).__name__}.generate')
 
@@ -31,5 +32,20 @@ class CharGenerator(Generator):
             exclude_characters=exclude_characters,
         )
 
-    def generate(self) -> int:
+    def generate(self) -> str:
         return chr(first(VoseSampler(data=self._chars).sample(size=1)))
+
+
+class InterfaceGenerator(Generator):
+    def __init__(self, generator_opt):
+        self._opt = generator_opt
+
+
+class ArrayGenerator(Generator):
+    def __init__(self, elements, min_size=0, max_size=float('inf')):
+        self.min_size = min_size
+        self.max_size = max_size
+        self.elements = elements
+
+    def generate(self):
+        return []

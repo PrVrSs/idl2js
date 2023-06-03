@@ -1,9 +1,13 @@
-from idl2js.builders.base import js_literal
+from idl2js.builders.js import js_literal
 from idl2js.generators.generator import CharGenerator
 from idl2js.idl_types.base import IdlType
 
 
-class DOMString(IdlType):
+class InternalType(IdlType):
+    """Base InternalType."""
+
+
+class DOMString(InternalType):
     """String value that represents the same sequence of code units."""
     __internal__ = True
     __type__ = 'DOMString'
@@ -17,7 +21,7 @@ class DOMString(IdlType):
     }
 
 
-class USVString(IdlType):
+class USVString(InternalType):
     """Corresponds to the set of all possible sequences of unicode scalar values."""
     __internal__ = True
     __type__ = 'USVString'

@@ -14,28 +14,3 @@ class BaseTarget(metaclass=MetaTarget):
 class InterfaceTarget(BaseTarget):
     kind = 'unknown'
     counts = 0
-
-
-
-# class Definition(BaseTarget):
-#
-#     kind = None
-#
-#     __constructor__ = [
-#
-#     ]
-#
-#     __constrains__ = [
-#
-#     ]
-#
-#     __type_constrains__ = [
-#
-#     ]
-#
-#     __dependencies__ = [
-#
-#     ]
-#
-#
-# Definition(type='Module')
