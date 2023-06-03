@@ -1,4 +1,5 @@
-from typing import Type, Any
+from collections import ChainMap
+from typing import Any, Type
 
 from idl2js.generators.generator import Generator
 
@@ -26,15 +27,20 @@ class MetaType(type):
 class IdlType(metaclass=MetaType):
 
     __internal__: bool
-    __builder__: Type[Generator]
+    __generator__: Type[Generator]
+    __builder__:  Any
     __type__: str
+    __default_opt__: dict
 
     def __init__(self, builder_opt: dict | None = None):
-        self._builder_opt = builder_opt or {}
-        self._builder = self.__builder__(**self._builder_opt)
+        self._builder_opt = ChainMap(builder_opt or {}, self.__default_opt__)
+        self._generator = self.__generator__(**self._builder_opt)
+
+    def generate(self):
+        return self._generator.generate()
 
     def build(self):
-        return self._builder.generate()
+        return self.__builder__()
 
     @classmethod
     def dependencies(cls, attribute: str = 'self') -> list:
@@ -55,7 +61,7 @@ class Interface(IdlType):
     __builder__: Type[Generator]
 
     def __init__(self, builder_opt: dict | None = None):
-        self._builder_opt = builder_opt or {}
+        self._builder_opt = ChainMap(builder_opt or {}, self.__default_opt__)
 
     def build(self):
         pass
@@ -64,8 +70,8 @@ class Interface(IdlType):
     def dependencies(cls, attribute: str = 'self'):
         if attribute == 'self':
             return [
-                i.value.unwrap()
-                for i in cls._constructor_.arguments
+                argument.value.unwrap()
+                for argument in cls._constructor_.arguments
             ]
 
 

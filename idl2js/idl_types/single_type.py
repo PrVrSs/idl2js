@@ -1,22 +1,31 @@
+from idl2js.builders.base import js_literal
 from idl2js.generators.generator import CharGenerator
-from idl2js.idl_types.base import IdlType, internal_types
+from idl2js.idl_types.base import IdlType
 
 
 class DOMString(IdlType):
+    """String value that represents the same sequence of code units."""
     __internal__ = True
     __type__ = 'DOMString'
-    __builder__ = CharGenerator
+    __generator__ = CharGenerator
+    __builder__ = js_literal
 
-
-class USVString(IdlType):
-    __internal__ = True
-    __type__ = 'USVString'
-    __builder__ = CharGenerator
-
-
-if __name__ == '__main__':
-    print(internal_types['DOMString'](builder_opt={
+    __default_opt__ = {
         'min_codepoint': 0,
         'max_codepoint': 128,
         'include_categories': {'Lu'},
-    }).build())
+    }
+
+
+class USVString(IdlType):
+    """Corresponds to the set of all possible sequences of unicode scalar values."""
+    __internal__ = True
+    __type__ = 'USVString'
+    __generator__ = CharGenerator
+    __builder__ = js_literal
+
+    __default_opt__ = {
+        'min_codepoint': 0,
+        'max_codepoint': 128,
+        'include_categories': {'Lu'},
+    }
