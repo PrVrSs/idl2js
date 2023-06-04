@@ -3,7 +3,7 @@ from types import SimpleNamespace
 from typing import Dict, Iterator, NewType
 
 from ..utils import interleave
-from ..visitors.visitor import Visitor
+from ..visitor import Visitor
 from .nodes import Ast as JsAst
 
 

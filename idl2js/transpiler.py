@@ -35,14 +35,22 @@ class CDGNode:
             for child in self.children
         ]
 
-        return self.idl_type().build(self.deps)
+        return self.idl_type().build([dep.name for dep in self.deps])
 
 class CDG:
     def __init__(self, root):
         self.root = root
 
-    def build(self):
-        return self.root.build()
+    def sample(self):
+        result = [self.root.build()]
+        todo = deque([self.root])
+
+        while todo:
+            node = todo.popleft()
+            result.extend(node.deps[::-1])
+            todo.extend(node.children)
+
+        return result[::-1]
 
 class Transpiler:
     def __init__(self, idls: Optional[tuple[str, ...]] = None):
