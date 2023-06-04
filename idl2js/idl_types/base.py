@@ -39,7 +39,7 @@ class IdlType(metaclass=MetaType):
     def generate(self):
         return self._generator.generate()
 
-    def build(self):
+    def build(self, *args, **kwargs):
         return self.__builder__()
 
     @classmethod

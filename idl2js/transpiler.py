@@ -3,13 +3,13 @@ from typing import Optional
 
 from .environment import Environment
 from .idl_processor import process_idl
-from .idl_types import internal_types
-from .visitors import make_idl_type_class
+from .idl_types import make_idl_type
+from .idl_types.base import internal_types
 
 
 def convert_idl(idls):
     return [
-        make_idl_type_class(definition)
+        make_idl_type(definition)
         for idl in process_idl(idls)
         for definition in idl.definitions
     ]
@@ -24,7 +24,7 @@ def external_types(idls: list[str]):
 
 class CDGNode:
     def __init__(self, idl_type):
-        self.idl_type = idl_type()
+        self.idl_type = idl_type
         self.children = []
 
         self.deps = []
@@ -35,7 +35,7 @@ class CDGNode:
             for child in self.children
         ]
 
-        return self.idl_type.build(*self.deps)
+        return self.idl_type().build(self.deps)
 
 class CDG:
     def __init__(self, root):
@@ -59,7 +59,7 @@ class Transpiler:
             item = todo.popleft()
 
             for dependency in item.idl_type.dependencies():
-                new_node = CDGNode(dependency)
+                new_node = CDGNode(self.environment.get_type(dependency))
                 item.children.append(new_node)
                 todo.append(new_node)
 

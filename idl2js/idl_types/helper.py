@@ -1,3 +1,11 @@
+def get_base_type(idl_type):
+    while True:
+        if isinstance(idl_type, IDLType):
+            return idl_type.value
+
+        idl_type = idl_type.unwrap()
+
+
 class IDLFunction:
     def __init__(self, name, return_type, arguments=None):
         self.name = name
@@ -14,17 +22,11 @@ class IDLArgument:
         self.value = value
         self.const = const
 
+    def unwrap(self):
+        return self.value
+
     def __repr__(self):
         return f'{self.name}: {self.value}'
-
-    def __call__(self, *args, **kwargs):
-        return self
-
-    def dependencies(self):
-        return []
-
-    # def build(self):
-    #     pass
 
 
 class IDLOptional:
@@ -32,7 +34,7 @@ class IDLOptional:
         self.value = value
 
     def unwrap(self):
-        return self.value.unwrap()
+        return self.value
 
     def __repr__(self):
         return f'FOptional[{self.value}]'
@@ -49,9 +51,6 @@ class IDLProperty:
 class IDLType:
     def __init__(self, value):
         self.value = value
-
-    def unwrap(self):
-        return self.value
 
     def __repr__(self):
         return self.value

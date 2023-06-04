@@ -1,8 +1,13 @@
 from collections import ChainMap
+from enum import IntEnum, auto
 from typing import Any, Type
 
-from idl2js.generators.generator import Generator
 from idl2js.idl_types.base import IdlType
+from idl2js.idl_types.helper import IDLFunction, get_base_type
+
+
+class Constrains(IntEnum):
+    OPTIONAL = auto()
 
 
 class GenericType(IdlType):
@@ -19,8 +24,8 @@ class Interface(GenericType):
     }
 
     _attributes_: Any
-    _constructor_: Any
-    __builder__: Type[Generator]
+    _constructor_: IDLFunction
+    __builder__:  Any
 
     def __init__(self, builder_opt: dict | None = None):
         self._builder_opt = ChainMap(builder_opt or {}, self.__default_opt__)
@@ -34,6 +39,9 @@ class Interface(GenericType):
     @classmethod
     def dependencies(cls, attribute: str = 'self'):
         if attribute == 'self':
-            return cls._constructor_.arguments
+            return [
+                get_base_type(argument)
+                for argument in cls._constructor_.arguments
+            ]
 
         return cls._attributes_
