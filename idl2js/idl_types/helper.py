@@ -1,9 +1,22 @@
-def get_base_type(idl_type):
-    while True:
-        if isinstance(idl_type, IDLType):
-            return idl_type.value
+from dataclasses import dataclass
+from typing import Any
+from enum import IntEnum
 
-        idl_type = idl_type.unwrap()
+
+class TypeFlag(IntEnum):
+    NONE = 0
+    OPTIONAL = 1
+    SEQUENCE = 2
+
+def get_base_type(idl_type):
+    flags = TypeFlag.NONE
+
+    while True:
+        idl_type, flag = handle_type(idl_type)
+        flags |= flag
+
+        if isinstance(idl_type, IDLType):
+            return idl_type.value , flags
 
 
 class IDLFunction:
@@ -22,23 +35,8 @@ class IDLArgument:
         self.value = value
         self.const = const
 
-    def unwrap(self):
-        return self.value
-
     def __repr__(self):
-        return f'{self.name}: {self.value}'
-
-
-class IDLOptional:
-    def __init__(self, value):
-        self.value = value
-
-    def unwrap(self):
-        return self.value
-
-    def __repr__(self):
-        return f'FOptional[{self.value}]'
-
+        return f'Argument[{self.name}: {self.value}]'
 
 class IDLProperty:
     def __init__(self, name, value):
@@ -48,26 +46,39 @@ class IDLProperty:
     def __repr__(self):
         return f'{self.name}: {self.value}'
 
+
+@dataclass
+class IDLOptional:
+    value: Any
+
+
+@dataclass
 class IDLType:
-    def __init__(self, value):
-        self.value = value
-
-    def __repr__(self):
-        return self.value
+    value: Any
 
 
+@dataclass
 class IDLUnion:
-    def __init__(self, items):
-        self.items = items
+    items: Any
 
 
+@dataclass
 class IDLSequence:
-    def __init__(self, items):
-        self.items = items
+    items: Any
 
-    @property
-    def result(self):
-        return self.items
 
-    def __repr__(self):
-        return f'FSequence[{self.items[0]}]'
+Type = IDLOptional | IDLType | IDLUnion | IDLSequence
+
+
+def handle_type(idl_type: Type):
+    match idl_type:
+        case IDLSequence(items):
+            return items[0], TypeFlag.SEQUENCE
+        case IDLOptional(value):
+            return value, TypeFlag.OPTIONAL
+        case IDLType(value):
+            return value, TypeFlag.NONE
+        case IDLUnion(_):
+            raise
+        case _:
+            raise

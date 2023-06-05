@@ -22,32 +22,46 @@ def external_types(idls: list[str]):
     }
 
 
+class Option:
+    def __init__(self, option):
+        self._option = option or {}
+
+    def __call__(self, idl_type):
+        return self._option.get(idl_type.__type__, {})
+
+
 class CDGNode:
-    def __init__(self, idl_type):
+    def __init__(self, idl_type, flags):
         self.idl_type = idl_type
         self.children = []
+        self.flags = flags
 
-        self.deps = []
+        self.dependencies = []
 
-    def build(self):
-        self.deps = [
-            child.build()
+    def build(self, option):
+        self.dependencies  = [
+            child.build(option)
             for child in self.children
         ]
 
-        return self.idl_type().build([dep.name for dep in self.deps])
+        return self.idl_type(option(self.idl_type), self.flags).build([
+                dependency.name
+                for dependency in self.dependencies
+            ],
+        )
 
 class CDG:
-    def __init__(self, root):
+    def __init__(self, root, options):
         self.root = root
+        self.options = options or {}
 
     def sample(self):
-        result = [self.root.build()]
+        result = [self.root.build(self.options)]
         todo = deque([self.root])
 
         while todo:
             node = todo.popleft()
-            result.extend(node.deps[::-1])
+            result.extend(node.dependencies[::-1])
             todo.extend(node.children)
 
         return result[::-1]
@@ -59,15 +73,15 @@ class Transpiler:
             **external_types(idls or []),
         })
 
-    def build_cdg(self, idl_type):
-        node = CDGNode(self.environment.get_type(idl_type))
-        cdg = CDG(root=node)
+    def build_cdg(self, idl_type, options):
+        node = CDGNode(self.environment.get_type(idl_type), None)
+        cdg = CDG(root=node, options=Option(options))
         todo = deque([node])
         while todo:
             item = todo.popleft()
 
-            for dependency in item.idl_type.dependencies():
-                new_node = CDGNode(self.environment.get_type(dependency))
+            for dependency, flags in item.idl_type.dependencies():
+                new_node = CDGNode(self.environment.get_type(dependency), flags)
                 item.children.append(new_node)
                 todo.append(new_node)
 

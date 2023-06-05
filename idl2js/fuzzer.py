@@ -1,19 +1,14 @@
 from idl2js.transpiler import Transpiler
 
 
-class Statistic:
-    pass
-
-
 class Fuzzer:
-    def __init__(self, transpiler: Transpiler):
-        self._transpiler = transpiler
-        self._statistic = Statistic()
+    def __init__(self, idls):
+        self._transpiler = Transpiler(idls=idls)
 
-    def run(self, idl_type, samples = 3):
-        cdg = self._transpiler.build_cdg(idl_type)
+    def samples(self, idl_type, count = 3, options = None):
+        cdg = self._transpiler.build_cdg(idl_type, options)
 
-        for _ in range(samples):
+        for _ in range(count):
             yield cdg.sample()
 
 
@@ -22,12 +17,20 @@ def main():
     from pathlib import Path
     from pprint import pprint
 
-    target = (Path(__file__).parent / 'webassembly.webidl').resolve()
+    fuzzer = Fuzzer(
+        idls=[
+            str((Path(__file__).parent / 'webassembly.webidl').resolve()),
+        ])
 
-    transpiler = Transpiler(idls=[str(target)])
-    fuzzer = Fuzzer(transpiler=transpiler)
-
-    pprint(list(fuzzer.run(idl_type='Blob')))
+    pprint(list(fuzzer.samples(
+        idl_type='Blob',
+        options={
+            'DOMString': {
+                'min_codepoint': 70,
+                'max_codepoint': 100,
+            }
+        }
+    )))
 
 
 if __name__ == '__main__':

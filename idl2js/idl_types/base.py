@@ -2,6 +2,7 @@ from collections import ChainMap
 from typing import Any, Type
 
 from idl2js.generators.generator import Generator
+from idl2js.idl_types.helper import TypeFlag
 
 
 internal_types = {}
@@ -32,16 +33,19 @@ class IdlType(metaclass=MetaType):
     __type__: str
     __default_opt__: dict
 
-    def __init__(self, builder_opt: dict | None = None):
+    def __init__(self, builder_opt: dict | None = None, flags = TypeFlag.NONE):
         self._builder_opt = ChainMap(builder_opt or {}, self.__default_opt__)
-        self._generator = self.__generator__(**self._builder_opt)
+        self._flags = flags
 
-    def generate(self):
-        return self._generator.generate()
+    def is_sequence(self):
+        return bool(self._flags & TypeFlag.SEQUENCE)
+
+    def is_optional(self):
+        return bool(self._flags & TypeFlag.OPTIONAL)
 
     def build(self, *args, **kwargs):
-        return self.__builder__()
+        return self.__builder__(*args, **kwargs)
 
     @classmethod
-    def dependencies(cls, attribute: str = 'self') -> list:
+    def dependencies(cls) -> list:
         return []
