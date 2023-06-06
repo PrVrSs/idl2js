@@ -4,10 +4,11 @@ from idl2js.utils import unique_name
 
 
 def js_literal(idl_type, *_):
-    if idl_type.is_sequence():
-        expression = create_array([create_literal(idl_type.generate())])
+    expression = idl_type.generate()
+    if isinstance(expression, list):
+        expression = create_array([create_literal(expr) for expr in expression])
     else:
-        expression = create_literal(idl_type.generate())
+        expression = create_literal(expression)
 
     return JSInstance(
         idl_type=idl_type.__type__,

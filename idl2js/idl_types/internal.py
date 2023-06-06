@@ -1,7 +1,7 @@
 from typing import Callable
 
 from idl2js.builders.js import js_literal
-from idl2js.generators.generator import text
+from idl2js.generators.generator import text, ArrayGenerator
 from idl2js.idl_types.base import IdlType
 
 
@@ -11,6 +11,12 @@ class InternalType(IdlType):
     __generator__: Callable
 
     def generate(self):
+        if self.is_sequence():
+            return ArrayGenerator(
+                element_generator=self.__generator__(self._builder_opt)(),
+                min_size=2,
+            ).generate()
+
         return self.__generator__(self._builder_opt)().generate()
 
 
