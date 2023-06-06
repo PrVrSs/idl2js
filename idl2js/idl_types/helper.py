@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from typing import Any
 from enum import IntEnum
+from typing import Any
 
 
 class TypeFlag(IntEnum):
@@ -16,7 +16,7 @@ def get_base_type(idl_type):
         flags |= flag
 
         if isinstance(idl_type, IDLType):
-            return idl_type.value , flags
+            return idl_type.value, flags
 
 
 class IDLFunction:

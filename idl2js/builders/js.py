@@ -1,5 +1,5 @@
 from idl2js.js.instance import Instance as JSInstance
-from idl2js.js.statements import create_expression, create_literal, create_object, create_array
+from idl2js.js.statements import create_array, create_expression, create_literal, create_object
 from idl2js.utils import unique_name
 
 

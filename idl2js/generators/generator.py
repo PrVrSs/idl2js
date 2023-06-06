@@ -1,7 +1,9 @@
 import sys
+from functools import partial
 
 from more_itertools import first
 
+from .coin import biased_coin
 from .ucd import ucd
 from .vose_sampler import VoseSampler
 
@@ -36,16 +38,49 @@ class CharGenerator(Generator):
         return chr(first(VoseSampler(data=self._chars).sample(size=1)))
 
 
-class InterfaceGenerator(Generator):
-    def __init__(self, generator_opt):
-        self._opt = generator_opt
+class many:
+    def __init__(self, min_size, max_size):
+        self.min_size = min_size
+        self.max_size = max_size
+        self.count = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.min_size > self.count:
+            should_continue = True
+        elif self.min_size == self.max_size:
+            should_continue = self.count < self.min_size
+        else:
+            should_continue = biased_coin()
+
+        if should_continue is False or self.max_size <= self.count:
+            raise StopIteration
+
+        self.count += 1
+
+        return self.count
 
 
 class ArrayGenerator(Generator):
-    def __init__(self, elements, min_size=0, max_size=float('inf')):
+    def __init__(self, element_generator, min_size: int = 2, max_size: int = 10):
         self.min_size = min_size
         self.max_size = max_size
-        self.elements = elements
+
+        self.element_generator = element_generator
 
     def generate(self):
-        return []
+        return [
+            self.element_generator.generate()
+            for _ in many(self.min_size, self.max_size)
+        ]
+
+
+class TextGenerator(ArrayGenerator):
+    def generate(self):
+        return ''.join(super().generate())
+
+
+def text(_, options):
+    return partial(TextGenerator, element_generator=CharGenerator(**options))

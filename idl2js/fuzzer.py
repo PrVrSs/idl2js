@@ -26,8 +26,9 @@ def main():
         idl_type='Blob',
         options={
             'DOMString': {
-                'min_codepoint': 70,
-                'max_codepoint': 100,
+                'min_codepoint': 97,
+                'max_codepoint': 122,
+                'include_categories': {},
             }
         }
     )))
