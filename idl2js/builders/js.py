@@ -31,3 +31,13 @@ def js_interface(idl_type, *args):
             ],
         ),
     )
+
+
+def js_type_def(idl_type, *args):
+    return JSInstance(
+        idl_type=idl_type.__type__,
+        ast=create_expression(
+            name=unique_name(),
+            expression=create_literal(args[0][0]),
+        )
+    )

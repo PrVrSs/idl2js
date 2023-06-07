@@ -77,6 +77,12 @@ class ArrayGenerator(Generator):
         ]
 
 
+class ChoiceGenerator(Generator):
+    def __init__(self, elements):
+        self.elements = elements
+    def generate(self):
+        return first(VoseSampler(data=self.elements).sample(size=1))
+
 class TextGenerator(ArrayGenerator):
     def generate(self):
         return ''.join(super().generate())

@@ -12,11 +12,11 @@ def get_base_type(idl_type):
     flags = TypeFlag.NONE
 
     while True:
-        idl_type, flag = handle_type(idl_type)
-        flags |= flag
-
         if isinstance(idl_type, IDLType):
             return idl_type.value, flags
+
+        idl_type, flag = handle_type(idl_type)
+        flags |= flag
 
 
 class IDLFunction:

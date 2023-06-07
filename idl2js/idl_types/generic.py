@@ -27,3 +27,19 @@ class Interface(GenericType):
             get_base_type(argument.value)
             for argument in cls._constructor_.arguments
         ]
+
+
+class TypeDef(GenericType):
+    """Base TypeDef class."""
+
+    _attributes_: Any
+    _constructor_: IDLFunction
+    __builder__:  Any
+    __generator__: Any
+
+    @classmethod
+    def dependencies(cls):
+        return [(cls.__generator__([
+            get_base_type(argument)[0]
+            for argument in cls._attributes_
+        ]).generate(), 0)]

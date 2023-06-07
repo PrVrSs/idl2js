@@ -1,7 +1,7 @@
 from typing import Callable
 
 from idl2js.builders.js import js_literal
-from idl2js.generators.generator import text, ArrayGenerator
+from idl2js.generators.generator import ArrayGenerator, text
 from idl2js.idl_types.base import IdlType
 
 
@@ -30,7 +30,6 @@ class DOMString(InternalType):
     __default_opt__ = {
         'min_codepoint': 0,
         'max_codepoint': 128,
-        'include_categories': {'Lu'},
     }
 
 
@@ -44,5 +43,4 @@ class USVString(InternalType):
     __default_opt__ = {
         'min_codepoint': 0,
         'max_codepoint': 128,
-        'include_categories': {'Lu'},
     }
