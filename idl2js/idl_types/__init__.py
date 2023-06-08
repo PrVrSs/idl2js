@@ -1,7 +1,9 @@
 from idl2js.exceptions import UnknownDefinitionType
 from idl2js.idl_types.interface import InterfaceVisitor
 from idl2js.idl_types.internal import DOMString, USVString
+from idl2js.idl_types.type_def import TypeDefVisitor
 from idl2js.idl_types.utils import DefinitionEnum
+from idl2js.idl_types.idl_enum import EnumVisitor
 
 
 def make_idl_type(definition):
@@ -9,9 +11,9 @@ def make_idl_type(definition):
         case DefinitionEnum.INTERFACE:
             return InterfaceVisitor().run(node=definition)
         case DefinitionEnum.TYPEDEF:
-            raise
+            return TypeDefVisitor().run(node=definition)
         case DefinitionEnum.ENUM:
-            raise
+            return EnumVisitor().run(node=definition)
         case DefinitionEnum.DICTIONARY:
             raise
         case DefinitionEnum.NAMESPACE:

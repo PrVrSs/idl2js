@@ -43,3 +43,19 @@ class TypeDef(GenericType):
             get_base_type(argument)[0]
             for argument in cls._attributes_
         ]).generate(), 0)]
+
+
+class Enum_(GenericType):
+    """Base Enum class."""
+
+    _attributes_: Any
+    _constructor_: IDLFunction
+    __builder__:  Any
+    __generator__: Any
+
+
+    def generate(self):
+        return self.__generator__([
+            get_base_type(argument)[0]
+            for argument in self._attributes_
+        ]).generate()
