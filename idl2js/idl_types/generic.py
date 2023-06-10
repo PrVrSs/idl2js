@@ -53,9 +53,27 @@ class Enum_(GenericType):
     __builder__:  Any
     __generator__: Any
 
-
     def generate(self):
         return self.__generator__([
             get_base_type(argument)[0]
             for argument in self._attributes_
         ]).generate()
+
+
+class Dictionary(GenericType):
+    """Base Dictionary class."""
+
+    _attributes_: Any
+    _constructor_: IDLFunction
+    __builder__:  Any
+    __generator__: Any
+
+    @classmethod
+    def dependencies(cls):
+        return [
+            get_base_type(argument.value)
+            for argument in cls._attributes_
+        ]
+
+    def attr_name(self):
+        return [attr.name for attr in self._attributes_]
