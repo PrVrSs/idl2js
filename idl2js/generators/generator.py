@@ -4,6 +4,7 @@ from functools import partial
 from more_itertools import first
 
 from .coin import biased_coin
+from .rng import idl2js_random
 from .ucd import ucd
 from .vose_sampler import VoseSampler
 
@@ -63,6 +64,15 @@ class many:
         return self.count
 
 
+class IntegerGenerator(Generator):
+    def __init__(self, min_value: int | None = None, max_value: int | None = None):
+        self._min_value = min_value
+        self._max_value = max_value
+
+    def generate(self):
+        return idl2js_random.randint(self._min_value, self._max_value)
+
+
 class ArrayGenerator(Generator):
     def __init__(self, element_generator, min_size: int = 2, max_size: int = 10):
         self.min_size = min_size
@@ -86,6 +96,10 @@ class ChoiceGenerator(Generator):
 class TextGenerator(ArrayGenerator):
     def generate(self):
         return ''.join(super().generate())
+
+
+def integer(_, options):
+    return partial(IntegerGenerator, min_value=options.get('min_value'), max_value=options.get('max_value'))
 
 
 def text(_, options):

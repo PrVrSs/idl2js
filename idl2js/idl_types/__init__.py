@@ -17,7 +17,5 @@ def make_idl_type(definition):
             return EnumVisitor().run(node=definition)
         case DefinitionEnum.DICTIONARY:
             return DictionaryVisitor().run(node=definition)
-        case DefinitionEnum.NAMESPACE:
-            raise
         case _:
             raise UnknownDefinitionType(f'Unknown {definition.type=}')
