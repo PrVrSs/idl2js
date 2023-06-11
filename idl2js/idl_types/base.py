@@ -8,7 +8,7 @@ from idl2js.idl_types.helper import TypeFlag
 internal_types = {}
 
 
-def _is_internal(ns: dict) -> bool:
+def _is_internal(ns: dict) -> bool:  # pylint: disable=invalid-name
     return ns.get('__internal__', False) is True
 
 

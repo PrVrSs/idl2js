@@ -45,7 +45,7 @@ class TypeDef(GenericType):
         ]).generate(), 0)]
 
 
-class Enum_(GenericType):
+class Enum_(GenericType):  # pylint: disable=invalid-name
     """Base Enum class."""
 
     _attributes_: Any

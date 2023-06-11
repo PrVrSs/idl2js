@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from enum import IntEnum
 from typing import Any
 
+from idl2js.exceptions import IDL2JSException
+
 
 class TypeFlag(IntEnum):
     NONE = 0
@@ -67,7 +69,7 @@ class IDLSequence:
     items: Any
 
 
-Type = IDLOptional | IDLType | IDLUnion | IDLSequence
+Type = IDLOptional | IDLType | IDLSequence
 
 
 def handle_type(idl_type: Type):
@@ -79,6 +81,6 @@ def handle_type(idl_type: Type):
         case IDLType(value):
             return value, TypeFlag.NONE
         case IDLUnion(_):
-            raise
+            raise IDL2JSException
         case _:
-            raise
+            raise IDL2JSException

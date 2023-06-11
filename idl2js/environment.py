@@ -15,6 +15,18 @@ class TypeTable(dict):
         dict.__setitem__(self, key, value)
 
 
+class SSA:
+    pass
+
+
+class CallGraph:
+    pass
+
+
+class SymbolTable:
+    pass
+
+
 class IRTable:
     def __init__(self):
         self._queue = deque()

@@ -39,7 +39,7 @@ class CharGenerator(Generator):
         return chr(first(VoseSampler(data=self._chars).sample(size=1)))
 
 
-class many:
+class many:  # pylint: disable=invalid-name
     def __init__(self, min_size, max_size):
         self.min_size = min_size
         self.max_size = max_size
@@ -98,8 +98,16 @@ class TextGenerator(ArrayGenerator):
         return ''.join(super().generate())
 
 
+class BooleanGenerator(Generator):
+    def generate(self):
+        return idl2js_random.choice([True, False])
+
 def integer(_, options):
-    return partial(IntegerGenerator, min_value=options.get('min_value'), max_value=options.get('max_value'))
+    return partial(
+        IntegerGenerator,
+        min_value=options.get('min_value'),
+        max_value=options.get('max_value'),
+    )
 
 
 def text(_, options):
