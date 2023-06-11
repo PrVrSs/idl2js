@@ -3,6 +3,7 @@ dictionary WebAssemblyInstantiatedSource {
     required Instance instance;
 };
 
+/*
 [Exposed=(Window,Worker,Worklet)]
 namespace WebAssembly {
     boolean validate(BufferSource bytes);
@@ -14,6 +15,7 @@ namespace WebAssembly {
     Promise<Instance> instantiate(
         Module moduleObject, optional object importObject);
 };
+*/
 
 enum ImportExportKind {
   "function",

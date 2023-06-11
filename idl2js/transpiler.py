@@ -1,10 +1,21 @@
 from collections import deque
 from typing import Optional
+from pathlib import Path
 
 from .environment import Environment
 from .idl_processor import process_idl
 from .idl_types import make_idl_type
 from .idl_types.base import internal_types
+
+
+COMMON_DEFINITION = Path(__file__).parent.resolve() / 'common_definitions.webidl'
+
+
+def common_definition():
+    return {
+        idl_type.__type__: idl_type
+        for idl_type in convert_idl([COMMON_DEFINITION])
+    }
 
 
 def convert_idl(idls):
@@ -70,6 +81,7 @@ class Transpiler:
     def __init__(self, idls: Optional[tuple[str, ...]] = None):
         self.environment = Environment({
             **internal_types,
+            **common_definition(),
             **external_types(idls or []),
         })
 
