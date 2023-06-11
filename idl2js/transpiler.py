@@ -1,11 +1,11 @@
 from collections import deque
-from typing import Optional
 from pathlib import Path
+from typing import Optional
 
 from .environment import Environment
+from .idl import make_idl_type
+from .idl.base import internal_types
 from .idl_processor import process_idl
-from .idl_types import make_idl_type
-from .idl_types.base import internal_types
 
 
 COMMON_DEFINITION = Path(__file__).parent.resolve() / 'common_definitions.webidl'

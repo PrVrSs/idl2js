@@ -2,8 +2,9 @@ from typing import Callable
 
 from idl2js.builders.js import js_literal
 from idl2js.generators.generator import ArrayGenerator, integer, text
-from idl2js.idl_types.base import IdlType
-from idl2js.idl_types.constants import INT_RANGES, LONG_LONG, UNSIGNED_LONG, UNSIGNED_LONG_LONG
+
+from ..base import IdlType
+from .constants import INT_RANGES, LONG_LONG, UNSIGNED_LONG, UNSIGNED_LONG_LONG
 
 
 class InternalType(IdlType):

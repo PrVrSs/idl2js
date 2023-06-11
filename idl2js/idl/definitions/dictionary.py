@@ -3,10 +3,10 @@ from types import SimpleNamespace
 from pywebidl2.expr import Ast as WebIDLAst
 
 from idl2js.builders.js import js_dictionary
-from idl2js.idl_types.generic import Dictionary
-from idl2js.idl_types.helper import IDLArgument
-from idl2js.idl_types.utils import prepare_idl_type
 from idl2js.visitor import Visitor
+
+from .definition import Dictionary
+from .helper import IDLArgument, prepare_idl_type
 
 
 class DictionaryVisitor(Visitor[WebIDLAst]):

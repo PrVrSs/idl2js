@@ -1,14 +1,23 @@
+from enum import Enum
 from typing import Any
 
-from idl2js.idl_types.base import IdlType
-from idl2js.idl_types.helper import IDLFunction, get_base_type
+from ..base import IdlType
+from .helper import IDLFunction, get_base_type
 
 
-class GenericType(IdlType):
-    """Base GenericType."""
+class DefinitionEnum(str, Enum):
+    INTERFACE = 'interface'
+    TYPEDEF = 'typedef'
+    ENUM = 'enum'
+    DICTIONARY = 'dictionary'
+    NAMESPACE = 'namespace'
 
 
-class Interface(GenericType):
+class DefinitionType(IdlType):
+    """Base DefinitionType."""
+
+
+class Interface(DefinitionType):
     """Base Interface class."""
 
     _builder_opt_ = {
@@ -29,7 +38,7 @@ class Interface(GenericType):
         ]
 
 
-class TypeDef(GenericType):
+class TypeDef(DefinitionType):
     """Base TypeDef class."""
 
     _attributes_: Any
@@ -45,7 +54,7 @@ class TypeDef(GenericType):
         ]).generate(), 0)]
 
 
-class Enum_(GenericType):  # pylint: disable=invalid-name
+class Enum_(DefinitionType):  # pylint: disable=invalid-name
     """Base Enum class."""
 
     _attributes_: Any
@@ -60,7 +69,7 @@ class Enum_(GenericType):  # pylint: disable=invalid-name
         ]).generate()
 
 
-class Dictionary(GenericType):
+class Dictionary(DefinitionType):
     """Base Dictionary class."""
 
     _attributes_: Any

@@ -4,9 +4,10 @@ from pywebidl2.expr import Ast as WebIDLAst
 
 from idl2js.builders.js import js_enum
 from idl2js.generators.generator import ChoiceGenerator
-from idl2js.idl_types.generic import Enum_
-from idl2js.idl_types.utils import prepare_idl_type
 from idl2js.visitor import Visitor
+
+from .definition import Enum_
+from .helper import prepare_idl_type
 
 
 class EnumVisitor(Visitor[WebIDLAst]):

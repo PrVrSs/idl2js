@@ -1,10 +1,12 @@
-from idl2js.exceptions import UnknownDefinitionType
-from idl2js.idl_types.dictionary import DictionaryVisitor
-from idl2js.idl_types.idl_enum import EnumVisitor
-from idl2js.idl_types.interface import InterfaceVisitor
-from idl2js.idl_types.internal import DOMString, USVString
-from idl2js.idl_types.type_def import TypeDefVisitor
-from idl2js.idl_types.utils import DefinitionEnum
+from ..exceptions import UnknownDefinitionType
+from .definitions import (
+    DefinitionEnum,
+    DictionaryVisitor,
+    EnumVisitor,
+    InterfaceVisitor,
+    TypeDefVisitor,
+)
+from .std import UNSIGNED_LONG_LONG, DOMString, LongLong, UnsignedLong, USVString
 
 
 def make_idl_type(definition):

@@ -1,11 +1,17 @@
 from collections import ChainMap
+from enum import IntEnum
 from typing import Any, Type
 
 from idl2js.generators.generator import Generator
-from idl2js.idl_types.helper import TypeFlag
 
 
 internal_types = {}
+
+
+class TypeFlag(IntEnum):
+    NONE = 0
+    OPTIONAL = 1
+    SEQUENCE = 2
 
 
 def _is_internal(ns: dict) -> bool:  # pylint: disable=invalid-name

@@ -4,11 +4,8 @@ from typing import Any
 
 from idl2js.exceptions import IDL2JSException
 
+from ..base import TypeFlag
 
-class TypeFlag(IntEnum):
-    NONE = 0
-    OPTIONAL = 1
-    SEQUENCE = 2
 
 def get_base_type(idl_type):
     flags = TypeFlag.NONE
@@ -84,3 +81,19 @@ def handle_type(idl_type: Type):
             raise IDL2JSException
         case _:
             raise IDL2JSException
+
+
+def prepare_idl_type(idl_type):
+    if isinstance(idl_type, list):
+        return [prepare_idl_type(idl) for idl in idl_type]
+
+    if isinstance(idl_type, str):
+        return IDLType(value=idl_type)
+
+    if idl_type.generic == 'sequence':
+        return IDLSequence(items=prepare_idl_type(idl_type.idl_type))
+
+    if idl_type.union is True:
+        return IDLUnion(items=[prepare_idl_type(idl_t) for idl_t in idl_type.idl_type])
+
+    return IDLType(value=idl_type.idl_type)
