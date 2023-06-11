@@ -33,7 +33,7 @@ class IdlType(metaclass=MetaType):
     __type__: str
     __default_opt__: dict
 
-    def __init__(self, builder_opt: dict | None = None, flags = TypeFlag.NONE):
+    def __init__(self, builder_opt: dict | None = None, flags: TypeFlag = TypeFlag.NONE):
         self._builder_opt = ChainMap(builder_opt or {}, self.__default_opt__)
         self._flags = flags
 

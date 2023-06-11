@@ -74,7 +74,7 @@ class Transpiler:
         })
 
     def build_cdg(self, idl_type, options):
-        node = CDGNode(self.environment.get_type(idl_type), None)
+        node = CDGNode(self.environment.get_type(idl_type), 0)
         cdg = CDG(root=node, options=Option(options))
         todo = deque([node])
         while todo:

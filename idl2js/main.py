@@ -5,7 +5,7 @@ from typing import Optional, Union
 import click
 from click import Context, Option, Parameter
 
-from .transpiler import Transpiler
+from .fuzzer import Fuzzer
 from .utils import save
 
 
@@ -17,6 +17,7 @@ def _idl_files(_: Context, __: Union[Option, Parameter], value: Optional[str]) -
 
 
 @click.command()
+@click.option('-t', '--target', required=True, type=str)
 @click.option(
     '-f', '--file',
     multiple=True,
@@ -35,8 +36,8 @@ def _idl_files(_: Context, __: Union[Option, Parameter], value: Optional[str]) -
     default='/dev/stdout',
     help='',
 )
-def cli(file: tuple[str, ...], directory: tuple[str, ...], output: str) -> None:
+def cli(target: str,file: tuple[str, ...], directory: tuple[str, ...], output: str) -> None:
     save(
         file_name=output,
-        content=Transpiler(idls=tuple(chain(file, directory))).transpile()
+        content=list(map(str, Fuzzer(idls=tuple(chain(file, directory))).samples(idl_type=target)))
     )
