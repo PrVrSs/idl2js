@@ -1,4 +1,4 @@
-from attr import fields
+from dataclasses import fields
 
 from .nodes import ast_node_map
 

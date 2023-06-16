@@ -1,16 +1,17 @@
 import random
 
-from .nodes import Ast as JsAst, Literal
 from ..visitor import NodeTransformer
+from .nodes import Ast as JsAst
+from .nodes import Literal
 
 
 class SimpleMutator(NodeTransformer[JsAst]):
-    def visit(self):
+    def visit(self, node):
         pass
 
 
 class LiteralMutator(NodeTransformer[JsAst]):
-    def visit_literal(self, node):
+    def visit_literal(self, _):
         return Literal(value=random.randint(0, 10))
 
 

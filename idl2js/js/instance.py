@@ -4,14 +4,16 @@ from .unparser import unparse
 
 
 class Instance:
-    def __init__(self, type_: str, ast: ExpressionStatement):
-        self._type = type_
+    def __init__(self, idl_type: str, ast: ExpressionStatement):
+        self._idl_type = idl_type
         self._ast = ast
-
-        self._spawn: list[Instance] = []
 
     def __repr__(self):
         return self.print(save=True)
+
+    @property
+    def idl_type(self):
+        return self._idl_type
 
     @property
     def name(self) -> str:

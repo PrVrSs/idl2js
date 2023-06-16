@@ -1,58 +1,107 @@
-import logging
-from collections import defaultdict
+from collections import deque
+from pathlib import Path
 from typing import Optional
 
 from .environment import Environment
-from .intermediate_to_js import transform_from_intermediate_to_js
+from .idl import make_idl_type
+from .idl.base import internal_types
 from .idl_processor import process_idl
-from .idl_to_intermediate import transform_from_idl_to_intermediate
-from .js.built_in.jtypes import type_class_dict
-from .std.builder import STDBuilder
-from .std.typed_array import TYPED_ARRAY_MAP
-from .targets import BaseTarget
-from .utils import project_idl_list
 
 
-logger = logging.getLogger(__name__)
+COMMON_DEFINITION = Path(__file__).parent.resolve() / 'common_definitions.webidl'
 
 
-def define_std_types(environment: Environment, builder: STDBuilder) -> None:
-    for key, value in type_class_dict.items():
-        environment.add_type(key, value(builder))
+def common_definition():
+    return {
+        idl_type.__type__: idl_type
+        for idl_type in convert_idl([COMMON_DEFINITION])
+    }
 
-    for key, value in TYPED_ARRAY_MAP.items():
-        environment.add_type(key, value)
 
-
-def idl_to_intermediate(idls: tuple[str, ...]):
-    return transform_from_idl_to_intermediate({
-        definition.name: definition
+def convert_idl(idls):
+    return [
+        make_idl_type(definition)
         for idl in process_idl(idls)
         for definition in idl.definitions
-    })
+    ]
+
+
+def external_types(idls: list[str]):
+    return {
+        idl_type.__type__: idl_type
+        for idl_type in convert_idl(idls)
+    }
+
+
+class Option:
+    def __init__(self, option):
+        self._option = option or {}
+
+    def __call__(self, idl_type):
+        return self._option.get(idl_type.__type__, {})
+
+
+class CDGNode:
+    def __init__(self, idl_type, flags):
+        self.idl_type = idl_type
+        self.children = []
+        self.flags = flags
+
+        self.dependencies = []
+
+    def build(self, option):
+        self.dependencies = [
+            child.build(option)
+            for child in self.children
+        ]
+
+        return self.idl_type(option(self.idl_type), self.flags).build([
+                dependency.name
+                for dependency in self.dependencies
+            ],
+        )
+
+
+class CDG:
+    def __init__(self, root, options):
+        self.root = root
+        self.options = options or {}
+
+    def sample(self):
+        result = [self.root.build(self.options)]
+        todo = deque([self.root])
+
+        while todo:
+            node = todo.popleft()
+            result.extend(node.dependencies[::-1])
+            todo.extend(node.children)
+
+        return result[::-1]
 
 
 class Transpiler:
     def __init__(self, idls: Optional[tuple[str, ...]] = None):
-        self._environment = Environment()
-        self._instances = defaultdict(list)
+        self.environment = Environment({
+            **internal_types,
+            **common_definition(),
+            **external_types(idls or []),
+        })
 
-        define_std_types(self._environment, STDBuilder())
-        self.define_idl_types(
-            [
-                *project_idl_list(),
-                *(idls or []),
-            ]
-        )
+    def build_cdg(self, idl_type, options):
+        node = CDGNode(self.environment.get_type(idl_type), 0)
+        cdg = CDG(root=node, options=Option(options))
+        todo = deque([node])
+        while todo:
+            item = todo.popleft()
 
-    def define_idl_types(self, idls: tuple[str, ...]) -> None:
-        for name, type_class in idl_to_intermediate(idls).items():
-            self._environment.add_type(name, type_class)
+            for dependency, flags in item.idl_type.dependencies():
+                if dependency == 'any':
+                    type_ = self.environment.get_random_type()
+                else:
+                    type_ = self.environment.get_type(dependency)
 
-    def transpile(self, targets: list[BaseTarget]):
-        for target in targets:
-            transform_from_intermediate_to_js(self._environment, target)
+                new_node = CDGNode(type_, flags)
+                item.children.append(new_node)
+                todo.append(new_node)
 
-    @property
-    def js_instances(self):
-        return self._environment.get_variable()
+        return cdg

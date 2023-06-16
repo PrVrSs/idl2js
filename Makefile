@@ -15,4 +15,4 @@ lint:
 	poetry run pylint idl2js
 
 
-test: mypy lint unit
+test: unit

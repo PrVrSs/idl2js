@@ -5,8 +5,7 @@ from typing import Optional, Union
 import click
 from click import Context, Option, Parameter
 
-from .logger import LOG_LEVELS, configure_logging
-from .transpiler import Transpiler
+from .fuzzer import Fuzzer
 from .utils import save
 
 
@@ -18,6 +17,7 @@ def _idl_files(_: Context, __: Union[Option, Parameter], value: Optional[str]) -
 
 
 @click.command()
+@click.option('-t', '--target', required=True, type=str)
 @click.option(
     '-f', '--file',
     multiple=True,
@@ -36,16 +36,8 @@ def _idl_files(_: Context, __: Union[Option, Parameter], value: Optional[str]) -
     default='/dev/stdout',
     help='',
 )
-@click.option(
-    '-l', '--level',
-    default='debug',
-    type=click.Choice(tuple(LOG_LEVELS.keys())),
-    help='',
-)
-def cli(file: tuple[str, ...], directory: tuple[str, ...], output: str, level: str) -> None:
-    configure_logging(level)
-
+def cli(target: str,file: tuple[str, ...], directory: tuple[str, ...], output: str) -> None:
     save(
         file_name=output,
-        content=Transpiler(idls=tuple(chain(file, directory))).idl_to_js()
+        content=list(map(str, Fuzzer(idls=tuple(chain(file, directory))).samples(idl_type=target)))
     )

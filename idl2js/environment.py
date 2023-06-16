@@ -1,4 +1,5 @@
 import logging
+import random
 from collections import defaultdict, deque
 
 from .exceptions import UnknownType
@@ -15,17 +16,28 @@ class TypeTable(dict):
         dict.__setitem__(self, key, value)
 
 
-class InstanceTable:
+class SSA:
+    pass
+
+
+class CallGraph:
+    pass
+
+
+class SymbolTable:
+    pass
+
+
+class IRTable:
     def __init__(self):
         self._queue = deque()
+
+
+class InstanceTable:
+    def __init__(self):
         self._instances = defaultdict(list)
 
-    @property
-    def instances(self):
-        return list(self._queue)
-
     def __setitem__(self, key, value):
-        self._queue.append(value)
         self._instances[key].append(value)
 
     def __getitem__(self, item):
@@ -33,9 +45,10 @@ class InstanceTable:
 
 
 class Environment:
-    def __init__(self):
-        self._type_table = TypeTable()
-        self._instances = InstanceTable()
+    def __init__(self, idl_type):
+        self._type_table = TypeTable(idl_type)
+        self._ir_table = IRTable()
+        self._instance_table = InstanceTable()
 
     def add_type(self, name, value):
         self._type_table[name] = value
@@ -46,8 +59,8 @@ class Environment:
         except KeyError:
             raise UnknownType(f'Not found type {name=}') from None
 
-    def add_instance(self, name, instance):
-        self._instances[name] = instance
+    def get_random_type(self):
+        return random.choice(list(self._type_table.values()))
 
-    def get_variable(self):
-        return self._instances.instances
+    def add_instance(self, name, instance):
+        self._instance_table[name] = instance

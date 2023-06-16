@@ -33,48 +33,29 @@ make unit
 ### Examples
 
 ```python
-import logging
 from pathlib import Path
 from pprint import pprint
 
-from idl2js import InterfaceTarget, Transpiler
-
-
-class Module(InterfaceTarget):
-    kind = 'Module'
-
-
-class Global(InterfaceTarget):
-    kind = 'Global'
-
-
-class Table(InterfaceTarget):
-    kind = 'Table'
-
-
-class Memory(InterfaceTarget):
-    kind = 'Memory'
+from idl2js import Fuzzer
 
 
 def main():
-    logging.getLogger('idl2js').setLevel(logging.DEBUG)
-
-    transpiler = Transpiler(
-        idls=(
+    fuzzer = Fuzzer(
+        idls=[
+            # https://www.w3.org/TR/wasm-js-api-2/#idl-index
             str((Path(__file__).parent / 'webassembly.webidl').resolve()),
-        )
-    )
+        ])
 
-    transpiler.transpile(
-        targets=[
-            Module,
-            Global,
-            Table,
-            Memory,
-        ]
-    )
-
-    pprint(transpiler.js_instances)
+    pprint(list(fuzzer.samples(
+        idl_type='Table',
+        options={
+            'DOMString': {
+                'min_codepoint': 97,
+                'max_codepoint': 122,
+                'include_categories': {},
+            }
+        }
+    )))
 
 
 if __name__ == '__main__':
@@ -86,16 +67,24 @@ if __name__ == '__main__':
 #### Output
 
 ```js
-try {v_0805c1325a3048aca879de7ce5f8c9a5 = new Int8Array()} catch(e){}
-try {v_cfa435d6211f41df8a6af0a8543b3b37 = new WebAssembly.Module(v_0805c1325a3048aca879de7ce5f8c9a5)} catch(e){}
-try {v_5deaeb375b774b54b6140be12322296a = {value: 'v128', mutable: true}} catch(e){}
-try {v_788c98fd9d97444688f48fedb824130b = 'meoein'} catch(e){}
-try {v_c3fcd21aecdd4ef6bb2060cbb0bd70fb = new WebAssembly.Global(v_5deaeb375b774b54b6140be12322296a, v_788c98fd9d97444688f48fedb824130b)} catch(e){}
-try {v_73a4bd166ae34681a13acc70c2a67876 = {element: 'anyfunc', initial: 290477176, maximum: 3297392043}} catch(e){}
-try {v_061571cb277b42beb33546c8d8c3ed07 = 'pahfbx'} catch(e){}
-try {v_0c4bc44857394e40a9ade62f0eaadfca = new WebAssembly.Table(v_73a4bd166ae34681a13acc70c2a67876, v_061571cb277b42beb33546c8d8c3ed07)} catch(e){}
-try {v_06ab1c4441d543ae8d4289c13a07c895 = {initial: 2477011723, maximum: 3809510539}} catch(e){}
-try {v_5e251ff6ba8647e48a2d633ba42386f8 = new WebAssembly.Memory(v_06ab1c4441d543ae8d4289c13a07c895)} catch(e){}
+[[try {v_cd820bf385f14b2383dfb7f81a4f935b = 'anyfunc'} catch(e){},
+  try {v_efa5137be7fe4063bf47252046aa0d74 = 2017893174} catch(e){},
+  try {v_646b30b73c6c4238945f1a4390ce73c8 = 4237930728} catch(e){},
+  try {v_39b62d49860248c5bcc5a904ac7bc277 = {element: 'v_cd820bf385f14b2383dfb7f81a4f935b', initial: 'v_efa5137be7fe4063bf47252046aa0d74', maximum: 'v_646b30b73c6c4238945f1a4390ce73c8'}} catch(e){},
+  try {v_ba1287fff1984465ad2ec78abb6c5b3f = 3981072889} catch(e){},
+  try {v_ccc9de6d2e64407bb78f1ca330563fb7 = new Table('v_39b62d49860248c5bcc5a904ac7bc277', 'v_ba1287fff1984465ad2ec78abb6c5b3f')} catch(e){}],
+ [try {v_29ad83a7ef134d48bc10a2057721d811 = 'anyfunc'} catch(e){},
+  try {v_fe5d92a6347b4799948eaf0e7f3901ae = 3273608333} catch(e){},
+  try {v_8a274ed057464448a103c554bb0f4489 = 1287757149} catch(e){},
+  try {v_1d7a983af8754a09adc7079bccca71df = {element: 'v_29ad83a7ef134d48bc10a2057721d811', initial: 'v_fe5d92a6347b4799948eaf0e7f3901ae', maximum: 'v_8a274ed057464448a103c554bb0f4489'}} catch(e){},
+  try {v_08efc03de63a4ab8ae0f0a3010eaa7b9 = 3191963624} catch(e){},
+  try {v_3436efc34ef3426bb05902a989cdde3c = new Table('v_1d7a983af8754a09adc7079bccca71df', 'v_08efc03de63a4ab8ae0f0a3010eaa7b9')} catch(e){}],
+ [try {v_7eeb3f14281f4223beeb48d3e0739b4b = 'externref'} catch(e){},
+  try {v_bf5605aa5293417a9fc90fc9d875fe4e = 3573454083} catch(e){},
+  try {v_22df38f875364571abd808b0a8c81b73 = 3093703977} catch(e){},
+  try {v_6158fc93b00b4dd8a0e9b56092ea32a5 = {element: 'v_7eeb3f14281f4223beeb48d3e0739b4b', initial: 'v_bf5605aa5293417a9fc90fc9d875fe4e', maximum: 'v_22df38f875364571abd808b0a8c81b73'}} catch(e){},
+  try {v_d259852980f04de1a1915ac3ec9f5686 = 2563963223} catch(e){},
+  try {v_88487080d56c4fa08630f5698f87bb70 = new Table('v_6158fc93b00b4dd8a0e9b56092ea32a5', 'v_d259852980f04de1a1915ac3ec9f5686')} catch(e){}]]
 ```
 
 
@@ -105,7 +94,6 @@ try {v_5e251ff6ba8647e48a2d633ba42386f8 = new WebAssembly.Memory(v_06ab1c4441d54
 * [original webidl parser](https://github.com/w3c/webidl2.js)
 * [TSJS-lib-generator](https://github.com/microsoft/TSJS-lib-generator/tree/master/inputfiles/idl)
 * [ECMAScript® 2021 Language Specification](https://tc39.es/ecma262/)
-* [Web IDL](https://heycam.github.io/webidl)
 * [Web IDL Spec](https://webidl.spec.whatwg.org/)
 
 
