@@ -59,6 +59,7 @@ def js_enum(idl_type, *_):
         )
     )
 
+
 def js_dictionary(idl_type, *args):
     return JSInstance(
         idl_type=idl_type.__type__,

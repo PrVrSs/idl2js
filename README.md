@@ -33,48 +33,28 @@ make unit
 ### Examples
 
 ```python
-import logging
 from pathlib import Path
 from pprint import pprint
 
-from idl2js import InterfaceTarget, Transpiler
-
-
-class Module(InterfaceTarget):
-    kind = 'Module'
-
-
-class Global(InterfaceTarget):
-    kind = 'Global'
-
-
-class Table(InterfaceTarget):
-    kind = 'Table'
-
-
-class Memory(InterfaceTarget):
-    kind = 'Memory'
+from idl2js import Fuzzer
 
 
 def main():
-    logging.getLogger('idl2js').setLevel(logging.DEBUG)
+    fuzzer = Fuzzer(
+        idls=[
+            str((Path(__file__).parent / 'Blob.webidl').resolve()),
+        ])
 
-    transpiler = Transpiler(
-        idls=(
-            str((Path(__file__).parent / 'webassembly.webidl').resolve()),
-        )
-    )
-
-    transpiler.transpile(
-        targets=[
-            Module,
-            Global,
-            Table,
-            Memory,
-        ]
-    )
-
-    pprint(transpiler.js_instances)
+    pprint(list(fuzzer.samples(
+        idl_type='Blob',
+        options={
+            'DOMString': {
+                'min_codepoint': 97,
+                'max_codepoint': 122,
+                'include_categories': {},
+            }
+        }
+    )))
 
 
 if __name__ == '__main__':

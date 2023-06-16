@@ -61,6 +61,7 @@ class CDGNode:
             ],
         )
 
+
 class CDG:
     def __init__(self, root, options):
         self.root = root
@@ -76,6 +77,7 @@ class CDG:
             todo.extend(node.children)
 
         return result[::-1]
+
 
 class Transpiler:
     def __init__(self, idls: Optional[tuple[str, ...]] = None):

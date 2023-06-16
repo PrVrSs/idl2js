@@ -1,8 +1,8 @@
 from collections import ChainMap
 from enum import IntEnum
-from typing import Any, Type
+from typing import Any, Callable, Type
 
-from idl2js.generators.generator import Generator
+from idl2js.generators.generator import ArrayGenerator, Generator
 
 
 internal_types = {}
@@ -14,7 +14,7 @@ class TypeFlag(IntEnum):
     SEQUENCE = 2
 
 
-def _is_internal(ns: dict) -> bool:  # pylint: disable=invalid-name
+def _is_std(ns: dict) -> bool:  # pylint: disable=invalid-name
     return ns.get('__internal__', False) is True
 
 
@@ -24,11 +24,10 @@ class MetaType(type):
             return super().__new__(mcs, typename, bases, ns)
 
         cls = super().__new__(mcs, typename, bases, ns)
-        if (idl_type := ns.get('__type__', None)) is not None and _is_internal(ns):
+        if (idl_type := ns.get('__type__', None)) is not None and _is_std(ns):
             internal_types[idl_type] = cls
 
         return cls
-
 
 
 class IdlType(metaclass=MetaType):
@@ -55,3 +54,19 @@ class IdlType(metaclass=MetaType):
     @classmethod
     def dependencies(cls) -> list:
         return []
+
+
+class STDType(IdlType):
+    """Base STDType."""
+
+    __generator__: Callable
+
+    def generate(self):
+        if self.is_sequence():
+            return ArrayGenerator(
+                element_generator=self.__generator__(self._builder_opt)(),
+                min_size=2,
+            ).generate()
+
+        return self.__generator__(self._builder_opt)().generate()
+

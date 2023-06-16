@@ -12,7 +12,6 @@ class Fuzzer:
             yield cdg.sample()
 
 
-
 def main():
     from pathlib import Path
     from pprint import pprint

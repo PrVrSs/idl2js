@@ -6,7 +6,7 @@ from .definitions import (
     InterfaceVisitor,
     TypeDefVisitor,
 )
-from .std import UNSIGNED_LONG_LONG, DOMString, LongLong, UnsignedLong, USVString
+from .std import DOMString, Int8Array, LongLong, UnsignedLong, USVString
 
 
 def make_idl_type(definition):
