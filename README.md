@@ -2,10 +2,10 @@
 
 **Grammar-based Fuzzer that uses WebIDL as a grammar.**
 
-[![Build Status](https://img.shields.io/travis/PrVrSs/idl2js/master?style=plastic)](https://travis-ci.org/github/PrVrSs/idl2js)
-[![Codecov](https://img.shields.io/codecov/c/github/PrVrSs/idl2js?style=plastic)](https://codecov.io/gh/PrVrSs/idl2js)
-[![Python Version](https://img.shields.io/badge/python-3.10-blue?style=plastic)](https://www.python.org/)
-[![License](https://img.shields.io/cocoapods/l/A?style=plastic)](https://github.com/PrVrSs/idl2js/blob/master/LICENSE)
+[![Build Status](https://github.com/PrVrSs/idl2js/workflows/test/badge.svg?branch=master&event=push)](https://github.com/PrVrSs/idl2js/actions?query=workflow%3Atest)
+[![Codecov](https://img.shields.io/codecov/c/github/PrVrSs/idl2js)](https://codecov.io/gh/PrVrSs/idl2js)
+[![Python Version](https://img.shields.io/badge/python-3.10%20|%203.11-blue)](https://www.python.org/)
+[![License](https://img.shields.io/cocoapods/l/A)](https://github.com/PrVrSs/idl2js/blob/master/LICENSE)
 
 
 ## Quick start
