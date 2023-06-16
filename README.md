@@ -42,11 +42,12 @@ from idl2js import Fuzzer
 def main():
     fuzzer = Fuzzer(
         idls=[
+            # https://www.w3.org/TR/wasm-js-api-2/#idl-index
             str((Path(__file__).parent / 'webassembly.webidl').resolve()),
         ])
 
     pprint(list(fuzzer.samples(
-        idl_type='Blob',
+        idl_type='Table',
         options={
             'DOMString': {
                 'min_codepoint': 97,
