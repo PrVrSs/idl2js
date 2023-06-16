@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import IntEnum
 from typing import Any
 
 from idl2js.exceptions import IDL2JSException

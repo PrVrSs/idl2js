@@ -69,4 +69,3 @@ class STDType(IdlType):
             ).generate()
 
         return self.__generator__(self._builder_opt)().generate()
-
