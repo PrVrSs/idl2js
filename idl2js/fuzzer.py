@@ -22,7 +22,7 @@ def main():
         ])
 
     pprint(list(fuzzer.samples(
-        idl_type='Blob',
+        idl_type='Table',
         options={
             'DOMString': {
                 'min_codepoint': 97,

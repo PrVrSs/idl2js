@@ -1,4 +1,5 @@
 import logging
+import random
 from collections import defaultdict, deque
 
 from .exceptions import UnknownType
@@ -57,6 +58,9 @@ class Environment:
             return self._type_table[name]
         except KeyError:
             raise UnknownType(f'Not found type {name=}') from None
+
+    def get_random_type(self):
+        return random.choice(list(self._type_table.values()))
 
     def add_instance(self, name, instance):
         self._instance_table[name] = instance

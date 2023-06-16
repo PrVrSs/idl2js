@@ -13,3 +13,4 @@ from .typed_array import (
     Uint16Array,
     Uint32Array,
 )
+from .buffer_source import ArrayBuffer

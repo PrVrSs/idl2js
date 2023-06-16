@@ -50,7 +50,7 @@ class CDGNode:
         self.dependencies = []
 
     def build(self, option):
-        self.dependencies  = [
+        self.dependencies = [
             child.build(option)
             for child in self.children
         ]
@@ -95,7 +95,12 @@ class Transpiler:
             item = todo.popleft()
 
             for dependency, flags in item.idl_type.dependencies():
-                new_node = CDGNode(self.environment.get_type(dependency), flags)
+                if dependency == 'any':
+                    type_ = self.environment.get_random_type()
+                else:
+                    type_ = self.environment.get_type(dependency)
+
+                new_node = CDGNode(type_, flags)
                 item.children.append(new_node)
                 todo.append(new_node)
 

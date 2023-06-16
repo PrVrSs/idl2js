@@ -10,6 +10,7 @@ class TypedArray(STDType):
 
 
 class Int8Array(TypedArray):
+    """Base TypedArray class."""
     __internal__ = True
     __type__ = 'Int8Array'
     __builder__ = js_interface
@@ -18,6 +19,7 @@ class Int8Array(TypedArray):
 
 
 class Int16Array(TypedArray):
+    """Base TypedArray class."""
     __internal__ = True
     __type__ = 'Int16Array'
     __builder__ = js_interface
@@ -26,6 +28,7 @@ class Int16Array(TypedArray):
 
 
 class Int32Array(TypedArray):
+    """Base TypedArray class."""
     __internal__ = True
     __type__ = 'Int32Array'
     __builder__ = js_interface
@@ -34,6 +37,7 @@ class Int32Array(TypedArray):
 
 
 class Uint8Array(TypedArray):
+    """Uint8Array."""
     __internal__ = True
     __type__ = 'Uint8Array'
     __builder__ = js_interface
@@ -42,6 +46,7 @@ class Uint8Array(TypedArray):
 
 
 class Uint16Array(TypedArray):
+    """Base TypedArray class."""
     __internal__ = True
     __type__ = 'Uint16Array'
     __builder__ = js_interface
@@ -50,6 +55,7 @@ class Uint16Array(TypedArray):
 
 
 class Uint32Array(TypedArray):
+    """Base TypedArray class."""
     __internal__ = True
     __type__ = 'Uint32Array'
     __builder__ = js_interface
@@ -58,6 +64,7 @@ class Uint32Array(TypedArray):
 
 
 class Uint8ClampedArray(TypedArray):
+    """Base TypedArray class."""
     __internal__ = True
     __type__ = 'Uint8ClampedArray'
     __builder__ = js_interface
@@ -66,6 +73,7 @@ class Uint8ClampedArray(TypedArray):
 
 
 class BigInt64Array(TypedArray):
+    """Base TypedArray class."""
     __internal__ = True
     __type__ = 'BigInt64Array'
     __builder__ = js_interface
@@ -74,6 +82,7 @@ class BigInt64Array(TypedArray):
 
 
 class BigUint64Array(TypedArray):
+    """Base TypedArray class."""
     __internal__ = True
     __type__ = 'BigUint64Array'
     __builder__ = js_interface
@@ -82,6 +91,7 @@ class BigUint64Array(TypedArray):
 
 
 class Float32Array(TypedArray):
+    """Float32Array."""
     __internal__ = True
     __type__ = 'Float32Array'
     __builder__ = js_interface
@@ -90,6 +100,7 @@ class Float32Array(TypedArray):
 
 
 class Float64Array(TypedArray):
+    """Float64Array."""
     __internal__ = True
     __type__ = 'Float64Array'
     __builder__ = js_interface
