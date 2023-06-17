@@ -30,6 +30,9 @@ extensions = [
     'sphinx.ext.napoleon',
 
     'm2r2',
+    'hoverxref.extension',
+    'sphinx_autodoc_typehints',
+    'sphinxcontrib.mermaid',
 ]
 
 templates_path = ['_templates']

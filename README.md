@@ -10,7 +10,7 @@
 
 ## Quick start
 
-```shell script
+```bash
 pip install idl2js
 ```
 
@@ -18,17 +18,16 @@ pip install idl2js
 ### Build from source
 
 *Get source and install dependencies*
-```shell script
+```bash
 git clone https://gitlab.com/PrVrSs/idl2js.git
 cd idl2js
 poetry install
 ```
 
 *Run tests*
-```shell script
+```bash
 make unit
 ```
-
 
 ### Examples
 
@@ -60,9 +59,7 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 ```
-
 
 #### Output
 
