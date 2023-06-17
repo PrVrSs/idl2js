@@ -36,6 +36,7 @@ class IDLArgument:
     def __repr__(self):
         return f'Argument[{self.name}: {self.value}]'
 
+
 class IDLProperty:
     def __init__(self, name, value):
         self.name = name
