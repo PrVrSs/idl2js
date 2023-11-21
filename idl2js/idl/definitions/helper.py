@@ -77,8 +77,8 @@ def handle_type(idl_type: Type):
             return value, TypeFlag.OPTIONAL
         case IDLType(value):
             return value, TypeFlag.NONE
-        case IDLUnion(_):
-            raise IDL2JSException
+        case IDLUnion(items):
+            return items[0], TypeFlag.SEQUENCE
         case _:
             raise IDL2JSException
 

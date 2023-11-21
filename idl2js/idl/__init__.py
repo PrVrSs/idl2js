@@ -21,7 +21,7 @@ def make_idl_type(definition):
         case DefinitionEnum.DICTIONARY:
             return DictionaryVisitor().run(node=definition)
         case DefinitionEnum.NAMESPACE:
-            logger.warning(f'Not implemented {DefinitionEnum.NAMESPACE}')
+            logger.warning('Not implemented %s', DefinitionEnum.NAMESPACE)
             return None
         case _:
             raise UnknownDefinitionType(f'Unknown {definition.type=}')
