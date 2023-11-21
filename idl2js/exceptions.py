@@ -1,6 +1,7 @@
 class IDL2JSException(Exception):
     """Base project exception."""
 
+
 class TranspilerException(IDL2JSException):
     """Transpiler exception."""
 

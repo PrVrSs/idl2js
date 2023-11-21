@@ -19,11 +19,11 @@ def common_definition():
 
 
 def convert_idl(idls):
-    return [
+    return list(filter(None, [
         make_idl_type(definition)
         for idl in process_idl(idls)
         for definition in idl.definitions
-    ]
+    ]))
 
 
 def external_types(idls: list[str]):

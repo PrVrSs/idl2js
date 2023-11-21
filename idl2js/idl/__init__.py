@@ -1,4 +1,5 @@
 from ..exceptions import UnknownDefinitionType
+from ..log import logger
 from .definitions import (
     DefinitionEnum,
     DictionaryVisitor,
@@ -6,7 +7,7 @@ from .definitions import (
     InterfaceVisitor,
     TypeDefVisitor,
 )
-from .std import DOMString, Int8Array, LongLong, UnsignedLong, USVString, ArrayBuffer
+from .std import ArrayBuffer, DOMString, Int8Array, LongLong, UnsignedLong, USVString
 
 
 def make_idl_type(definition):
@@ -19,5 +20,8 @@ def make_idl_type(definition):
             return EnumVisitor().run(node=definition)
         case DefinitionEnum.DICTIONARY:
             return DictionaryVisitor().run(node=definition)
+        case DefinitionEnum.NAMESPACE:
+            logger.warning(f'Not implemented {DefinitionEnum.NAMESPACE}')
+            return None
         case _:
             raise UnknownDefinitionType(f'Unknown {definition.type=}')
