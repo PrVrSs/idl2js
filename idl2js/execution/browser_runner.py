@@ -43,12 +43,16 @@ def _find_chrome():
     return None
 
 
-def _safe_decode(data):
+_MAX_OUTPUT = 64 * 1024  # 64 KiB
+
+
+def _safe_decode(data, max_bytes=_MAX_OUTPUT):
     if data is None:
         return ''
     if isinstance(data, bytes):
+        data = data[:max_bytes]
         return data.decode(errors='replace')
-    return str(data)
+    return str(data)[:max_bytes]
 
 
 def wrap_in_html(js_source):
@@ -106,13 +110,16 @@ class BrowserRunner:
 
             elapsed = (time.monotonic() - start) * 1000
 
+            stdout = _safe_decode(result.stdout)
+            stderr = _safe_decode(result.stderr)
+
             if result.returncode < 0:
                 return Outcome(
                     status=ExitStatus.CRASH,
                     exit_code=result.returncode,
                     signal=-result.returncode,
-                    stdout=result.stdout.decode(errors='replace'),
-                    stderr=result.stderr.decode(errors='replace'),
+                    stdout=stdout,
+                    stderr=stderr,
                     duration_ms=elapsed,
                 )
 
@@ -120,16 +127,16 @@ class BrowserRunner:
                 return Outcome(
                     status=ExitStatus.FAILURE,
                     exit_code=result.returncode,
-                    stdout=result.stdout.decode(errors='replace'),
-                    stderr=result.stderr.decode(errors='replace'),
+                    stdout=stdout,
+                    stderr=stderr,
                     duration_ms=elapsed,
                 )
 
             return Outcome(
                 status=ExitStatus.SUCCESS,
                 exit_code=0,
-                stdout=result.stdout.decode(errors='replace'),
-                stderr=result.stderr.decode(errors='replace'),
+                stdout=stdout,
+                stderr=stderr,
                 duration_ms=elapsed,
             )
         finally:
