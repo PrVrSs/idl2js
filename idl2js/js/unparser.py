@@ -136,6 +136,23 @@ class Unparser(Visitor[JsAst]):
             separator=lambda: self.write('\n')
         )
 
+    def visit_arrow_function_expression(self, node):
+        with self._parentheses(PAREN):
+            interleave(
+                iterable=node.params,
+                func=self.traverse,
+                separator=lambda: self.write(', ')
+            )
+
+        self.write(' => ')
+
+        if node.body is not None:
+            with self._parentheses(BRACE):
+                self.traverse(node.body)
+        else:
+            with self._parentheses(BRACE):
+                pass
+
     def visit_assignment_expression(self, node):
         self.traverse(node.left)
 

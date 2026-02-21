@@ -106,3 +106,12 @@ class Float64Array(TypedArray):
     __builder__ = js_interface
 
     __default_opt__ = {}
+
+
+class Float16Array(TypedArray):
+    """Float16Array."""
+    __internal__ = True
+    __type__ = 'Float16Array'
+    __builder__ = js_interface
+
+    __default_opt__ = {}

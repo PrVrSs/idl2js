@@ -1,8 +1,11 @@
 from idl2js.js.instance import Instance as JSInstance
+from idl2js.js.nodes import ObjectExpression
 from idl2js.js.statements import (
     create_array,
+    create_arrow_function,
     create_dict,
     create_expression,
+    create_identifier,
     create_literal,
     create_object,
     create_property,
@@ -14,6 +17,10 @@ def js_literal(idl_type, *_):
     expression = idl_type.generate()
     if isinstance(expression, list):
         expression = create_array([create_literal(expr) for expr in expression])
+    elif isinstance(expression, dict):
+        expression = ObjectExpression()
+    elif isinstance(expression, str) and expression.startswith('Symbol('):
+        expression = create_identifier(expression)
     else:
         expression = create_literal(expression)
 
@@ -72,5 +79,26 @@ def js_dictionary(idl_type, *args):
                 )
                 for name, arg in zip(idl_type.attr_name(), args[0])
             ]
+        )
+    )
+
+
+def js_callback(idl_type, *args):
+    params = [create_identifier(f'arg{i}') for i in range(len(args[0]))] if args[0] else []
+    return JSInstance(
+        idl_type=idl_type.__type__,
+        ast=create_expression(
+            name=unique_name(),
+            expression=create_arrow_function(params=params),
+        )
+    )
+
+
+def js_namespace(idl_type, *_):
+    return JSInstance(
+        idl_type=idl_type.__type__,
+        ast=create_expression(
+            name=unique_name(),
+            expression=create_identifier(idl_type.__type__),
         )
     )

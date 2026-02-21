@@ -3,6 +3,7 @@ from typing import Any
 from .const import CATCH_CONSTANT, LET
 from .nodes import (
     ArrayExpression,
+    ArrowFunctionExpression,
     AssignmentExpression,
     BlockStatement,
     CallExpression,
@@ -105,3 +106,13 @@ def create_identifier(name: str) -> Identifier:
 
 def create_property(key: Any, value: Any) -> Property:
     return Property(key=key, value=value)
+
+
+def create_arrow_function(
+    params: list[Any] | None = None,
+    body: Any = None
+) -> ArrowFunctionExpression:
+    return ArrowFunctionExpression(
+        params=params or [],
+        body=body,
+    )

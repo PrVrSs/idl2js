@@ -34,9 +34,10 @@ class CharGenerator(Generator):
             include_characters=include_characters,
             exclude_characters=exclude_characters,
         )
+        self._sampler = VoseSampler(data=self._chars)
 
     def generate(self) -> str:
-        return chr(first(VoseSampler(data=self._chars).sample(size=1)))
+        return chr(first(self._sampler.sample(size=1)))
 
 
 class many:  # pylint: disable=invalid-name
@@ -90,8 +91,10 @@ class ArrayGenerator(Generator):
 class ChoiceGenerator(Generator):
     def __init__(self, elements):
         self.elements = elements
+        self._sampler = VoseSampler(data=self.elements)
+
     def generate(self):
-        return first(VoseSampler(data=self.elements).sample(size=1))
+        return first(self._sampler.sample(size=1))
 
 class TextGenerator(ArrayGenerator):
     def generate(self):
@@ -101,6 +104,46 @@ class TextGenerator(ArrayGenerator):
 class BooleanGenerator(Generator):
     def generate(self):
         return idl2js_random.choice([True, False])
+
+
+class FloatGenerator(Generator):
+    def __init__(self, min_value: float = 0.0, max_value: float = 1.0):
+        self._min_value = min_value
+        self._max_value = max_value
+
+    def generate(self):
+        return idl2js_random.uniform(self._min_value, self._max_value)
+
+
+class UndefinedGenerator(Generator):
+    def generate(self):
+        return None
+
+
+class AnyGenerator(Generator):
+    def generate(self):
+        gen = idl2js_random.choice([
+            BooleanGenerator(),
+            IntegerGenerator(min_value=-2**31, max_value=2**31 - 1),
+            FloatGenerator(),
+        ])
+        return gen.generate()
+
+
+class SymbolGenerator(Generator):
+    def generate(self):
+        return f'Symbol("{idl2js_random.randint(0, 9999)}")'
+
+
+class ObjectGenerator(Generator):
+    def generate(self):
+        return {}
+
+
+class BigIntGenerator(Generator):
+    def generate(self):
+        return idl2js_random.randint(-2**63, 2**63 - 1)
+
 
 def integer(_, options):
     return partial(
@@ -112,3 +155,37 @@ def integer(_, options):
 
 def text(_, options):
     return partial(TextGenerator, element_generator=CharGenerator(**options))
+
+
+def boolean(_, _options):
+    return BooleanGenerator
+
+
+def float_(_, options):
+    return partial(
+        FloatGenerator,
+        min_value=options.get('min_value'),
+        max_value=options.get('max_value'),
+    )
+
+
+def undefined(_, _options):
+    return UndefinedGenerator
+
+
+def any_type(_, _options):
+    return AnyGenerator
+
+
+def symbol(_, _options):
+    return SymbolGenerator
+
+
+def object_type(_, _options):
+    return ObjectGenerator
+
+
+def bigint(_, _options):
+    return partial(
+        BigIntGenerator,
+    )

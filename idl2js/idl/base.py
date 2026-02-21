@@ -3,6 +3,7 @@ from enum import IntEnum
 from typing import Any, Callable, Type
 
 from idl2js.generators.generator import ArrayGenerator, Generator
+from idl2js.generators.rng import idl2js_random
 
 
 internal_types = {}
@@ -12,6 +13,7 @@ class TypeFlag(IntEnum):
     NONE = 0
     OPTIONAL = 1
     SEQUENCE = 2
+    NULLABLE = 4
 
 
 def _is_std(ns: dict) -> bool:  # pylint: disable=invalid-name
@@ -48,6 +50,9 @@ class IdlType(metaclass=MetaType):
     def is_optional(self):
         return bool(self._flags & TypeFlag.OPTIONAL)
 
+    def is_nullable(self):
+        return bool(self._flags & TypeFlag.NULLABLE)
+
     def build(self, *args, **kwargs):
         return self.__builder__(*args, **kwargs)
 
@@ -62,6 +67,9 @@ class STDType(IdlType):
     __generator__: Callable
 
     def generate(self):
+        if self.is_nullable() and idl2js_random.random() < 0.2:
+            return None
+
         if self.is_sequence():
             return ArrayGenerator(
                 element_generator=self.__generator__(self._builder_opt)(),

@@ -11,6 +11,10 @@ class DefinitionEnum(str, Enum):
     ENUM = 'enum'
     DICTIONARY = 'dictionary'
     NAMESPACE = 'namespace'
+    CALLBACK = 'callback'
+    CALLBACK_INTERFACE = 'callback interface'
+    INTERFACE_MIXIN = 'interface mixin'
+    INCLUDES = 'includes'
 
 
 class DefinitionType(IdlType):
@@ -28,14 +32,19 @@ class Interface(DefinitionType):
 
     _attributes_: Any
     _constructor_: IDLFunction
+    _inheritance_: str | None
     __builder__:  Any
 
     @classmethod
     def dependencies(cls):
-        return [
+        deps = [
             get_base_type(argument.value)
             for argument in cls._constructor_.arguments
         ]
+        inheritance = getattr(cls, '_inheritance_', None)
+        if inheritance:
+            deps.append((inheritance, 0))
+        return deps
 
 
 class TypeDef(DefinitionType):
@@ -74,15 +83,52 @@ class Dictionary(DefinitionType):
 
     _attributes_: Any
     _constructor_: IDLFunction
+    _inheritance_: str | None
     __builder__:  Any
     __generator__: Any
 
     @classmethod
     def dependencies(cls):
-        return [
+        deps = [
             get_base_type(argument.value)
             for argument in cls._attributes_
         ]
+        inheritance = getattr(cls, '_inheritance_', None)
+        if inheritance:
+            deps.append((inheritance, 0))
+        return deps
 
     def attr_name(self):
         return [attr.name for attr in self._attributes_]
+
+
+class Callback_(DefinitionType):  # pylint: disable=invalid-name
+    """Base Callback class."""
+
+    _attributes_: Any
+    _constructor_: IDLFunction
+    __builder__: Any
+
+    @classmethod
+    def dependencies(cls):
+        return [
+            get_base_type(argument.value)
+            for argument in cls._constructor_.arguments
+        ]
+
+
+class Namespace_(DefinitionType):  # pylint: disable=invalid-name
+    """Base Namespace class."""
+
+    _attributes_: Any
+    _constructor_: IDLFunction
+    __builder__: Any
+
+    @classmethod
+    def dependencies(cls):
+        deps = []
+        for attr in cls._attributes_:
+            if isinstance(attr, IDLFunction):
+                for arg in attr.arguments:
+                    deps.append(get_base_type(arg.value))
+        return deps

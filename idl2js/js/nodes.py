@@ -75,8 +75,12 @@ class Literal(Ast):
     type: str = field(default='Literal')
 
     def __post_init__(self):
-        if isinstance(self.value, bool):
+        if self.value is None:
+            self.raw = 'undefined'
+        elif isinstance(self.value, bool):
             self.raw = 'true' if self.value is True else 'false'
+        elif isinstance(self.value, float):
+            self.raw = str(self.value)
         elif isinstance(self.value, int):
             self.raw = str(self.value)
         elif isinstance(self.value, str):
@@ -142,6 +146,13 @@ class ObjectExpression(Ast):
     properties: list[Property] = field(default_factory=list)
 
 
+@dataclass
+class ArrowFunctionExpression(Ast):
+    params: list[Any] = field(default_factory=list)
+    body: Any = field(default=None)
+    type: str = field(default='ArrowFunctionExpression')
+
+
 Expression = Union[
     AssignmentExpression,
     NewExpression,
@@ -149,4 +160,5 @@ Expression = Union[
     CallExpression,
     ObjectExpression,
     ArrayExpression,
+    ArrowFunctionExpression,
 ]
