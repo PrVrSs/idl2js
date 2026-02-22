@@ -2,8 +2,10 @@ import math
 
 import pytest
 
+from idl2js.generators.chooser import ChoiceKind
 from idl2js.generators.mutator import (
     mutate_array,
+    mutate_choices,
     mutate_float,
     mutate_integer,
     mutate_string,
@@ -113,3 +115,72 @@ class TestMutateArray:
     def test_single_element(self):
         results = {tuple(mutate_array([42])) for _ in range(100)}
         assert len(results) > 1
+
+
+class TestMutateChoices:
+    def test_same_length(self):
+        choices = [
+            (ChoiceKind.INTEGER, 0, 100, 50),
+            (ChoiceKind.FLOAT, 0.0, 1.0, 0.5),
+            (ChoiceKind.INTEGER, -10, 10, 0),
+        ]
+        result = mutate_choices(choices)
+        assert len(result) == len(choices)
+
+    def test_at_least_one_mutated(self):
+        choices = [
+            (ChoiceKind.INTEGER, 0, 100, 50),
+            (ChoiceKind.INTEGER, 0, 100, 50),
+            (ChoiceKind.INTEGER, 0, 100, 50),
+        ]
+        different = False
+        for _ in range(100):
+            result = mutate_choices(choices)
+            if result != choices:
+                different = True
+                break
+        assert different
+
+    def test_respects_integer_bounds(self):
+        choices = [(ChoiceKind.INTEGER, 10, 20, 15)] * 10
+        for _ in range(100):
+            result = mutate_choices(choices, mutation_rate=1.0)
+            for kind, lo, hi, val in result:
+                assert lo <= val <= hi
+
+    def test_float_mutation(self):
+        choices = [(ChoiceKind.FLOAT, 0.0, 1.0, 0.5)] * 5
+        mutated_values = set()
+        for _ in range(100):
+            result = mutate_choices(choices, mutation_rate=1.0)
+            for _, _, _, val in result:
+                if not math.isnan(val) and not math.isinf(val):
+                    mutated_values.add(round(val, 6))
+        assert len(mutated_values) > 1
+
+    def test_empty_input(self):
+        result = mutate_choices([])
+        assert result == []
+
+    def test_num_mutations_param(self):
+        choices = [(ChoiceKind.INTEGER, 0, 100, 50)] * 20
+        result = mutate_choices(choices, num_mutations=1)
+        diffs = sum(1 for a, b in zip(choices, result) if a != b)
+        assert diffs >= 1
+
+    def test_preserves_kind_and_bounds(self):
+        choices = [
+            (ChoiceKind.INTEGER, 5, 95, 50),
+            (ChoiceKind.FLOAT, -1.0, 1.0, 0.0),
+        ]
+        result = mutate_choices(choices, mutation_rate=1.0)
+        for (ok, olo, ohi, _), (nk, nlo, nhi, _) in zip(choices, result):
+            assert ok == nk
+            assert olo == nlo
+            assert ohi == nhi
+
+    def test_boolean_flip(self):
+        choices = [(ChoiceKind.BOOLEAN, 0, 1, 0)] * 5
+        result = mutate_choices(choices, mutation_rate=1.0)
+        for _, _, _, val in result:
+            assert val == 1

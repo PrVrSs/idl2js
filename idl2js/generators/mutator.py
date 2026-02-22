@@ -1,5 +1,7 @@
 import math
+import random as stdlib_random
 
+from .chooser import ChoiceKind
 from .rng import idl2js_random
 
 
@@ -170,3 +172,43 @@ def _arr_remove_element(value):
 
 def _arr_reverse(value):
     return list(reversed(value))
+
+
+def mutate_choices(choices, num_mutations=None, mutation_rate=0.1):
+    if not choices:
+        return list(choices)
+
+    result = list(choices)
+    n = len(result)
+
+    if num_mutations is not None:
+        count = max(1, min(num_mutations, n))
+    else:
+        count = max(1, int(n * mutation_rate))
+
+    positions = stdlib_random.sample(range(n), k=min(count, n))
+
+    for pos in positions:
+        kind, lo, hi, val = result[pos]
+        result[pos] = _mutate_single_choice(kind, lo, hi, val)
+
+    return result
+
+
+def _mutate_single_choice(kind, lo, hi, val):
+    if kind == ChoiceKind.INTEGER:
+        new_val = mutate_integer(val, min_value=lo, max_value=hi)
+        return (kind, lo, hi, new_val)
+
+    if kind == ChoiceKind.FLOAT:
+        new_val = mutate_float(val, min_value=lo, max_value=hi)
+        return (kind, lo, hi, new_val)
+
+    if kind == ChoiceKind.BOOLEAN:
+        return (kind, lo, hi, 1 - val)
+
+    if kind == ChoiceKind.INDEX:
+        new_val = stdlib_random.randint(lo, hi)
+        return (kind, lo, hi, new_val)
+
+    return (kind, lo, hi, val)

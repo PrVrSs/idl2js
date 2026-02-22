@@ -82,6 +82,13 @@ class Fuzzer:
         minimal_sample = self.replay(idl_type, minimal_choices, options)
         return minimal_sample, minimal_choices
 
+    def generate_one_recorded(self, idl_type, options=None, seed=None):
+        for sample, choices in self.recorded_samples(
+            idl_type, count=1, options=options, seed=seed,
+        ):
+            return sample, choices
+        return None, None  # pragma: no cover
+
     @property
     def coverage(self):
         return self._coverage
