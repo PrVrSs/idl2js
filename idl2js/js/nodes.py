@@ -6,6 +6,18 @@ from typing import Any, Union
 ast_node_map: dict[str, 'Ast'] = {}
 
 
+class _NullType:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+
+NULL = _NullType()
+
+
 @dataclass
 class Ast(abc.ABC):
     def __init_subclass__(cls, **kwargs):
@@ -75,7 +87,9 @@ class Literal(Ast):
     type: str = field(default='Literal')
 
     def __post_init__(self):
-        if self.value is None:
+        if isinstance(self.value, _NullType):
+            self.raw = 'null'
+        elif self.value is None:
             self.raw = 'undefined'
         elif isinstance(self.value, bool):
             self.raw = 'true' if self.value is True else 'false'
@@ -112,7 +126,7 @@ class TryStatement(Ast):
 
 @dataclass
 class AssignmentExpression(Ast):
-    left: Identifier
+    left: Any
     right: Any
     operator: str = field(default='=')
     type: str = field(default='AssignmentExpression')
@@ -153,6 +167,31 @@ class ArrowFunctionExpression(Ast):
     type: str = field(default='ArrowFunctionExpression')
 
 
+@dataclass
+class BinaryExpression(Ast):
+    left: Any
+    right: Any
+    operator: str
+    type: str = field(default='BinaryExpression')
+
+
+@dataclass
+class UpdateExpression(Ast):
+    argument: Any
+    operator: str
+    prefix: bool = field(default=False)
+    type: str = field(default='UpdateExpression')
+
+
+@dataclass
+class ForStatement(Ast):
+    init: Any
+    test: Any
+    update: Any
+    body: Any
+    type: str = field(default='ForStatement')
+
+
 Expression = Union[
     AssignmentExpression,
     NewExpression,
@@ -161,4 +200,7 @@ Expression = Union[
     ObjectExpression,
     ArrayExpression,
     ArrowFunctionExpression,
+    BinaryExpression,
+    UpdateExpression,
+    ForStatement,
 ]

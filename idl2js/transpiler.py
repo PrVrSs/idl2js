@@ -87,8 +87,9 @@ def external_types(idls: list[str]):
 
 
 class Option:
-    def __init__(self, option):
+    def __init__(self, option, env=None):
         self._option = option or {}
+        self._env = env
 
     def __call__(self, idl_type):
         return self._option.get(idl_type.__type__, {})
@@ -103,12 +104,20 @@ class CDGNode:
         self.dependencies = []
 
     def build(self, option):
-        self.dependencies = [
-            child.build(option)
-            for child in self.children
-        ]
+        self.dependencies = []
+        for child in self.children:
+            result = child.build(option)
+            if isinstance(result, list):
+                self.dependencies.append(result[0])
+            else:
+                self.dependencies.append(result)
 
-        return self.idl_type(option(self.idl_type), self.flags).build([
+        opt = option(self.idl_type)
+        env = getattr(option, '_env', None)
+        if env is not None:
+            opt = {**opt, '_env': env}
+
+        return self.idl_type(opt, self.flags).build([
                 dependency.name
                 for dependency in self.dependencies
             ],
@@ -121,12 +130,21 @@ class CDG:
         self.options = options or {}
 
     def sample(self):
-        result = [self.root.build(self.options)]
+        root_result = self.root.build(self.options)
+        if isinstance(root_result, list):
+            result = list(reversed(root_result))
+        else:
+            result = [root_result]
+
         todo = deque([self.root])
 
         while todo:
             node = todo.popleft()
-            result.extend(node.dependencies[::-1])
+            for dep in reversed(node.dependencies):
+                if isinstance(dep, list):
+                    result.extend(reversed(dep))
+                else:
+                    result.append(dep)
             todo.extend(node.children)
 
         return result[::-1]
@@ -142,7 +160,8 @@ class Transpiler:
 
     def build_cdg(self, idl_type, options):
         node = CDGNode(self.environment.get_type(idl_type), 0)
-        cdg = CDG(root=node, options=Option(options))
+        opt = Option(options, env=self.environment)
+        cdg = CDG(root=node, options=opt)
         todo = deque([node])
         while todo:
             item = todo.popleft()
