@@ -5,6 +5,13 @@ from more_itertools import first
 
 from .coin import biased_coin
 from .rng import idl2js_random
+from .strategy import (
+    FLOAT_SPECIAL_VALUES,
+    GenerationStrategy,
+    float_boundary_values,
+    integer_boundary_values,
+    select_strategy,
+)
 from .ucd import ucd
 from .vose_sampler import VoseSampler
 
@@ -66,22 +73,74 @@ class many:  # pylint: disable=invalid-name
 
 
 class IntegerGenerator(Generator):
-    def __init__(self, min_value: int | None = None, max_value: int | None = None):
+    def __init__(
+        self,
+        min_value: int | None = None,
+        max_value: int | None = None,
+        strategy: GenerationStrategy | None = None,
+    ):
         self._min_value = min_value
         self._max_value = max_value
+        self._strategy = strategy
+        self._boundaries = None
+
+    def _get_boundaries(self):
+        if self._boundaries is None:
+            self._boundaries = integer_boundary_values(
+                self._min_value, self._max_value,
+            )
+        return self._boundaries
 
     def generate(self):
+        strategy = self._strategy or select_strategy()
+
+        if strategy == GenerationStrategy.BOUNDARY:
+            boundaries = self._get_boundaries()
+            if boundaries:
+                return idl2js_random.choice(boundaries)
+
+        if strategy == GenerationStrategy.SPECIAL:
+            special = [0, 1, -1]
+            valid = [
+                v for v in special
+                if self._min_value <= v <= self._max_value
+            ]
+            if valid:
+                return idl2js_random.choice(valid)
+
         return idl2js_random.randint(self._min_value, self._max_value)
 
 
 class ArrayGenerator(Generator):
-    def __init__(self, element_generator, min_size: int = 2, max_size: int = 10):
+    def __init__(
+        self,
+        element_generator,
+        min_size: int = 2,
+        max_size: int = 10,
+        strategy: GenerationStrategy | None = None,
+    ):
         self.min_size = min_size
         self.max_size = max_size
-
         self.element_generator = element_generator
+        self._strategy = strategy
 
     def generate(self):
+        strategy = self._strategy or select_strategy()
+
+        if strategy == GenerationStrategy.BOUNDARY:
+            size = idl2js_random.choice([0, 1, self.max_size])
+            return [
+                self.element_generator.generate() for _ in range(size)
+            ]
+
+        if strategy == GenerationStrategy.SPECIAL:
+            size = idl2js_random.choice([
+                0, self.max_size, self.max_size + 5,
+            ])
+            return [
+                self.element_generator.generate() for _ in range(size)
+            ]
+
         return [
             self.element_generator.generate()
             for _ in many(self.min_size, self.max_size)
@@ -89,16 +148,52 @@ class ArrayGenerator(Generator):
 
 
 class ChoiceGenerator(Generator):
-    def __init__(self, elements):
+    def __init__(self, elements, coverage=None):
         self.elements = elements
         self._sampler = VoseSampler(data=self.elements)
+        self._coverage = coverage
+        self._chosen = set()
 
     def generate(self):
-        return first(self._sampler.sample(size=1))
+        if self._coverage:
+            uncovered = [
+                e for e in set(self.elements) if e not in self._chosen
+            ]
+            if uncovered:
+                choice = idl2js_random.choice(uncovered)
+                self._chosen.add(choice)
+                return choice
+
+        result = first(self._sampler.sample(size=1))
+        self._chosen.add(result)
+        return result
+
 
 class TextGenerator(ArrayGenerator):
     def generate(self):
-        return ''.join(super().generate())
+        strategy = self._strategy or select_strategy()
+
+        if strategy == GenerationStrategy.SPECIAL:
+            return idl2js_random.choice([
+                '',
+                '\x00',
+                '\n',
+                ' ' * 50,
+                'a' * 100,
+            ])
+
+        if strategy == GenerationStrategy.BOUNDARY:
+            size = idl2js_random.choice([0, 1, self.max_size])
+            if size == 0:
+                return ''
+            return ''.join(
+                self.element_generator.generate() for _ in range(size)
+            )
+
+        return ''.join(
+            self.element_generator.generate()
+            for _ in many(self.min_size, self.max_size)
+        )
 
 
 class BooleanGenerator(Generator):
@@ -107,11 +202,40 @@ class BooleanGenerator(Generator):
 
 
 class FloatGenerator(Generator):
-    def __init__(self, min_value: float = 0.0, max_value: float = 1.0):
+    def __init__(
+        self,
+        min_value: float = 0.0,
+        max_value: float = 1.0,
+        unrestricted: bool = False,
+        strategy: GenerationStrategy | None = None,
+    ):
         self._min_value = min_value
         self._max_value = max_value
+        self._unrestricted = unrestricted
+        self._strategy = strategy
+        self._boundaries = None
+
+    def _get_boundaries(self):
+        if self._boundaries is None:
+            self._boundaries = float_boundary_values(
+                self._min_value, self._max_value,
+            )
+        return self._boundaries
 
     def generate(self):
+        strategy = self._strategy or select_strategy()
+
+        if strategy == GenerationStrategy.SPECIAL and self._unrestricted:
+            return idl2js_random.choice(FLOAT_SPECIAL_VALUES)
+
+        if strategy == GenerationStrategy.BOUNDARY:
+            boundaries = self._get_boundaries()
+            if boundaries:
+                return idl2js_random.choice(boundaries)
+
+        if strategy == GenerationStrategy.SPECIAL:
+            return idl2js_random.choice([0.0, -0.0, 1.0, -1.0])
+
         return idl2js_random.uniform(self._min_value, self._max_value)
 
 
@@ -141,8 +265,26 @@ class ObjectGenerator(Generator):
 
 
 class BigIntGenerator(Generator):
+    def __init__(
+        self,
+        strategy: GenerationStrategy | None = None,
+    ):
+        self._strategy = strategy
+        self._min = -2**63
+        self._max = 2**63 - 1
+
     def generate(self):
-        return idl2js_random.randint(-2**63, 2**63 - 1)
+        strategy = self._strategy or select_strategy()
+
+        if strategy == GenerationStrategy.BOUNDARY:
+            boundaries = integer_boundary_values(self._min, self._max)
+            if boundaries:
+                return idl2js_random.choice(boundaries)
+
+        if strategy == GenerationStrategy.SPECIAL:
+            return idl2js_random.choice([0, 1, -1])
+
+        return idl2js_random.randint(self._min, self._max)
 
 
 def integer(_, options):
@@ -166,6 +308,7 @@ def float_(_, options):
         FloatGenerator,
         min_value=options.get('min_value'),
         max_value=options.get('max_value'),
+        unrestricted=options.get('unrestricted', False),
     )
 
 

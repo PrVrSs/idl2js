@@ -36,6 +36,7 @@ class UnrestrictedFloat(Floating):
     __default_opt__ = {
         'min_value': FLOAT_RANGES[UNRESTRICTED_FLOAT][0],
         'max_value': FLOAT_RANGES[UNRESTRICTED_FLOAT][1],
+        'unrestricted': True,
     }
 
 
@@ -60,4 +61,5 @@ class UnrestrictedDouble(Floating):
     __default_opt__ = {
         'min_value': FLOAT_RANGES[UNRESTRICTED_DOUBLE][0],
         'max_value': FLOAT_RANGES[UNRESTRICTED_DOUBLE][1],
+        'unrestricted': True,
     }

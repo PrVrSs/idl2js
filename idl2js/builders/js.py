@@ -40,7 +40,7 @@ def js_interface(idl_type, *args):
             name=unique_name(),
             progenitor=idl_type.__type__,
             arguments=[
-                create_literal(argument)
+                create_identifier(argument)
                 for argument in args[0]
             ],
         ),
@@ -75,7 +75,7 @@ def js_dictionary(idl_type, *args):
             properties=[
                 create_property(
                     key=name,
-                    value=create_literal(arg),
+                    value=create_identifier(arg),
                 )
                 for name, arg in zip(idl_type.attr_name(), args[0])
             ]
