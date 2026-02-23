@@ -20,7 +20,7 @@ _parentheses: Dict[Parenthesis, SimpleNamespace] = {
 }
 
 
-class Unparser(Visitor[JsAst]):
+class Unparser(Visitor[JsAst]):  # pylint: disable=too-many-public-methods
     """
     Methods in this class recursively traverse an AST and output source code
     for the abstract syntax.
@@ -136,12 +136,60 @@ class Unparser(Visitor[JsAst]):
             separator=lambda: self.write('\n')
         )
 
+    def visit_arrow_function_expression(self, node):
+        with self._parentheses(PAREN):
+            interleave(
+                iterable=node.params,
+                func=self.traverse,
+                separator=lambda: self.write(', ')
+            )
+
+        self.write(' => ')
+
+        if node.body is not None:
+            with self._parentheses(BRACE):
+                self.traverse(node.body)
+        else:
+            with self._parentheses(BRACE):
+                pass
+
+    def visit_expression_statement(self, node):
+        self.traverse(node.expression)
+
     def visit_assignment_expression(self, node):
         self.traverse(node.left)
 
         self.write(' = ')
 
         self.traverse(node.right)
+
+    def visit_for_statement(self, node):
+        self.write('for ')
+
+        with self._parentheses(PAREN):
+            self.traverse(node.init)
+            self.write('; ')
+            self.traverse(node.test)
+            self.write('; ')
+            self.traverse(node.update)
+
+        self.write(' ')
+
+        with self._parentheses(BRACE):
+            self.traverse(node.body)
+
+    def visit_binary_expression(self, node):
+        self.traverse(node.left)
+        self.write(f' {node.operator} ')
+        self.traverse(node.right)
+
+    def visit_update_expression(self, node):
+        if node.prefix:
+            self.write(node.operator)
+            self.traverse(node.argument)
+        else:
+            self.traverse(node.argument)
+            self.write(node.operator)
 
     @contextmanager
     def _parentheses(self, paren: Parenthesis) -> Iterator[None]:

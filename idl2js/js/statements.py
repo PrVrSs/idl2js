@@ -2,13 +2,17 @@ from typing import Any
 
 from .const import CATCH_CONSTANT, LET
 from .nodes import (
+    NULL,
     ArrayExpression,
+    ArrowFunctionExpression,
     AssignmentExpression,
+    BinaryExpression,
     BlockStatement,
     CallExpression,
     CatchClause,
     Expression,
     ExpressionStatement,
+    ForStatement,
     Identifier,
     Literal,
     MemberExpression,
@@ -16,6 +20,7 @@ from .nodes import (
     ObjectExpression,
     Property,
     TryStatement,
+    UpdateExpression,
     VariableDeclaration,
     VariableDeclarator,
 )
@@ -105,3 +110,58 @@ def create_identifier(name: str) -> Identifier:
 
 def create_property(key: Any, value: Any) -> Property:
     return Property(key=key, value=value)
+
+
+def create_arrow_function(
+    params: list[Any] | None = None,
+    body: Any = None
+) -> ArrowFunctionExpression:
+    return ArrowFunctionExpression(
+        params=params or [],
+        body=body,
+    )
+
+
+def create_null_literal() -> Literal:
+    return Literal(value=NULL)
+
+
+def create_for_loop(
+    var_name: str,
+    limit: int,
+    body_stmts: list[Any],
+) -> ExpressionStatement:
+    return ExpressionStatement(
+        expression=ForStatement(
+            init=AssignmentExpression(
+                left=Identifier(name=f'var {var_name}'),
+                right=Literal(value=0),
+            ),
+            test=BinaryExpression(
+                left=Identifier(name=var_name),
+                right=Literal(value=limit),
+                operator='<',
+            ),
+            update=UpdateExpression(
+                argument=Identifier(name=var_name),
+                operator='++',
+            ),
+            body=BlockStatement(body=body_stmts),
+        )
+    )
+
+
+def create_property_assignment(
+    obj_name: str,
+    prop_name: str,
+    value_expr: Any,
+) -> ExpressionStatement:
+    return ExpressionStatement(
+        expression=AssignmentExpression(
+            left=MemberExpression(
+                object=Identifier(name=obj_name),
+                property=Identifier(name=prop_name),
+            ),
+            right=value_expr,
+        )
+    )

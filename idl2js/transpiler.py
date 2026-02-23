@@ -18,12 +18,65 @@ def common_definition():
     }
 
 
-def convert_idl(idls):
-    return list(filter(None, [
-        make_idl_type(definition)
+def _classify_definitions(all_definitions):
+    includes = []
+    partials = []
+    non_partials = []
+
+    for definition in all_definitions:
+        if definition.type == 'includes':
+            includes.append(definition)
+        elif getattr(definition, 'partial', False):
+            partials.append(definition)
+        else:
+            non_partials.append(definition)
+
+    return non_partials, partials, includes
+
+
+def _merge_attributes(target, source):
+    target_attrs = list(getattr(target, '_attributes_', []))
+    source_attrs = list(getattr(source, '_attributes_', []))
+    target._attributes_ = target_attrs + source_attrs  # pylint: disable=protected-access
+
+
+def convert_idl(idls):  # pylint: disable=too-many-locals
+    all_definitions = [
+        definition
         for idl in process_idl(idls)
         for definition in idl.definitions
-    ]))
+    ]
+
+    non_partials, partials, includes = _classify_definitions(all_definitions)
+
+    types_dict = {}
+    for definition in non_partials:
+        idl_type = make_idl_type(definition)
+        if idl_type is not None:
+            types_dict[idl_type.__type__] = idl_type
+
+    for definition in partials:
+        idl_type = make_idl_type(definition)
+        if idl_type is None:
+            continue
+        base = types_dict.get(idl_type.__type__)
+        if base is not None:
+            _merge_attributes(base, idl_type)
+        else:
+            types_dict[idl_type.__type__] = idl_type
+
+    for inc in includes:
+        target_name = getattr(inc, 'target', None)
+        mixin_name = getattr(inc, 'includes', None)
+        if not target_name or not mixin_name:
+            continue
+
+        target = types_dict.get(target_name)
+        mixin = types_dict.get(mixin_name)
+        if target is not None and mixin is not None:
+            _merge_attributes(target, mixin)
+
+    return list(types_dict.values())
 
 
 def external_types(idls: list[str]):
@@ -34,8 +87,9 @@ def external_types(idls: list[str]):
 
 
 class Option:
-    def __init__(self, option):
+    def __init__(self, option, env=None):
         self._option = option or {}
+        self._env = env
 
     def __call__(self, idl_type):
         return self._option.get(idl_type.__type__, {})
@@ -50,12 +104,20 @@ class CDGNode:
         self.dependencies = []
 
     def build(self, option):
-        self.dependencies = [
-            child.build(option)
-            for child in self.children
-        ]
+        self.dependencies = []
+        for child in self.children:
+            result = child.build(option)
+            if isinstance(result, list):
+                self.dependencies.append(result[0])
+            else:
+                self.dependencies.append(result)
 
-        return self.idl_type(option(self.idl_type), self.flags).build([
+        opt = option(self.idl_type)
+        env = getattr(option, '_env', None)
+        if env is not None:
+            opt = {**opt, '_env': env}
+
+        return self.idl_type(opt, self.flags).build([
                 dependency.name
                 for dependency in self.dependencies
             ],
@@ -68,12 +130,21 @@ class CDG:
         self.options = options or {}
 
     def sample(self):
-        result = [self.root.build(self.options)]
+        root_result = self.root.build(self.options)
+        if isinstance(root_result, list):
+            result = list(reversed(root_result))
+        else:
+            result = [root_result]
+
         todo = deque([self.root])
 
         while todo:
             node = todo.popleft()
-            result.extend(node.dependencies[::-1])
+            for dep in reversed(node.dependencies):
+                if isinstance(dep, list):
+                    result.extend(reversed(dep))
+                else:
+                    result.append(dep)
             todo.extend(node.children)
 
         return result[::-1]
@@ -89,7 +160,8 @@ class Transpiler:
 
     def build_cdg(self, idl_type, options):
         node = CDGNode(self.environment.get_type(idl_type), 0)
-        cdg = CDG(root=node, options=Option(options))
+        opt = Option(options, env=self.environment)
+        cdg = CDG(root=node, options=opt)
         todo = deque([node])
         while todo:
             item = todo.popleft()
