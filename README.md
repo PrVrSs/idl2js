@@ -2,9 +2,9 @@
 
 **Grammar-based Fuzzer that uses WebIDL as a grammar.**
 
-[![Build Status](https://github.com/PrVrSs/idl2js/workflows/test/badge.svg?branch=master&event=push)](https://github.com/PrVrSs/idl2js/actions?query=workflow%3Atest)
-[![Codecov](https://img.shields.io/codecov/c/github/PrVrSs/idl2js)](https://codecov.io/gh/PrVrSs/idl2js)
-[![Python Version](https://img.shields.io/badge/python-3.10%20|%203.11-blue)](https://www.python.org/)
+[![Build Status](https://github.com/PrVrSs/idl2js/actions/workflows/test.yml/badge.svg?branch=master&event=push)](https://github.com/PrVrSs/idl2js/actions?query=workflow%3Atest)
+[![Codecov](https://codecov.io/gh/PrVrSs/idl2js/branch/master/graph/badge.svg)](https://codecov.io/gh/PrVrSs/idl2js)
+[![Python Version](https://img.shields.io/badge/python-3.13-blue)](https://www.python.org/)
 [![License](https://img.shields.io/cocoapods/l/A)](https://github.com/PrVrSs/idl2js/blob/master/LICENSE)
 
 
