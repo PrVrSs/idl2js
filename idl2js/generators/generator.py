@@ -296,7 +296,14 @@ def integer(_, options):
 
 
 def text(_, options):
-    return partial(TextGenerator, element_generator=CharGenerator(**options))
+    return partial(TextGenerator, element_generator=CharGenerator(
+        min_codepoint=options.get('min_codepoint', 0),
+        max_codepoint=options.get('max_codepoint', sys.maxunicode),
+        exclude_categories=options.get('exclude_categories'),
+        include_categories=options.get('include_categories'),
+        include_characters=options.get('include_characters'),
+        exclude_characters=options.get('exclude_characters'),
+    ))
 
 
 def boolean(_, _options):

@@ -1,3 +1,4 @@
+import atexit
 import os
 import subprocess
 import tempfile
@@ -33,17 +34,21 @@ def _is_docker_error(returncode, stderr_text):
     return any(s in lower for s in _DOCKER_ERROR_STRINGS)
 
 
-def _safe_decode(data):
+_MAX_OUTPUT = 64 * 1024  # 64 KiB — keep ASAN traces, drop Chrome verbose logs
+
+
+def _safe_decode(data, max_bytes=_MAX_OUTPUT):
     if data is None:
         return ''
     if isinstance(data, bytes):
+        data = data[:max_bytes]
         return data.decode(errors='replace')
-    return str(data)
+    return str(data)[:max_bytes]
 
 
 def _classify(result, elapsed):
-    stdout = result.stdout.decode(errors='replace')
-    stderr = result.stderr.decode(errors='replace')
+    stdout = _safe_decode(result.stdout)
+    stderr = _safe_decode(result.stderr)
 
     if _is_docker_error(result.returncode, stderr):
         return Outcome(
@@ -89,6 +94,16 @@ def _classify(result, elapsed):
     )
 
 
+def _docker_kill(container_id):
+    try:
+        subprocess.run(
+            ['docker', 'kill', container_id],
+            capture_output=True, timeout=5, check=False,
+        )
+    except Exception:  # pylint: disable=broad-except
+        pass
+
+
 class DockerRunner:
     def __init__(self, image, chrome_path='google-chrome',
                  chrome_args=None, timeout_ms=10000, docker_args=None):
@@ -97,16 +112,26 @@ class DockerRunner:
         self._chrome_args = chrome_args if chrome_args is not None else list(_DEFAULT_CHROME_ARGS)
         self._timeout_s = timeout_ms / 1000.0
         self._docker_args = docker_args or []
+        self._active_containers = set()
+        atexit.register(self._cleanup)
+
+    def _cleanup(self):
+        for cid in list(self._active_containers):
+            _docker_kill(cid)
+        self._active_containers.clear()
 
     def run(self, js_source):
         html = wrap_in_html(js_source)
         fd, tmp_path = tempfile.mkstemp(prefix='idl2js_', suffix='.html')
+        container_name = f'idl2js_{os.getpid()}_{id(js_source):x}'
         try:
             with os.fdopen(fd, 'w', encoding='utf-8') as f:
                 f.write(html)
 
             cmd = [
                 'docker', 'run', '--rm',
+                '--name', container_name,
+                '--stop-timeout', '5',
                 '-v', f'{tmp_path}:{_CONTAINER_POC_PATH}:ro',
                 '--entrypoint', self._chrome_path,
                 *self._docker_args,
@@ -115,6 +140,7 @@ class DockerRunner:
                 f'file://{_CONTAINER_POC_PATH}',
             ]
 
+            self._active_containers.add(container_name)
             start = time.monotonic()
             try:
                 result = subprocess.run(
@@ -125,6 +151,7 @@ class DockerRunner:
                 )
             except subprocess.TimeoutExpired as exc:
                 elapsed = (time.monotonic() - start) * 1000
+                _docker_kill(container_name)
                 return Outcome(
                     status=ExitStatus.TIMEOUT,
                     exit_code=-1,
@@ -138,6 +165,8 @@ class DockerRunner:
                     exit_code=-1,
                     stderr='docker: command not found',
                 )
+            finally:
+                self._active_containers.discard(container_name)
 
             elapsed = (time.monotonic() - start) * 1000
             return _classify(result, elapsed)
