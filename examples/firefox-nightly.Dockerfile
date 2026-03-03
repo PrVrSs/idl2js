@@ -49,6 +49,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libxrender1 \
         libxt6 \
         libxtst6 \
+        mesa-vulkan-drivers \
+        libvulkan1 \
+        vulkan-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Install Firefox Nightly from Mozilla APT repo ─────────────────────────
@@ -74,7 +77,23 @@ user_pref("browser.dom.window.dump.enabled", true);\n\
 user_pref("devtools.console.stdout.content", true);\n\
 user_pref("dom.webnn.enabled", true);\n\
 user_pref("dom.webgpu.enabled", true);\n\
+user_pref("gfx.webgpu.force-enabled", true);\n\
+user_pref("gfx.feature.webgpu.force-enabled", true);\n\
+user_pref("gfx.feature.webrender.force-enabled", true);\n\
+user_pref("widget.dmabuf.force-enabled", true);\n\
+user_pref("gfx.blocklist.all", 0);\n\
+user_pref("gfx.driver-init.appVersion", "150.0a1");\n\
+user_pref("layers.acceleration.force-enabled", true);\n\
+user_pref("security.sandbox.content.level", 0);\n\
+user_pref("dom.ipc.plugins.sandbox-level.default", 0);\n\
 ' > /tmp/ff-profile/user.js
+
+# ── Force software Vulkan (lavapipe) for WebGPU in headless ─────────────
+ENV LIBGL_ALWAYS_SOFTWARE=1
+ENV VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+ENV MOZ_WEBGPU_FORCE_ENABLED=1
+ENV MOZ_GFX_BLOCKLIST_DISABLE=1
+ENV MOZ_HEADLESS=1
 
 # Smoke test
 RUN firefox-nightly --version 2>/dev/null || true
